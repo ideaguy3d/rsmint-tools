@@ -14,8 +14,7 @@
 
 <div style="margin: auto; width: 60%;">
     <h1>
-        <img src="https://redstonemail.com/companies/renderLogo/568ae6c2103fb4f64f2337d2"
-             alt="logo" width="150px">
+        <img src="https://redstonemail.com/companies/renderLogo/568ae6c2103fb4f64f2337d2" alt="logo" width="150px">
         Remove Encoded chars
     </h1>
     
@@ -27,16 +26,17 @@
     
     <br>
     
-    <form action="./" method="POST" enctype="multipart/form-data">
-        <div data-ng-click="">
-            <input type="file" name="job-recs" data-flex="60" style="margin-right: 6px;">
-            <span onclick="console.log('the click was picked up :)')"><input type="submit"></span>
+    <form action="/redstone/tools/" method="POST" enctype="multipart/form-data">
+        <div onclick="console.log('the click was picked up :)')">
+            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
         </div>
+        <br><br>
+        <input type="submit">
     </form>
     
     <br>
     
-    <div id="rs-js-output" style="font-family: Consolas, sans-serif; font-size: 12px;"></div>
+    <div id="rs-js-output" style="font-family: Consolas, sans-serif; font-size: 12px;">Output</div>
     
 </div>
 
