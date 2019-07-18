@@ -21,4 +21,8 @@ return function (App $app) {
         return $logger;
     };
     
+    $localUploadsFolderPath = 'C:\xampp\htdocs\redstone\uploads';
+    
+    $container['upload_directory'] = $localUploadsFolderPath;
+    
 };
