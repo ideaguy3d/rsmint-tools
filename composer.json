@@ -22,7 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Redstone\\Tools\\": "src/classes"
+            "Redstone\\Tools\\": "src/classes",
+            "Redstone\\Tools\\Interfaces\\": "src/interfaces"
         }
     },
     "autoload-dev": {

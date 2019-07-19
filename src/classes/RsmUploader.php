@@ -11,7 +11,7 @@ class RsmUploader
     /**
      * Move file to upload folder and give it a unique name
      *
-     * @param App $app
+     * @param App $app - this is reference to the Slim
      * @param string $directory
      * @param UploadedFile $uploadedFile
      *

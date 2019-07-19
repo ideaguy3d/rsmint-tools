@@ -19,12 +19,9 @@ return function(App $app) {
             
             $file = $uploadedFiles['csv_file'];
             if($file->getError() === UPLOAD_ERR_OK) {
-                $homeLink = "<br/> <a href=''>Home</a>";
-                $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
                 
-                // some html info
-                $fileInfo = '<br/> &nbsp;&nbsp; ' .'uploaded: ' . $fileName;
-                $folderInfo = "to $directory<br/>$homeLink";
+                $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
+                $filePath = $directory . DIRECTORY_SEPARATOR . $fileName;
                 
                 //-- headers to change:
                 $cacheControl = 'Cache-Control';
