@@ -19,6 +19,7 @@ if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
     
     $_SERVER['REQUEST_URI'] = '/';
     $_SERVER['REQUEST_METHOD'] = 'POST';
+    
 }
 
 return function(App $app) {
@@ -29,14 +30,27 @@ return function(App $app) {
     $app->post('/',
         function(Request $request, Response $response) use ($container, $app) {
             $directory = $container->get('upload_directory');
+            $log = $app->getContainer()->get('logger');
             
             $uploadedFiles = $request->getUploadedFiles();
+            $file = $uploadedFiles['csv_file'] ?? null;
             
-            $file = $uploadedFiles['csv_file'];
-            if($file->getError() === UPLOAD_ERR_OK) {
+            // Program is in debug mode
+            if(AppGlobals::$NINJA_AUTO_DEBUG) {
+                // read a "debug test" file into memory
+                $folder = 'C:\xampp\htdocs\redstone\uploads';
+                $file = 'test.csv';
                 
+                // debug RsmEncodeRemove code & app logic
+                $encodeRemove = new RsmEncodeRemove($folder, $file);
+                $encodeRemove->removeEncodedChars();
+                $cleanFilePath = $encodeRemove->getCleanFilePath();
+            }
+            // Program is NOT in debug mode, it's go time
+            else if($file && $file->getError() === UPLOAD_ERR_OK) {
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
                 $encodeRemove = new RsmEncodeRemove($directory, $fileName);
+                $log->info("\n\r __>> file name = $fileName \n\r");
                 $encodeRemove->removeEncodedChars();
                 $cleanFile = $encodeRemove->getCleanFilePath();
                 
@@ -45,7 +59,7 @@ return function(App $app) {
                 $contentDescription = 'Content-Description';
                 $contentDisposition = 'Content-Disposition';
                 $contentType = 'Content-Type';
-                $contentTranserEncoding = 'Content-Transfer-Encoding';
+                $contentTransferEncoding = 'Content-Transfer-Encoding';
                 
                 // test file path to see if this works
                 $testFile = 'C:\xampp\htdocs\@ Good Prac Data' . DIRECTORY_SEPARATOR . "test.csv";
@@ -54,12 +68,13 @@ return function(App $app) {
                 $response = $response->withHeader($contentDescription, 'File Transfer');
                 $response = $response->withHeader($contentDisposition, "attachment; filename=encodes_removed.csv");
                 $response = $response->withHeader($contentType, 'application/zip');
-                $response = $response->withHeader($contentTranserEncoding, 'binary');
+                $response = $response->withHeader($contentTransferEncoding, 'binary');
                 
                 readfile($cleanFile);
                 
                 return $response;
             }
+            // something broke
             else {
                 exit("ERROR UPLOADING FILE - " . (string)$file->getError());
             }

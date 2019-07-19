@@ -15,7 +15,7 @@ class AppGlobals
 {
     //-------------------------------------------------------------
     // TURN DEBUG MODE on OR off, then set the route in routes.php
-    public static $NINJA_AUTO_DEBUG = false;
+    public static $NINJA_AUTO_DEBUG = true;
     //-------------------------------------------------------------
     
     //-------------------------------------------------------------

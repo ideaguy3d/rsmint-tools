@@ -24,7 +24,10 @@ class RsmEncodeRemove
      * will parse CSV data, then export the clean data to a CSV file
      */
     public function removeEncodedChars(): void  {
-    
+        $break = 'point';
+        
+        // do stuff
+        
     }
     
     public function getCleanFilePath(): string {
