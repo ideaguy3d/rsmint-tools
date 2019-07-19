@@ -24,6 +24,7 @@ class RsmUploader
         
         $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
         try {
+            // encode file name
             $basename = bin2hex(random_bytes(8));
         }
         catch(\Exception $e) {

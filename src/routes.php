@@ -5,6 +5,7 @@ use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Redstone\Tools\RsmUploader;
+use Redstone\Tools\RsmEncodeRemove;
 
 return function(App $app) {
     
@@ -20,9 +21,30 @@ return function(App $app) {
             if($file->getError() === UPLOAD_ERR_OK) {
                 $homeLink = "<br/> <a href=''>Home</a>";
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
+                
+                // some html info
                 $fileInfo = '<br/> &nbsp;&nbsp; ' .'uploaded: ' . $fileName;
                 $folderInfo = "to $directory<br/>$homeLink";
-                $response->write($fileName . $folderInfo);
+                
+                //-- headers to change:
+                $cacheControl = 'Cache-Control';
+                $contentDescription = 'Content-Description';
+                $contentDisposition = 'Content-Disposition';
+                $contentType = 'Content-Type';
+                $contentTranserEncoding = 'Content-Transfer-Encoding';
+                // test file path to see if this works
+                $testFile = 'C:\xampp\htdocs\@ Good Prac Data' . DIRECTORY_SEPARATOR . "test.csv";
+                
+                $response = $response->withHeader($cacheControl, 'public');
+                $response = $response->withHeader($contentDescription, 'File Transfer');
+                $response = $response->withHeader($contentDisposition, "attachment; filename=RedstoneFile.csv");
+                $response = $response->withHeader($contentType, 'application/zip');
+                $response = $response->withHeader($contentTranserEncoding, 'binary');
+                
+                readfile($testFile); 
+                
+                // send back info to user
+                return $response;
             }
         }
     );
