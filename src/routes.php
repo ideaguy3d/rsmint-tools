@@ -50,7 +50,7 @@ return function(App $app) {
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
                 $encodeRemove = new RsmEncodeRemove($directory, $fileName);
-                $log->info("\n\r __>> file name = $fileName \n\r");
+                $log->info("\n\r __>> file_name= [ $fileName ] \n\r");
                 $encodeRemove->removeEncodedChars();
                 $cleanFile = $encodeRemove->getCleanFilePath();
                 
@@ -70,7 +70,7 @@ return function(App $app) {
                 $response = $response->withHeader($contentType, 'application/zip');
                 $response = $response->withHeader($contentTransferEncoding, 'binary');
                 
-                readfile($cleanFile);
+                readfile($testFile);
                 
                 return $response;
             }
