@@ -41,7 +41,7 @@ return function(App $app) {
                 $response = $response->withHeader($contentType, 'application/zip');
                 $response = $response->withHeader($contentTranserEncoding, 'binary');
                 
-                readfile($testFile); 
+                readfile($testFile);
                 
                 // send back info to user
                 return $response;
