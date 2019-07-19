@@ -67,32 +67,34 @@ class RsmEncodeRemove
                 $cleanCsv[$i] = $record; // initialize an array
                 
                 /** LOOP OVER FIELDS **/
-                for ($j = 0; $j < count($record); $j++) {
+                for($f = 0; $f < count($record); $f++) {
                     // field in the current record
-                    $field = $record[$j];
-                    $field2arr = str_split($field);
-        
+                    $field = $record[$f];
                     
-                    if (preg_match('/[^\x20-\x7e]/', $field)) {
-    
-                        /** LOOP OVER CHARS **/
-                        foreach ($field2arr as $ch) {
-                            if (ord($ch) < 32 || ord($ch) > 126) {
-                                array_splice($field2arr, array_search($ch, $field2arr), 1);
-                            }
+                    // preg_match('/[^\x20-\x7e]/', $field)
+                    
+                    /** LOOP OVER EACH CHAR **/
+                    for($c = 0; $c < strlen($field); $c++) {
+                        $ch = $field[$c];
+                        
+                        if(!$this->isEncodedChar($ch)) {
+                            $field[$c] = $ch;
                         }
-            
-                        $record[$j] = implode("", $field2arr); // update the field
-            
+                        // $ch is an encoded char so make it " "
+                        else {
+                            $field[$c] = " ";
+                        }
                     }
-        
+                    
+                    $record[$f] = $field;
+                    
                 } // END OF: looping over each field
-    
+                
                 $cleanCsv[$i] = $record;
-    
-            }
+                
+            } // END OF: looping over each record
         }
-        catch (\Exception $e) {
+        catch(\Exception $e) {
             $exceptionMessage = $e->getMessage();
             exit("\n__>> RSM Exception: $exceptionMessage\n");
         }
@@ -104,4 +106,17 @@ class RsmEncodeRemove
         
         return $path2file;
     }
+    
+    public function isEncodedChar(string $ch): bool {
+        $isEncoded = false;
+        
+        if(ord($ch) < 32 || ord($ch) > 126) {
+            array_splice(
+                $field2arr, array_search($ch, $field2arr), 1
+            );
+        }
+        
+        return $isEncoded;
+        
+    } // END OF: isEncodedChar()
 }
