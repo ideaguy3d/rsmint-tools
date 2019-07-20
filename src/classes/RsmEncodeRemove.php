@@ -59,7 +59,6 @@ class RsmEncodeRemove
         };
         
         try {
-            
             /** LOOP OVER RECORDS **/
             foreach($generate($start, $limit, $step) as $i) {
                 // $record will be the csv row
@@ -70,6 +69,7 @@ class RsmEncodeRemove
                 for($f = 0; $f < count($record); $f++) {
                     // field in the current record
                     $field = $record[$f];
+                    $cleanField = '';
                     
                     // preg_match('/[^\x20-\x7e]/', $field)
                     
@@ -78,15 +78,15 @@ class RsmEncodeRemove
                         $ch = $field[$c];
                         
                         if(!$this->isEncodedChar($ch)) {
-                            $field[$c] = $ch;
+                            $cleanField .= $ch;
                         }
                         // $ch is an encoded char so make it " "
                         else {
-                            $field[$c] = " ";
+                            $cleanField .= " ";
                         }
                     }
                     
-                    $record[$f] = $field;
+                    $record[$f] = $cleanField;
                     
                 } // END OF: looping over each field
                 
@@ -99,6 +99,8 @@ class RsmEncodeRemove
             exit("\n__>> RSM Exception: $exceptionMessage\n");
         }
         
+        $break = 'point';
+        
     } // END OF: removeEncodedChars()
     
     public function getCleanFilePath(): string {
@@ -109,14 +111,23 @@ class RsmEncodeRemove
     
     public function isEncodedChar(string $ch): bool {
         $isEncoded = false;
+        $goodChars = "/([a-z]|[A-Z]|[0-9])/";
+        $match = preg_match($goodChars, $ch);
+        
+        if($match) {
+            return $isEncoded;
+        }
         
         if(ord($ch) < 32 || ord($ch) > 126) {
-            array_splice(
-                $field2arr, array_search($ch, $field2arr), 1
-            );
+            return ($isEncoded = true);
         }
         
         return $isEncoded;
         
     } // END OF: isEncodedChar()
+    
+    public function deleteEncodes(string $str, string $detectedEncode): string {
+        $cleanStr = '';
+        
+    }
 }
