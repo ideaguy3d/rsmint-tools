@@ -45,6 +45,7 @@ interface ICsvParseModel
      * @param string $exportPath    - where to place the CSV file, do NOT include a directory
      *                                separator e.g. '\' or '/'  at the end of path
      * @param string $name2giveFile - just an informative description to add to the CSV file name
+     *                                do NOT include '.csv' or any file type
      *
      * @return string               - the name of the file
      */

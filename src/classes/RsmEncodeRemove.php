@@ -86,7 +86,7 @@ class RsmEncodeRemove
                         }
                     }
                     
-                    $record[$f] = $cleanField;
+                    $record[$f] = trim($cleanField);
                     
                 } // END OF: looping over each field
                 
@@ -101,6 +101,14 @@ class RsmEncodeRemove
         
         $break = 'point';
         
+        // remove file name, this is a full path, not a relative path
+        $exportFolder = str_replace(basename($this->path2file), '', $this->path2file);
+        // remove trailing '\' at the end of the string
+        $exportFolder = substr($exportFolder, 0, strlen($exportFolder)-1);
+        CsvParseModel::export2csv(
+            $cleanCsv, $exportFolder, 'rsm-encode-remove'
+        );
+        
     } // END OF: removeEncodedChars()
     
     public function getCleanFilePath(): string {
@@ -114,8 +122,16 @@ class RsmEncodeRemove
         $goodChars = "/([a-z]|[A-Z]|[0-9])/";
         $match = preg_match($goodChars, $ch);
         
-        if($match) {
+        //TODO: Detect 1 whitespace
+        
+        if($match === 1) {
             return $isEncoded;
+        }
+        else if($match === 0) {
+            echo "\n encoded char = $ch";
+        }
+        else if($match === false) {
+            exit("\n __>> ERROR - can't match, the char = $ch\n");
         }
         
         if(ord($ch) < 32 || ord($ch) > 126) {
@@ -126,8 +142,4 @@ class RsmEncodeRemove
         
     } // END OF: isEncodedChar()
     
-    public function deleteEncodes(string $str, string $detectedEncode): string {
-        $cleanStr = '';
-        
-    }
 }

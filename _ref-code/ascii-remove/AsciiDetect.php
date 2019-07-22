@@ -19,9 +19,6 @@ class AsciiDetect implements IAsciiDetect
         ];
     }
     
-    //TODO: Improve the runtime of this algorithm
-    // an example path:
-    // C:\xampp\htdocs\_z-accuzip
     public function stripCsvAscii(string $fullPathToCsv): array {
         $csvArray = CsvParseModel::getCsvArray($fullPathToCsv);
         
