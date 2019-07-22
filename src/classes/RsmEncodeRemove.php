@@ -10,13 +10,29 @@ class RsmEncodeRemove
     /**
      * @var string
      */
+    private $path2directory;
+    /**
+     * @var string
+     */
+    private $fileName;
+    /**
+     * @var string
+     */
     private $path2file;
+    /**
+     * This will be an absolute path to the sanitized CSV file
+     *
+     * @var string
+     */
+    private $sanitizedFilePath;
     /**
      * @var array
      */
     private $csvData;
     
     public function __construct(string $directory, string $fileName) {
+        $this->path2directory = $directory;
+        $this->fileName = $fileName;
         $this->path2file = $directory . DIRECTORY_SEPARATOR . $fileName;
         $this->csvData = CsvParseModel::specificCsv2array($directory, $fileName);
     }
@@ -80,8 +96,9 @@ class RsmEncodeRemove
                         if(!$this->isEncodedChar($ch)) {
                             $cleanField .= $ch;
                         }
-                        // $ch is an encoded char so make it " "
+                        // _ENCODE REPLACE - $ch is an encoded char so make it " "
                         else {
+                            //TODO: Track which encodes were removed so AngularJS can render this info
                             $cleanField .= " ";
                         }
                     }
@@ -100,21 +117,14 @@ class RsmEncodeRemove
         }
         
         $break = 'point';
-        
-        // remove file name, this is a full path, not a relative path
-        $exportFolder = str_replace(basename($this->path2file), '', $this->path2file);
-        // remove trailing '\' at the end of the string
-        $exportFolder = substr($exportFolder, 0, strlen($exportFolder)-1);
-        CsvParseModel::export2csv(
-            $cleanCsv, $exportFolder, 'rsm-encode-remove'
-        );
+        $cleanFileName = 'rsm-encode-remove-' . $this->fileName;
+        $this->sanitizedFilePath = $this->path2directory . DIRECTORY_SEPARATOR . $cleanFileName;
+        CsvParseModel::export2csv($cleanCsv, $this->path2directory, $cleanFileName);
         
     } // END OF: removeEncodedChars()
     
     public function getCleanFilePath(): string {
-        $path2file = '';
-        
-        return $path2file;
+        return $this->sanitizedFilePath;
     }
     
     public function isEncodedChar(string $ch): bool {

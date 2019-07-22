@@ -31,6 +31,7 @@ return function(App $app) {
         function(Request $request, Response $response) use ($container, $app) {
             $directory = $container->get('upload_directory');
             $log = $app->getContainer()->get('logger');
+            $sanitizedFilePath = null;
             
             $uploadedFiles = $request->getUploadedFiles();
             $file = $uploadedFiles['csv_file'] ?? null;
@@ -44,15 +45,20 @@ return function(App $app) {
                 // debug RsmEncodeRemove code & app logic
                 $encodeRemove = new RsmEncodeRemove($folder, $file);
                 $encodeRemove->removeEncodedChars();
-                $cleanFilePath = $encodeRemove->getCleanFilePath();
+                $sanitizedFilePath = $encodeRemove->getCleanFilePath();
+                $log->info("\n\r__>> RSM DEBUG MODE - testing app logic, sanitized file path = $sanitizedFilePath\n\r");
+    
+                $break = 'point';
             }
             // Program is NOT in debug mode, it's go time
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
                 $encodeRemove = new RsmEncodeRemove($directory, $fileName);
-                $log->info("\n\r __>> file_name= [ $fileName ] \n\r");
+               
+                $log->info("\n\r __>> RSM file upload name= [ $fileName ] \n\r");
+                
                 $encodeRemove->removeEncodedChars();
-                $cleanFile = $encodeRemove->getCleanFilePath();
+                $sanitizedFilePath = $encodeRemove->getCleanFilePath();
                 
                 //-- headers to change to download a file --\\
                 $cacheControl = 'Cache-Control';
@@ -63,14 +69,15 @@ return function(App $app) {
                 
                 // test file path to see if this works
                 $testFile = 'C:\xampp\htdocs\@ Good Prac Data' . DIRECTORY_SEPARATOR . "test.csv";
+                $downloadFileName = 'rsm-encodes-removed.csv';
                 
                 $response = $response->withHeader($cacheControl, 'public');
                 $response = $response->withHeader($contentDescription, 'File Transfer');
-                $response = $response->withHeader($contentDisposition, "attachment; filename=encodes_removed.csv");
+                $response = $response->withHeader($contentDisposition, "attachment; filename=$downloadFileName");
                 $response = $response->withHeader($contentType, 'application/zip');
                 $response = $response->withHeader($contentTransferEncoding, 'binary');
                 
-                readfile($testFile);
+                readfile($sanitizedFilePath);
                 
                 return $response;
             }
