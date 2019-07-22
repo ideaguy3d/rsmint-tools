@@ -7,15 +7,15 @@
         body {
             font-family: sans-serif;
         }
-        
+
         table {
             margin: auto;
         }
-        
+
         .rsm-text-center {
             text-align: center;
         }
-        
+
         .rsm-mt {
             margin-top: 10%;
         }
@@ -115,7 +115,9 @@
 
 <div class="rsm-text-center">
     <h2>encodes that were removed</h2>
-    <p>{{s_status}}</p>
+    <p>
+        <small>{{s_status}}, interval: {{s_interval}};</small>
+    </p>
     <table class="flat-table flat-table-2">
         <thead>
         <th>encoded char</th>
@@ -124,18 +126,20 @@
         <th>field {{firstField}} value</th>
         </thead>
         <tbody>
+        <!--
         <tr>
             <td>�</td>
             <td>56</td>
             <td>27</td>
             <td>5648932</td>
         </tr>
+        -->
         </tbody>
     </table>
 </div>
 
 <footer class="rsm-text-center rsm-mt">
-      <h5>Redstone Automation v0.0.{{8-9+2}}</h5>
+    <h5>Redstone Automation v0.0.{{8-9+2}}</h5>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.8/angular.min.js"
@@ -144,10 +148,19 @@
 
 <script>
     let app = angular.module('rsm-encode-remove', []);
-    app.controller('EncodePresentCtrl', ['$scope', EncodePresentCtrlClass]);
-    
-    function EncodePresentCtrlClass($scope) {
+    app.controller('EncodePresentCtrl', ['$scope', '$interval', EncodePresentCtrlClass]);
+
+    function EncodePresentCtrlClass($scope, $interval) {
         $scope.s_status = 'Controller is wired up';
+        $scope.s_interval = 0;
+
+        /*
+        simple interval test
+        $interval(function () {
+            $scope.s_interval += 2.5;
+        }, 500);
+        */
+        
     }
 </script>
 

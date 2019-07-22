@@ -26,7 +26,10 @@ return function(App $app) {
     
     $container = $app->getContainer();
     
-    // route root
+    /**  .17/redstone/tools
+     * a POST to '/' will invoke the core portion of the "encode remove" program.
+     * It'll look for the CSV the user just uploaded, removed encodes, and download it
+     */
     $app->post('/',
         function(Request $request, Response $response) use ($container, $app) {
             $directory = $container->get('upload_directory');
@@ -89,31 +92,44 @@ return function(App $app) {
                 $startOver = "<br><br> <a href='/redstone/tools/encode-remove'><b>Start Over</b></a>";
                 return $response->getBody()->write($errorInfo . $fileError . $startOver);
             }
+            
+            exit("An error happened ~routes.php L93");
         }
     );
     
+    /**  .17/redstone/tools
+     * a GET req, this route will render the AngularJS UI so the user can upload a file
+     */
     $app->get('/encode-remove',
         function(Request $request, Response $response, array $args) use ($container) {
             $container->get('renderer')->render($response, 'encode-remove.phtml', $args);
         }
     );
     
-    /**
+    /**  .17/redstone/tools
+     * This will return the info for the removed encodes
+     */
+    $app->get('/encode-remove/removed-encodes/{encode-id}',
+        function(Request $request, Response $response, array $args) use ($container) {
+    
+        }
+    );
+    
+    /**  .17/redstone/tools
      * Root route to The API for the slim micro framework, this won't be used much to be honest
+     * All it'll do is render a view that'll say "hello" what ever var {name} is
      */
     $app->get('/[{name}]',
-        
-        // route controller
         function(Request $request, Response $response, array $args) use ($container) {
-            
+        
             // Sample log message
             $container->get('logger')->info("\n\rRedstone '/' route\n\r");
-            
+        
             // Render index view
             return $container->get('renderer')->render($response, 'index.phtml', $args);
-            
+        
         } // END OF: root route ctrl i.e. "/[{optional-route-var}]"
-    
+
     );
     
 };
