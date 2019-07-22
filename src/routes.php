@@ -47,14 +47,14 @@ return function(App $app) {
                 $encodeRemove->removeEncodedChars();
                 $sanitizedFilePath = $encodeRemove->getCleanFilePath();
                 $log->info("\n\r__>> RSM DEBUG MODE - testing app logic, sanitized file path = $sanitizedFilePath\n\r");
-    
+                
                 $break = 'point';
             }
             // Program is NOT in debug mode, it's go time
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
                 $encodeRemove = new RsmEncodeRemove($directory, $fileName);
-               
+                
                 $log->info("\n\r __>> RSM file upload name= [ $fileName ] \n\r");
                 
                 $encodeRemove->removeEncodedChars();
@@ -84,7 +84,10 @@ return function(App $app) {
             }
             // something broke
             else {
-                exit("ERROR UPLOADING FILE - " . (string)$file->getError());
+                $errorInfo = '<h1>No file selected and the submit button was clicked</h1> <br/>';
+                $fileError = 'Error ' . (string)$file->getError();
+                $startOver = "<br><br> <a href='/redstone/tools/encode-remove'><b>Start Over</b></a>";
+                return $response->getBody()->write($errorInfo . $fileError . $startOver);
             }
         }
     );

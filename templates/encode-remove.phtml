@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ng-app="rsm-encode-remove">
 
 <head>
     <title>Redstone Mint</title>
@@ -14,6 +14,10 @@
         
         .rsm-text-center {
             text-align: center;
+        }
+        
+        .rsm-mt {
+            margin-top: 10%;
         }
 
         .flat-table {
@@ -80,7 +84,7 @@
 </head>
 
 
-<body>
+<body data-ng-controller="EncodePresentCtrl">
 
 <div style="margin: auto; width: 80%;">
     <h1>
@@ -111,6 +115,7 @@
 
 <div class="rsm-text-center">
     <h2>encodes that were removed</h2>
+    <p>{{s_status}}</p>
     <table class="flat-table flat-table-2">
         <thead>
         <th>encoded char</th>
@@ -129,7 +134,22 @@
     </table>
 </div>
 
+<footer class="rsm-text-center rsm-mt">
+      <h5>Redstone Automation v0.0.{{8-9+2}}</h5>
+</footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.8/angular.min.js"
+        integrity="sha256-drxfSiYW94qA5Cyx5wrs8T8qV5GB45vES84r+X4zNS0="
+        crossorigin="anonymous"></script>
+
+<script>
+    let app = angular.module('rsm-encode-remove', []);
+    app.controller('EncodePresentCtrl', ['$scope', EncodePresentCtrlClass]);
+    
+    function EncodePresentCtrlClass($scope) {
+        $scope.s_status = 'Controller is wired up';
+    }
+</script>
 
 </body>
 </html>
