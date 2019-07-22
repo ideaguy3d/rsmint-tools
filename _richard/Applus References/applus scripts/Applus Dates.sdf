@@ -1,0 +1,26 @@
+**************************************************
+**************************************************
+*-- 001
+*-- C:\PROGRAM FILES (X86)\ACCUZIP6 5.0\COMMAND\DATE MOVE.TXT
+*-- Modified: 05/17/2019 02:01:12 PM
+**************************************************
+*NAME=Date Move 
+COMMAND=
+Replace all Mailer_due with SUBSTR(Mailer_due,5,4)+LEFT(Mailer_due,4)
+Replace all Mail_by_da with SUBSTR(Mail_by_da,5,4)+LEFT(Mail_by_da,4)
+Replace all Expiration with SUBSTR(Expiration,5,4)+LEFT(Expiration,4)
+Replace all Date_of_bi with SUBSTR(Date_of_bi,5,4)+LEFT(Date_of_bi,4)
+
+**************************************************
+**************************************************
+*-- 002
+*-- C:\PROGRAM FILES (X86)\ACCUZIP6 5.0\COMMAND\DATE FORMATE.TXT
+*-- Modified: 05/17/2019 01:56:00 PM
+**************************************************
+*NAME=Date Formate 
+COMMAND=
+Replace all Mailer_due with LEFT(ALLT(Mailer_due),2)+"/"+SUBSTR(ALLT(Mailer_due),3,2)+"/"+SUBSTR(ALLT(Mailer_due),5,4)
+Replace all Mail_by_da with LEFT(ALLT(Mail_by_da),2)+"/"+SUBSTR(ALLT(Mail_by_da),3,2)+"/"+SUBSTR(ALLT(Mail_by_da),5,4)
+Replace all Expiration with LEFT(ALLT(Expiration),2)+"/"+SUBSTR(ALLT(Expiration),3,2)+"/"+SUBSTR(ALLT(Expiration),5,4)
+Replace all Date_of_bi with LEFT(ALLT(Date_of_bi),2)+"/"+SUBSTR(ALLT(Date_of_bi),3,2)+"/"+SUBSTR(ALLT(Date_of_bi),5,4)
+

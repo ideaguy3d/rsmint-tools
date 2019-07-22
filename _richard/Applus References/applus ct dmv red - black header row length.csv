@@ -1,0 +1,17 @@
+i,field_title,char_count
+0,vin,17
+1,class_code,2
+2,license,8
+3,mail_by_date,8
+4,expiration,8
+5,mailer_due,8
+6,year,4
+7,make,18
+8,model,18
+9,date_of_birth,8
+10,primary_owner,38
+11,secondary_owner,38
+12,address,38
+13,city,22
+14,st,2
+15,zip,10

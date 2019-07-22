@@ -7,25 +7,95 @@
         body {
             font-family: sans-serif;
         }
+        
+        table {
+            margin: auto;
+        }
+        
+        .rsm-text-center {
+            text-align: center;
+        }
+
+        .flat-table {
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            font-family: 'Lato', Calibri, Arial, sans-serif;
+            border: none;
+            border-radius: 3px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+        }
+
+        .flat-table th, .flat-table td {
+            box-shadow: inset 0 -1px rgba(0, 0, 0, 0.25),
+            inset 0 1px rgba(0, 0, 0, 0.25);
+        }
+
+        .flat-table th {
+            font-weight: normal;
+            -webkit-font-smoothing: antialiased;
+            padding: 1em;
+            color: rgba(0, 0, 0, 0.45);
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+            font-size: 1.5em;
+        }
+
+        .flat-table td {
+            color: #f7f7f7;
+            padding: 0.7em 1em 0.7em 1.15em;
+            text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
+            font-size: 1.4em;
+        }
+
+        .flat-table tr {
+            -webkit-transition: background 0.3s, box-shadow 0.3s;
+            -moz-transition: background 0.3s, box-shadow 0.3s;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .flat-table-1 {
+            background: #336ca6;
+        }
+
+        .flat-table-1 tr:hover {
+            background: rgba(0, 0, 0, 0.19);
+        }
+
+        .flat-table-2 tr:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .flat-table-2 {
+            background: #f06060;
+        }
+
+        .flat-table-3 {
+            background: #52be7f;
+        }
+
+        .flat-table-3 tr:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
+
 
 <body>
 
 <div style="margin: auto; width: 80%;">
     <h1>
         <img src="https://redstonemail.com/companies/renderLogo/568ae6c2103fb4f64f2337d2" alt="logo" width="150px">
-        Remove Encoded chars
+        Remove Encodes
     </h1>
-    
+
     <p class="rsm-file-upload-info">
         <small>
             upload file
         </small>
     </p>
-    
+
     <br>
-    
+
     <form action="/redstone/tools/" method="POST" enctype="multipart/form-data">
         <div onclick="console.log('the click was picked up :)')">
             <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
@@ -33,37 +103,33 @@
         <br><br>
         <input type="submit">
     </form>
-    
+
     <br>
-    
-    <div id="rs-js-output" style="font-family: Consolas, sans-serif; font-size: 12px;">Output</div>
 </div>
 
-<script type="text/javascript">
-    let outputElem = document.getElementById('rs-js-output');
-    let applusCookie = getCookie('ApplusStatus');
+<hr>
 
-    setInterval(function () {
-        let applusCookie = getCookie('ApplusStatus');
-        outputElem.innerHTML = "<h2>" + applusCookie + "</h2>";
-    }, 2);
+<div class="rsm-text-center">
+    <h2>encodes that were removed</h2>
+    <table class="flat-table flat-table-2">
+        <thead>
+        <th>encoded char</th>
+        <th>Row</th>
+        <th>Column</th>
+        <th>field {{firstField}} value</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>�</td>
+            <td>56</td>
+            <td>27</td>
+            <td>5648932</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
-    function getCookie(cname) {
-        let name = cname + "=";
-        let ca = decodeURIComponent(document.cookie).split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
 
-        return "";
-    }
-</script>
 
 </body>
 </html>

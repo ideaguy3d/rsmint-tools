@@ -1,0 +1,5 @@
+NAME=Applus First3 
+COMMAND=ON ERROR com_Mesg=MESSAGE()
+SET SAFETY OFF
+ALTER TABLE (ALIAS()) ADD COLUMN First3 C(60)
+replace all First3 with allt(first)+" "+allt(Company)

@@ -1,0 +1,5 @@
+NAME=Date Move 
+COMMAND=Replace all Mailer_due with SUBSTR(Mailer_due,5,4)+LEFT(Mailer_due,4)
+Replace all Mail_by_da with SUBSTR(Mail_by_da,5,4)+LEFT(Mail_by_da,4)
+Replace all Expiration with SUBSTR(Expiration,5,4)+LEFT(Expiration,4)
+Replace all Date_of_bi with SUBSTR(Date_of_bi,5,4)+LEFT(Date_of_bi,4)

@@ -1,0 +1,696 @@
+Array
+(
+    [0] => Array
+        (
+            [sku] => sku
+            [spicer_cost] => spicer_cost
+            [spicer_location] => spicer_location
+            [spicer_location_info] => spicer_location_info
+            [skid_box] => skid_box
+            [brand] => brand
+            [additional_cost_info] => additional_cost_info
+        )
+
+    [1] => Array
+        (
+            [sku] => P8511-60WH
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $9.20
+            [skid_box] => 200000
+            [brand] => Soporcet/Husky
+            [additional_cost_info] => *$10.00 Husky Sac
+        )
+
+    [2] => Array
+        (
+            [sku] => P8511-60WH
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $10.00
+            [skid_box] => 200000
+            [brand] => Soporcet/Husky
+            [additional_cost_info] => *$10.00 Husky Sac
+        )
+
+    [3] => Array
+        (
+            [sku] => P8514-60WH
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $13.60
+            [skid_box] => 150000
+            [brand] => Husky
+            [additional_cost_info] => 
+        )
+
+    [4] => Array
+        (
+            [sku] => P8514-60WH
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $13.60
+            [skid_box] => 150000
+            [brand] => Husky
+            [additional_cost_info] => 
+        )
+
+    [5] => Array
+        (
+            [sku] => P8514-20WH
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $8.80
+            [skid_box] => 150000
+            [brand] => Pacesetter 98
+            [additional_cost_info] => 
+        )
+
+    [6] => Array
+        (
+            [sku] => P8514-20WH
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $8.80
+            [skid_box] => 150000
+            [brand] => Pacesetter 98
+            [additional_cost_info] => 
+        )
+
+    [7] => Array
+        (
+            [sku] => P8511-20PI
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $9.40
+            [skid_box] => 200000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [8] => Array
+        (
+            [sku] => P8511-20PI
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $10.00
+            [skid_box] => 200000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [9] => Array
+        (
+            [sku] => P8511-20GR
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $9.40
+            [skid_box] => 200000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [10] => Array
+        (
+            [sku] => P8511-20GR
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $10.00
+            [skid_box] => 200000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [11] => Array
+        (
+            [sku] => P8511-20BL
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $9.40
+            [skid_box] => 200000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [12] => Array
+        (
+            [sku] => P8511-20BL
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $10.00
+            [skid_box] => 200000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [13] => Array
+        (
+            [sku] => P8511-70WH
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $10.35
+            [skid_box] => 160000
+            [brand] => Soporcet/Husky
+            [additional_cost_info] => *$11.75 Husky Sac
+        )
+
+    [14] => Array
+        (
+            [sku] => P8511-70WH
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $11.75
+            [skid_box] => 160000
+            [brand] => Soporcet/Husky
+            [additional_cost_info] => *$11.75 Husky Sac
+        )
+
+    [15] => Array
+        (
+            [sku] => P8511-20CA
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $9.40
+            [skid_box] => 200000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [16] => Array
+        (
+            [sku] => P8511-20CA
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $10.00
+            [skid_box] => 200000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [17] => Array
+        (
+            [sku] => P8514-60GR
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $15.50
+            [skid_box] => 120000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [18] => Array
+        (
+            [sku] => P8514-60GR
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $15.50
+            [skid_box] => 120000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [19] => Array
+        (
+            [sku] => P8511-60CR
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $12.10
+            [skid_box] => 160000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [20] => Array
+        (
+            [sku] => P8511-60CR
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $12.10
+            [skid_box] => 160000
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [21] => Array
+        (
+            [sku] => P8511-20WH
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $6.30
+            [skid_box] => 200000
+            [brand] => Pacesetter 98
+            [additional_cost_info] => 
+        )
+
+    [22] => Array
+        (
+            [sku] => P8511-20WH
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $6.30
+            [skid_box] => 200000
+            [brand] => Pacesetter 98
+            [additional_cost_info] => 
+        )
+
+    [23] => Array
+        (
+            [sku] => P1117-60WH
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $19.60
+            [skid_box] => 100000
+            [brand] => Soporcet/Husky
+            [additional_cost_info] => *$21.30 Husky Sac
+        )
+
+    [24] => Array
+        (
+            [sku] => P1117-60WH
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $21.30
+            [skid_box] => 100000
+            [brand] => Soporcet/Husky
+            [additional_cost_info] => *$21.30 Husky Sac
+        )
+
+    [25] => Array
+        (
+            [sku] => P1117-70WH
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $22.00
+            [skid_box] => 80000
+            [brand] => soporcet/Husky
+            [additional_cost_info] => *$21.30 Husky Sac
+        )
+
+    [26] => Array
+        (
+            [sku] => P1117-70WH
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $24.86
+            [skid_box] => 80000
+            [brand] => soporcet/Husky
+            [additional_cost_info] => *$21.30 Husky Sac
+        )
+
+    [27] => Array
+        (
+            [sku] => P1117-70WH-V
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $44.00
+            [skid_box] => 
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [28] => Array
+        (
+            [sku] => P1117-70WH-V
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $44.00
+            [skid_box] => 
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [29] => Array
+        (
+            [sku] => P1117-70CA-V
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $45.00
+            [skid_box] => 
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [30] => Array
+        (
+            [sku] => P1117-70CA-V
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $45.00
+            [skid_box] => 
+            [brand] => Earthchoice
+            [additional_cost_info] => 
+        )
+
+    [31] => Array
+        (
+            [sku] => P1218-67CA-V-CT
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => 
+            [skid_box] => 
+            [brand] => 
+            [additional_cost_info] => 
+        )
+
+    [32] => Array
+        (
+            [sku] => P1218-67CA-V-CT
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => 
+            [skid_box] => 
+            [brand] => 
+            [additional_cost_info] => 
+        )
+
+    [33] => Array
+        (
+            [sku] => P1218-67WH-V-CT
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => 
+            [skid_box] => 
+            [brand] => 
+            [additional_cost_info] => 
+        )
+
+    [34] => Array
+        (
+            [sku] => P1218-67WH-V-CT
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => 
+            [skid_box] => 
+            [brand] => 
+            [additional_cost_info] => 
+        )
+
+    [35] => Array
+        (
+            [sku] => P1218-100WHGL-C
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $78.39
+            [skid_box] => 475/19000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [36] => Array
+        (
+            [sku] => P1218-100WHGL-C
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $78.39
+            [skid_box] => 475/19000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [37] => Array
+        (
+            [sku] => P1218-100WHGL-T
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $41.00
+            [skid_box] => 900/36000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [38] => Array
+        (
+            [sku] => P1218-100WHGL-T
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $41.00
+            [skid_box] => 900/36000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [39] => Array
+        (
+            [sku] => P1218-80WHGL-C
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $62.33
+            [skid_box] => 575/23000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [40] => Array
+        (
+            [sku] => P1218-80WHGL-C
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $62.33
+            [skid_box] => 575/23000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [41] => Array
+        (
+            [sku] => P1218-80WHGL-T
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $32.80
+            [skid_box] => 1200/48000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [42] => Array
+        (
+            [sku] => P1218-80WHGL-T
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $32.80
+            [skid_box] => 1200/48000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [43] => Array
+        (
+            [sku] => P1319-100WHGL-C
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $89.72
+            [skid_box] => 475/19000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [44] => Array
+        (
+            [sku] => P1319-100WHGL-C
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $89.72
+            [skid_box] => 475/19000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [45] => Array
+        (
+            [sku] => P1319-100WHGL-T
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $47.38
+            [skid_box] => 900/19000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [46] => Array
+        (
+            [sku] => P1319-100WHGL-T
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $47.38
+            [skid_box] => 900/19000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [47] => Array
+        (
+            [sku] => P1319-80WHGL-C
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $71.78
+            [skid_box] => 575/23000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [48] => Array
+        (
+            [sku] => P1319-80WHGL-C
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $71.78
+            [skid_box] => 575/23000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [49] => Array
+        (
+            [sku] => P1319-80WHGL-T
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $38.27
+            [skid_box] => 1200/48000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [50] => Array
+        (
+            [sku] => P1319-80WHGL-T
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $38.27
+            [skid_box] => 1200/48000
+            [brand] => Pacesetter
+            [additional_cost_info] => 
+        )
+
+    [51] => Array
+        (
+            [sku] => P2335-65MGR-C
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $355.00
+            [skid_box] => 500
+            [brand] => Astrobright 
+            [additional_cost_info] => 
+        )
+
+    [52] => Array
+        (
+            [sku] => P2335-65MGR-C
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $355.00
+            [skid_box] => 500
+            [brand] => Astrobright 
+            [additional_cost_info] => 
+        )
+
+    [53] => Array
+        (
+            [sku] => P2335-80WH
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $98.50
+            [skid_box] => 6500
+            [brand] => Pacesetter 
+            [additional_cost_info] => 
+        )
+
+    [54] => Array
+        (
+            [sku] => P2335-80WH
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $98.50
+            [skid_box] => 6500
+            [brand] => Pacesetter 
+            [additional_cost_info] => 
+        )
+
+    [55] => Array
+        (
+            [sku] => P2640-67WH-V
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $250.00
+            [skid_box] => 500
+            [brand] => Earthchoice/Exact
+            [additional_cost_info] => 
+        )
+
+    [56] => Array
+        (
+            [sku] => P2640-67WH-V
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $250.00
+            [skid_box] => 500
+            [brand] => Earthchoice/Exact
+            [additional_cost_info] => 
+        )
+
+    [57] => Array
+        (
+            [sku] => P2640-67CA-V
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $250.00
+            [skid_box] => 500
+            [brand] => Earthchoice/Exact
+            [additional_cost_info] => 
+        )
+
+    [58] => Array
+        (
+            [sku] => P2640-67CA-V
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $250.00
+            [skid_box] => 500
+            [brand] => Earthchoice/Exact
+            [additional_cost_info] => 
+        )
+
+    [59] => Array
+        (
+            [sku] => P2640-67GR-V
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $250.00
+            [skid_box] => 500
+            [brand] => Earthchoice/Exact
+            [additional_cost_info] => 
+        )
+
+    [60] => Array
+        (
+            [sku] => P2640-67GR-V
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $250.00
+            [skid_box] => 500
+            [brand] => Earthchoice/Exact
+            [additional_cost_info] => 
+        )
+
+    [61] => Array
+        (
+            [sku] => P2649-65OR-C
+            [spicer_location] => Sacramento
+            [spicer_location_info] => Spicers Sacramento
+            [spicer_cost] => $695.00
+            [skid_box] => 500
+            [brand] => Astrobright 
+            [additional_cost_info] => 
+        )
+
+    [62] => Array
+        (
+            [sku] => P2649-65OR-C
+            [spicer_location] => Denver
+            [spicer_location_info] => Spicers Denver
+            [spicer_cost] => $695.00
+            [skid_box] => 500
+            [brand] => Astrobright 
+            [additional_cost_info] => 
+        )
+
+)

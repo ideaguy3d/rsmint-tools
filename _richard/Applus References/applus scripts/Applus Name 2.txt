@@ -1,0 +1,7 @@
+NAME=Applus Name 2 
+COMMAND=
+REPLACE company WITH first, first WITH "" 
+;FOR AT("INC", UPPER(first)) != 0 OR AT("LLC", UPPER(first)) != 0
+REPLACE first WITH ALLT(LTRIM(SUBSTR(first,AT(" ",ALLTRIM(first))+1)))+" "+ LEFT(first,AT(" ",ALLTRIM(first))-1) 
+;FOR OCCURS(" ",ALLTRIM(first))>0
+REPLACE first2 WITH ALLT(LTRIM(SUBSTR(first2,AT(" ",ALLTRIM(first2))+1)))+" "+LEFT(first2,AT(" ",ALLTRIM(first2))-1) FOR OCCURS(" ",ALLTRIM(first2))>0
