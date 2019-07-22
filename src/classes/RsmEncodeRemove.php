@@ -29,10 +29,11 @@ class RsmEncodeRemove
      * @var array
      */
     private $csvData;
+    private $removedEncodesInfo = [];
     
     public function __construct(string $directory, string $fileName) {
         $this->path2directory = $directory;
-        $this->fileName = $fileName;
+        $this->fileName = str_replace('.csv', '',$fileName);
         $this->path2file = $directory . DIRECTORY_SEPARATOR . $fileName;
         $this->csvData = CsvParseModel::specificCsv2array($directory, $fileName);
     }
@@ -41,8 +42,6 @@ class RsmEncodeRemove
      * will parse CSV data, then export the clean data to a CSV file
      */
     public function removeEncodedChars(): void {
-        $break = 'point';
-        
         $csvArray = $this->csvData;
         $cleanCsv = [$csvArray[0]];
         
@@ -117,9 +116,9 @@ class RsmEncodeRemove
         }
         
         $break = 'point';
-        $cleanFileName = 'rsm-encode-remove-' . $this->fileName;
-        $this->sanitizedFilePath = $this->path2directory . DIRECTORY_SEPARATOR . $cleanFileName;
+        $cleanFileName = $this->fileName . '-sanitized';
         CsvParseModel::export2csv($cleanCsv, $this->path2directory, $cleanFileName);
+        $this->sanitizedFilePath = $this->path2directory . DIRECTORY_SEPARATOR . $cleanFileName;
         
     } // END OF: removeEncodedChars()
     
@@ -132,13 +131,15 @@ class RsmEncodeRemove
         $goodChars = "/([a-z]|[A-Z]|[0-9])/";
         $match = preg_match($goodChars, $ch);
         
+        
         //TODO: Detect 1 whitespace
         
         if($match === 1) {
             return $isEncoded;
         }
         else if($match === 0) {
-            echo "\n encoded char = $ch";
+            //TODO: maybe track the encoded chars here?
+            $this->removedEncodesInfo [] = ['char' => $ch];
         }
         else if($match === false) {
             exit("\n __>> ERROR - can't match, the char = $ch\n");

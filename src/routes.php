@@ -77,7 +77,8 @@ return function(App $app) {
                 $response = $response->withHeader($contentType, 'application/zip');
                 $response = $response->withHeader($contentTransferEncoding, 'binary');
                 
-                readfile($sanitizedFilePath);
+                // have to add '.csv' to fix an annoying error 
+                readfile(($sanitizedFilePath . '.csv'));
                 
                 return $response;
             }

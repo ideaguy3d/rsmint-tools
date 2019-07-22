@@ -62,7 +62,7 @@ class CsvParseModel implements ICsvParseModel
     public static function export2csv(
         array $dataSet, string $exportPath, string $name2giveFile
     ): string {
-        $csvName = 'rs_' . $name2giveFile . '.csv';
+        $csvName = $name2giveFile . '.csv';
         $exportPath = $exportPath . DIRECTORY_SEPARATOR . $csvName;
         $outputFile = fopen($exportPath, 'w') or exit("mheta - unable to open $exportPath");
         
