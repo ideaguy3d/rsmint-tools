@@ -34,6 +34,8 @@ return function(App $app) {
         function(Request $request, Response $response) use ($container, $app) {
             $directory = AppGlobals::PathToUploadDirectory();
             $log = $app->getContainer()->get('logger');
+            $dbRSMint_1 = $this->dbRSMint_1;
+            // function declarations
             $sanitizedFilePath = null;
             
             $uploadedFiles = $request->getUploadedFiles();
@@ -46,17 +48,18 @@ return function(App $app) {
                 $file = 'test.csv';
                 
                 // debug RsmEncodeRemove code & app logic
-                $encodeRemove = new RsmEncodeRemove($folder, $file);
+                $encodeRemove = new RsmEncodeRemove($folder, $file, $dbRSMint_1);
                 $encodeRemove->removeEncodedChars();
                 $sanitizedFilePath = $encodeRemove->getCleanFilePath();
                 $log->info("\n\r__>> RSM DEBUG MODE - testing app logic, sanitized file path = $sanitizedFilePath\n\r");
                 
                 $break = 'point';
             }
+            
             // Program is NOT in debug mode, it's go time
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
-                $encodeRemove = new RsmEncodeRemove($directory, $fileName);
+                $encodeRemove = new RsmEncodeRemove($directory, $fileName, $dbRSMint_1);
                 
                 $log->info("\n\r __>> RSM file upload name= [ $fileName ] \n\r");
                 
@@ -111,7 +114,7 @@ return function(App $app) {
      */
     $app->get('/encode-remove/removed-encodes/{encode-id}',
         function(Request $request, Response $response, array $args) use ($container) {
-    
+        
         }
     );
     
@@ -121,15 +124,15 @@ return function(App $app) {
      */
     $app->get('/[{name}]',
         function(Request $request, Response $response, array $args) use ($container) {
-        
+            
             // Sample log message
             $container->get('logger')->info("\n\rRedstone '/' route\n\r");
-        
+            
             // Render index view
             return $container->get('renderer')->render($response, 'index.phtml', $args);
-        
+            
         } // END OF: root route ctrl i.e. "/[{optional-route-var}]"
-
+    
     );
     
 };

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Redstone\Tools;
 
 use Generator;
+use PDO;
 
 class RsmEncodeRemove
 {
@@ -21,7 +22,6 @@ class RsmEncodeRemove
     private $path2file;
     /**
      * This will be an absolute path to the sanitized CSV file
-     *
      * @var string
      */
     private $sanitizedFilePath;
@@ -29,11 +29,25 @@ class RsmEncodeRemove
      * @var array
      */
     private $csvData;
+    /**
+     * will insert all the encoded chars to SQL Server
+     * @var array
+     */
     private $removedEncodesInfo = [];
+    /**
+     * connection to RSMint_1 db
+     * @var PDO
+     */
+    private $dbRSMint_1;
+    /**
+     * @var string
+     */
+    private $removedEncodesTable = '[RSMint_1].[dbo].[RemovedEncodes]';
     
-    public function __construct(string $directory, string $fileName) {
+    public function __construct(string $directory, string $fileName, PDO $dbRSMint_1) {
         $this->path2directory = $directory;
-        $this->fileName = str_replace('.csv', '',$fileName);
+        $this->dbRSMint_1 = $dbRSMint_1;
+        $this->fileName = str_replace('.csv', '', $fileName);
         $this->path2file = $directory . DIRECTORY_SEPARATOR . $fileName;
         $this->csvData = CsvParseModel::specificCsv2array($directory, $fileName);
     }
@@ -81,22 +95,25 @@ class RsmEncodeRemove
                 $cleanCsv[$i] = $record; // initialize an array
                 // $i is basically the row
                 $row = $i;
-    
+                $firstField = '';
+                
                 /** LOOP OVER FIELDS **/
                 for($f = 0; $f < count($record); $f++) {
                     // field in the current record
                     $field = $record[$f];
                     $cleanField = '';
                     // $f is basically the column
-                    $column = $f; 
-                    
+                    $column = $f;
+                    if($f = 0) {
+                        $firstField = $field;
+                    }
                     // preg_match('/[^\x20-\x7e]/', $field)
                     
                     /** LOOP OVER EACH CHAR **/
                     for($c = 0; $c < strlen($field); $c++) {
                         $ch = $field[$c];
                         
-                        if(!$this->isEncodedChar($ch, $row, $column)) {
+                        if(!$this->isEncodedChar($ch, $row, $column, $firstField)) {
                             $cleanField .= $ch;
                         }
                         // _ENCODE REPLACE - $ch is an encoded char so make it " "
@@ -131,7 +148,9 @@ class RsmEncodeRemove
         return $this->sanitizedFilePath;
     }
     
-    public function isEncodedChar(string $ch, int $row, int $column): bool {
+    public function isEncodedChar(
+        string $ch, int $row, int $column, string $firstField
+    ): bool {
         $isEncoded = false;
         $goodChars = "/([a-z]|[A-Z]|[0-9])/";
         $match = preg_match($goodChars, $ch);
@@ -146,7 +165,7 @@ class RsmEncodeRemove
                 'file' => $this->fileName,
                 'encode' => $ch,
                 'row' => $row,
-                'column' => $column
+                'column' => $column,
             ];
         }
         else if($match === false) {
@@ -159,7 +178,7 @@ class RsmEncodeRemove
                 'file' => $this->fileName,
                 'encode' => $ch,
                 'row' => $row,
-                'column' => $column
+                'column' => $column,
             ];
             return ($isEncoded = true);
         }
@@ -169,7 +188,14 @@ class RsmEncodeRemove
     } // END OF: isEncodedChar()
     
     private function insertIntoSqlServer(): void {
-    
-}
+        $query = "
+            INSERT INTO {$this->removedEncodesTable}
+            (
+                [rsm_file_name],
+                [rsm_row],
+                [rsm_column]
+            )
+        ";
+    }
     
 }
