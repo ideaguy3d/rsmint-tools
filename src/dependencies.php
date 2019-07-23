@@ -1,6 +1,7 @@
 <?php
 
 use Slim\App;
+use PDO;
 
 return function (App $app) {
     
@@ -21,8 +22,17 @@ return function (App $app) {
         return $logger;
     };
     
-    $localUploadsFolderPath = 'C:\xampp\htdocs\redstone\uploads';
-    
-    $container['upload_directory'] = $localUploadsFolderPath;
-    
+    // RSMint_1 db
+    $container['dbRSMint_1'] = function($c){
+        $dbRSMint_1 = $c['settings']['dbRSMint_1'];
+        $dsn = "sqlsrv:Database={$dbRSMint_1['dbname']};server={$dbRSMint_1['host']}";
+        $user = $dbRSMint_1['user'];
+        $pass = $dbRSMint_1['pass'];
+        $pdo = new PDO($dsn, $user, $pass);
+        
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        
+        return $pdo; 
+    };
 };

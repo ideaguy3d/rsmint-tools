@@ -79,12 +79,16 @@ class RsmEncodeRemove
                 // $record will be the csv row
                 $record = $csvArray[$i];
                 $cleanCsv[$i] = $record; // initialize an array
-                
+                // $i is basically the row
+                $row = $i;
+    
                 /** LOOP OVER FIELDS **/
                 for($f = 0; $f < count($record); $f++) {
                     // field in the current record
                     $field = $record[$f];
                     $cleanField = '';
+                    // $f is basically the column
+                    $column = $f; 
                     
                     // preg_match('/[^\x20-\x7e]/', $field)
                     
@@ -92,7 +96,7 @@ class RsmEncodeRemove
                     for($c = 0; $c < strlen($field); $c++) {
                         $ch = $field[$c];
                         
-                        if(!$this->isEncodedChar($ch)) {
+                        if(!$this->isEncodedChar($ch, $row, $column)) {
                             $cleanField .= $ch;
                         }
                         // _ENCODE REPLACE - $ch is an encoded char so make it " "
@@ -123,34 +127,49 @@ class RsmEncodeRemove
     } // END OF: removeEncodedChars()
     
     public function getCleanFilePath(): string {
+        $this->insertIntoSqlServer();
         return $this->sanitizedFilePath;
     }
     
-    public function isEncodedChar(string $ch): bool {
+    public function isEncodedChar(string $ch, int $row, int $column): bool {
         $isEncoded = false;
         $goodChars = "/([a-z]|[A-Z]|[0-9])/";
         $match = preg_match($goodChars, $ch);
-        
-        
         //TODO: Detect 1 whitespace
         
+        //-- 1ST WAVE OF SCANS:
         if($match === 1) {
             return $isEncoded;
         }
         else if($match === 0) {
-            //TODO: maybe track the encoded chars here?
-            $this->removedEncodesInfo [] = ['char' => $ch];
+            $this->removedEncodesInfo [] = [
+                'file' => $this->fileName,
+                'encode' => $ch,
+                'row' => $row,
+                'column' => $column
+            ];
         }
         else if($match === false) {
             exit("\n __>> ERROR - can't match, the char = $ch\n");
         }
         
+        //-- 2ND WAVE OF SCANS: 
         if(ord($ch) < 32 || ord($ch) > 126) {
+            $this->removedEncodesInfo [] = [
+                'file' => $this->fileName,
+                'encode' => $ch,
+                'row' => $row,
+                'column' => $column
+            ];
             return ($isEncoded = true);
         }
         
         return $isEncoded;
         
     } // END OF: isEncodedChar()
+    
+    private function insertIntoSqlServer(): void {
+    
+}
     
 }

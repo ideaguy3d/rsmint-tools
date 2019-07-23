@@ -15,7 +15,7 @@ class AppGlobals
 {
     //-------------------------------------------------------------
     // TURN DEBUG MODE on OR off, then set the route in routes.php
-    public static $NINJA_AUTO_DEBUG = false;
+    public static $NINJA_AUTO_DEBUG = true;
     //-------------------------------------------------------------
     
     //-------------------------------------------------------------
@@ -28,10 +28,10 @@ class AppGlobals
     public static $accounting_csv = 'accounting-php.csv';
     public static $coordinator_csv = 'coordinator-php.csv';
     
-    public static function PathToCommissionCsvFolder() {
+    public static function PathToUploadDirectory() {
         return (gethostname() === 'Julius1')
-            ? 'C:\xampp\htdocs\ninja\app\commission-csv'
-            : 'C:\inetpub\wwwroot\ninja\app\commission-csv';
+            ? 'C:\xampp\htdocs\redstone\uploads'
+            : 'C:\inetpub\wwwroot\redstone\uploads';
     }
     
     public static function LogComAutoInfo(string $info): void {

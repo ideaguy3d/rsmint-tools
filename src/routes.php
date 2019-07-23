@@ -32,7 +32,7 @@ return function(App $app) {
      */
     $app->post('/',
         function(Request $request, Response $response) use ($container, $app) {
-            $directory = $container->get('upload_directory');
+            $directory = AppGlobals::PathToUploadDirectory();
             $log = $app->getContainer()->get('logger');
             $sanitizedFilePath = null;
             

@@ -19,6 +19,13 @@ return [
             'level' => \Monolog\Logger::DEBUG,
         ],
         
+        'dbRSMint_1' => [
+            'host' => '192.168.7.16\\rsmauto',
+            'dbname' => 'RSMint_1',
+            'user' => 'mhetadata',
+            'pass' => 'miguel'
+        ],
+        
     ],
     
 ];
