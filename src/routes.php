@@ -5,7 +5,7 @@ use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Redstone\Tools\RsmUploader;
-use Redstone\Tools\RsmEncodeRemove;
+use Redstone\Tools\EncodeRemove;
 use Redstone\Tools\AppGlobals;
 
 if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
@@ -52,8 +52,8 @@ return function(App $app) {
                 $folder = 'C:\xampp\htdocs\redstone\uploads';
                 $file = 'test.csv';
                 
-                // debug RsmEncodeRemove code & app logic
-                $encodeRemove = new RsmEncodeRemove($folder, $file, $dbRSMint_1, $AngularJS_id);
+                // debug EncodeRemove code & app logic
+                $encodeRemove = new EncodeRemove($folder, $file, $dbRSMint_1, $AngularJS_id);
                 $encodeRemove->removeEncodedChars();
                 $sanitizedFilePath = $encodeRemove->getCleanFilePath();
                 $log->info("\n\r__>> RSM DEBUG MODE - testing app logic, sanitized file path = $sanitizedFilePath\n\r");
@@ -64,7 +64,7 @@ return function(App $app) {
             // NOT in debug mode, it's go time
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
-                $encodeRemove = new RsmEncodeRemove($directory, $fileName, $dbRSMint_1, $AngularJS_id);
+                $encodeRemove = new EncodeRemove($directory, $fileName, $dbRSMint_1, $AngularJS_id);
                 
                 $log->info("\n\r __>> RSM file upload name= [ $fileName ] \n\r");
                 
@@ -119,11 +119,11 @@ return function(App $app) {
     /**  .17/redstone/tools
      * This will return the info for the removed encodes
      */
-    $app->get('/encode-remove/removed-encodes/{encode-id}',
+    $app->get('/encode-remove/removed-encodes/{ng-id}',
         //TODO: figure out how to send which encoded chars were removed back to AngularJS
         // so the table can show which chars were removed
         function(Request $request, Response $response, array $args) use ($container) {
-        
+            //$encodeRemove = new EncodeRemove()
         }
     );
     

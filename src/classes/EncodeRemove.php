@@ -6,7 +6,7 @@ namespace Redstone\Tools;
 use Generator;
 use PDO;
 
-class RsmEncodeRemove
+class EncodeRemove
 {
     /**
      * @var string
