@@ -15,6 +15,10 @@ GO
 ALTER TABLE [RSMint_1].[dbo].[RemovedEncodes] ADD first_field VARCHAR(512)
 GO
 
+-- forgot to create a column for the actual encoded char
+ALTER TABLE [RSMint_1].[dbo].[RemovedEncodes] ADD encode VARCHAR(2)
+GO
+
 
 
 

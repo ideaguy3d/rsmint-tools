@@ -1,7 +1,6 @@
 <?php
 
 use Slim\App;
-use PDO;
 
 return function (App $app) {
     
