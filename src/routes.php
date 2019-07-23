@@ -6,6 +6,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Redstone\Tools\RsmUploader;
 use Redstone\Tools\EncodeRemove;
+use Redstone\Tools\EncodeRemoveSql;
 use Redstone\Tools\AppGlobals;
 
 if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
@@ -27,6 +28,7 @@ return function(App $app) {
     $container = $app->getContainer();
     
     /**  .17/redstone/tools
+     *
      * a POST to '/' will invoke the core portion of the "encode remove" program.
      * It'll look for the CSV the user just uploaded, removed encodes, and download it
      *
@@ -108,6 +110,7 @@ return function(App $app) {
     );
     
     /**  .17/redstone/tools
+     *
      * a GET req, this route will render the AngularJS UI so the user can upload a file
      */
     $app->get('/encode-remove',
@@ -117,17 +120,19 @@ return function(App $app) {
     );
     
     /**  .17/redstone/tools
-     * This will return the info for the removed encodes
+     *
+     *  Return the info for the removed encodes from SQL Server
      */
-    $app->get('/encode-remove/removed-encodes/{ng-id}',
-        //TODO: figure out how to send which encoded chars were removed back to AngularJS
-        // so the table can show which chars were removed
+    $app->get('/get-removed-encodes/{ng-id}',
         function(Request $request, Response $response, array $args) use ($container) {
-            //$encodeRemove = new EncodeRemove()
+            $RSMint_1 = $this->dbRSMint_1;
+            $db = new EncodeRemoveSql($RSMint_1, $args['ng-id']);
+            return $response->withJson($db->getRemovedEncodes());
         }
     );
     
     /**  .17/redstone/tools
+     *
      * Root route to The API for the slim micro framework, this won't be used much to be honest
      * All it'll do is render a view that'll say "hello" what ever var {name} is
      */

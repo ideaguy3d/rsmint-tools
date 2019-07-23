@@ -94,10 +94,9 @@
 
     <br>
 
-    <form action="{{s_phpAction}}" method="POST" enctype="multipart/form-data">
-        <div onclick="console.log('the click was picked up :)')">
-            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
-        </div>
+    <form data-ng-submit="sf_getEncodeInfo($event)" action="/redstone/tools/<?= '?angularjs-id=test123' ?>"
+          name="rsmDownload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
         <br><br>
         <input type="submit">
     </form>
@@ -108,7 +107,7 @@
 <div class="rsm-text-center">
     <h2>encodes that were removed</h2>
     <p>
-        <small>{{s_status}}, interval: {{s_interval}};</small>
+        <small>{{s_status}}, interval: <b>{{s_interval}};</b></small>
     </p>
     <table class="flat-table flat-table-2">
         <thead>
@@ -139,20 +138,37 @@
         crossorigin="anonymous"></script>
 
 <script>
+    window.onload = function () {
+        // e.g. /redstone/tools/?angularjs-id=ng488641789g
+        //document.rsmDownload.action = rsm_action();
+        console.log('window loaded');
+    };
+    
+    function rsm_action(form) {
+        const bil = 9000000000;
+        const rand = Math.floor((Math.random() * bil) + 1);
+        const ng = "angularjsphpsqlcompsciwebapp";
+        const rLetter = ng.charAt(Math.floor((Math.random() * ng.length) + 1));
+        const ngid = `ng${rand}${rLetter}`;
+        const phpAction = "/redstone/tools/?angularjs-id=" + ngid;
+        console.log("phpAction = " + phpAction);
+        form.action = phpAction;
+        //return phpAction;
+    }
+    
     // _ANGULARJS APP
     let app = angular.module('rsm-encode-remove', []);
     app.controller('EncodePresentCtrl', ['$scope', '$interval', EncodePresentCtrlClass]);
 
     function EncodePresentCtrlClass($scope, $interval) {
-        const bil = 1000000000;
-        const rand = Math.floor((Math.random() * bil) + 1);
-        const ng = "angularjsphpsqlcompsciwebapp";
-        const rLetter = ng.charAt(Math.floor((Math.random() * ng.length)+1));
-        let ngid = `ng${rand}${rLetter}`;
-        $scope.s_phpAction = "/redstone/tools/?angularjs-id="+ngid;
         $scope.s_status = 'Controller is wired up';
         $scope.s_interval = 0;
-
+        
+        // sf = scope function
+        $scope.sf_getEncodeInfo = function ($event) {
+            //$event.preventDefault();
+            console.log('AngularJS picked up click')
+        };
         /*
         // simple interval test to ensure app can maintain state
         $interval(function () {

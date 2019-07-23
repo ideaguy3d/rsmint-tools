@@ -9,7 +9,7 @@ class EncodeRemoveSql
 {
     private $dbRSMint_1;
     private $ngid;
-    private $removedEncodesTable;
+    private $removedEncodesTable = '[RSMint_1].[dbo].[RemovedEncodes]';
     
     public function __construct(PDO $dbRSMint_1, string $ngid) {
         $this->dbRSMint_1 = $dbRSMint_1;
@@ -19,7 +19,7 @@ class EncodeRemoveSql
     public function getRemovedEncodes(): array {
         $query = "
             SELECT * FROM {$this->removedEncodesTable}
-            WHERE [angularjs_id] = ':ngid'
+            WHERE [angularjs_id] = :ngid
         ";
         
         $statement = $this->dbRSMint_1->prepare($query);
