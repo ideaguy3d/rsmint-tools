@@ -22,7 +22,10 @@ GO
 ALTER TABLE [RSMint_1].[dbo].[RemovedEncodes] ADD encode2 VARCHAR(2048)
 GO
 
-
+-- DROP COLUMN
+ALTER TABLE [RSMint_1].[dbo].[RemovedEncodes]
+DROP COLUMN [encode]
+GO
 
 
 --

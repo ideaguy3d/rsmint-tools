@@ -146,7 +146,7 @@
     function EncodePresentCtrlClass($scope, $interval) {
         const bil = 1000000000;
         const rand = Math.floor((Math.random() * bil) + 1);
-        const ng = "angularjsphpsqlcompsciwebapp" ;
+        const ng = "angularjsphpsqlcompsciwebapp";
         const rLetter = ng.charAt(Math.floor((Math.random() * ng.length)+1));
         let ngid = `ng${rand}${rLetter}`;
         $scope.s_phpAction = "/redstone/tools/?angularjs-id="+ngid;

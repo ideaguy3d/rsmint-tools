@@ -46,15 +46,14 @@ return function(App $app) {
             // function declarations
             $sanitizedFilePath = null;
             
-            
-            // Program is in debug mode
+            // in Debug Mode
             if(AppGlobals::$NINJA_AUTO_DEBUG) {
                 // read a "debug test" file into memory
                 $folder = 'C:\xampp\htdocs\redstone\uploads';
                 $file = 'test.csv';
                 
                 // debug RsmEncodeRemove code & app logic
-                $encodeRemove = new RsmEncodeRemove($folder, $file, $dbRSMint_1);
+                $encodeRemove = new RsmEncodeRemove($folder, $file, $dbRSMint_1, $AngularJS_id);
                 $encodeRemove->removeEncodedChars();
                 $sanitizedFilePath = $encodeRemove->getCleanFilePath();
                 $log->info("\n\r__>> RSM DEBUG MODE - testing app logic, sanitized file path = $sanitizedFilePath\n\r");
@@ -65,7 +64,7 @@ return function(App $app) {
             // NOT in debug mode, it's go time
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
-                $encodeRemove = new RsmEncodeRemove($directory, $fileName, $dbRSMint_1);
+                $encodeRemove = new RsmEncodeRemove($directory, $fileName, $dbRSMint_1, $AngularJS_id);
                 
                 $log->info("\n\r __>> RSM file upload name= [ $fileName ] \n\r");
                 
