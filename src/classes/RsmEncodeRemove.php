@@ -43,13 +43,22 @@ class RsmEncodeRemove
      * @var string
      */
     private $removedEncodesTable = '[RSMint_1].[dbo].[RemovedEncodes]';
+    /**
+     * The randomly generated id AngularJS will send in the Q string
+     * to uniquely identify which encodes to query for
+     * @var string
+     */
+    private $AngularJS_id;
     
-    public function __construct(string $directory, string $fileName, PDO $dbRSMint_1) {
+    public function __construct(
+        string $directory, string $fileName, PDO $dbRSMint_1, string $AngularJS_id
+    ) {
         $this->path2directory = $directory;
         $this->dbRSMint_1 = $dbRSMint_1;
         $this->fileName = str_replace('.csv', '', $fileName);
         $this->path2file = $directory . DIRECTORY_SEPARATOR . $fileName;
         $this->csvData = CsvParseModel::specificCsv2array($directory, $fileName);
+        $this->AngularJS_id = $AngularJS_id;
     }
     
     /**
@@ -118,7 +127,6 @@ class RsmEncodeRemove
                         }
                         // _ENCODE REPLACE - $ch is an encoded char so make it " "
                         else {
-                            //TODO: Track which encodes were removed so AngularJS can render this info
                             $cleanField .= " ";
                         }
                     }
@@ -144,7 +152,6 @@ class RsmEncodeRemove
     } // END OF: removeEncodedChars()
     
     public function getCleanFilePath(): string {
-        $this->insertIntoSqlServer();
         return $this->sanitizedFilePath;
     }
     
@@ -178,7 +185,6 @@ class RsmEncodeRemove
                 'first_field' => $firstField
             ];
         };
-        //TODO: Detect 1 whitespace
         
         //-- 1ST WAVE OF SCANS:
         if($match === 1 || $matchSpace === 1) {
@@ -202,7 +208,7 @@ class RsmEncodeRemove
         
     } // END OF: isEncodedChar()
     
-    private function insertIntoSqlServer(): void {
+    public function insertIntoSqlServer(): void {
         $query = "
             INSERT INTO {$this->removedEncodesTable}
             (
@@ -211,6 +217,7 @@ class RsmEncodeRemove
                 ,[rsm_column]
                 ,[first_field]
                 ,[encode2]
+                ,[angularjs_id]
             )
             VALUES
             (
@@ -218,7 +225,8 @@ class RsmEncodeRemove
                 :rsmRow,
                 :rsmColumn,
                 :firstField,
-                :encode
+                :encode,
+                :angularjsId
             )
         ";
         
@@ -242,6 +250,7 @@ class RsmEncodeRemove
                 $statement->bindValue(':rsmColumn', $rsmColumn);
                 $statement->bindValue(':firstField', $firstField);
                 $statement->bindValue(':encode', $encode);
+                $statement->bindValue(':angularjsId', $this->AngularJS_id);
                 
                 // execute sql query
                 $statement->execute();

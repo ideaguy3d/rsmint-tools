@@ -29,17 +29,23 @@ return function(App $app) {
     /**  .17/redstone/tools
      * a POST to '/' will invoke the core portion of the "encode remove" program.
      * It'll look for the CSV the user just uploaded, removed encodes, and download it
+     *
+     *  Q STRING:
+     *    angularjs-id=VALUE
      */
     $app->post('/',
         function(Request $request, Response $response) use ($container, $app) {
+            // function field initializations
             $directory = AppGlobals::PathToUploadDirectory();
             $log = $app->getContainer()->get('logger');
             $dbRSMint_1 = $this->dbRSMint_1;
+            $uploadedFiles = $request->getUploadedFiles();
+            $file = $uploadedFiles['csv_file'] ?? null;
+            $AngularJS_id = $request->getQueryParam('angularjs-id');
+            
             // function declarations
             $sanitizedFilePath = null;
             
-            $uploadedFiles = $request->getUploadedFiles();
-            $file = $uploadedFiles['csv_file'] ?? null;
             
             // Program is in debug mode
             if(AppGlobals::$NINJA_AUTO_DEBUG) {
@@ -52,11 +58,11 @@ return function(App $app) {
                 $encodeRemove->removeEncodedChars();
                 $sanitizedFilePath = $encodeRemove->getCleanFilePath();
                 $log->info("\n\r__>> RSM DEBUG MODE - testing app logic, sanitized file path = $sanitizedFilePath\n\r");
-                
+                $encodeRemove->insertIntoSqlServer();
                 $break = 'point';
             }
             
-            // Program is NOT in debug mode, it's go time
+            // NOT in debug mode, it's go time
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
                 $encodeRemove = new RsmEncodeRemove($directory, $fileName, $dbRSMint_1);
@@ -86,6 +92,8 @@ return function(App $app) {
                 // have to add '.csv' to fix an annoying error
                 readfile(($sanitizedFilePath . '.csv'));
                 
+                $encodeRemove->insertIntoSqlServer();
+                
                 return $response;
             }
             // something broke
@@ -113,6 +121,8 @@ return function(App $app) {
      * This will return the info for the removed encodes
      */
     $app->get('/encode-remove/removed-encodes/{encode-id}',
+        //TODO: figure out how to send which encoded chars were removed back to AngularJS
+        // so the table can show which chars were removed
         function(Request $request, Response $response, array $args) use ($container) {
         
         }

@@ -19,6 +19,9 @@ GO
 ALTER TABLE [RSMint_1].[dbo].[RemovedEncodes] ADD encode VARCHAR(2)
 GO
 
+ALTER TABLE [RSMint_1].[dbo].[RemovedEncodes] ADD encode2 VARCHAR(2048)
+GO
+
 
 
 

@@ -92,15 +92,9 @@
         Remove Encodes
     </h1>
 
-    <p class="rsm-file-upload-info">
-        <small>
-            upload file
-        </small>
-    </p>
-
     <br>
 
-    <form action="/redstone/tools/" method="POST" enctype="multipart/form-data">
+    <form action="{{s_phpAction}}" method="POST" enctype="multipart/form-data">
         <div onclick="console.log('the click was picked up :)')">
             <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
         </div>
@@ -110,8 +104,6 @@
 
     <br>
 </div>
-
-<hr>
 
 <div class="rsm-text-center">
     <h2>encodes that were removed</h2>
@@ -147,15 +139,22 @@
         crossorigin="anonymous"></script>
 
 <script>
+    // _ANGULARJS APP
     let app = angular.module('rsm-encode-remove', []);
     app.controller('EncodePresentCtrl', ['$scope', '$interval', EncodePresentCtrlClass]);
 
     function EncodePresentCtrlClass($scope, $interval) {
+        const bil = 1000000000;
+        const rand = Math.floor((Math.random() * bil) + 1);
+        const ng = "angularjsphpsqlcompsciwebapp" ;
+        const rLetter = ng.charAt(Math.floor((Math.random() * ng.length)+1));
+        let ngid = `ng${rand}${rLetter}`;
+        $scope.s_phpAction = "/redstone/tools/?angularjs-id="+ngid;
         $scope.s_status = 'Controller is wired up';
         $scope.s_interval = 0;
 
         /*
-        simple interval test
+        // simple interval test to ensure app can maintain state
         $interval(function () {
             $scope.s_interval += 2.5;
         }, 500);
