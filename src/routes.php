@@ -124,7 +124,7 @@ return function(App $app) {
         }
     );
     
-    /**  .17/redstone/tools
+    /**  .17/redstone/tools/get-removed-encodes/{ng-id}
      *
      *  Return the info for the removed encodes from SQL Server
      */

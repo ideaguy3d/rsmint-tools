@@ -95,7 +95,7 @@
     <br>
 
     <form data-ng-submit="sf_getEncodeInfo($event)" name="rsmDownload" enctype="multipart/form-data"
-          action="/redstone/tools/<?php echo isset($php_action) ? $php_action : '' ?>" method="POST">
+          action="/redstone/tools/<?= isset($php_action) ? $php_action : '' ?>" method="POST">
         <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
         <br><br>
         <input type="submit">
@@ -138,7 +138,7 @@
         crossorigin="anonymous"></script>
 
 <script>
-    let AngularJS_id = "<?php echo isset($ngid) ? $ngid : '' ?>";
+    let AngularJS_id = "<?= isset($ngid) ? $ngid : '' ?>";
     window.onload = function () {
         // e.g. /redstone/tools/?angularjs-id=ng488641789g
         //document.rsmDownload.action = rsm_action();
@@ -159,18 +159,27 @@
     
     // _ANGULARJS APP
     let app = angular.module('rsm-encode-remove', []);
-    app.controller('EncodePresentCtrl', ['$scope', '$interval', EncodePresentCtrlClass]);
+    app.controller('EncodePresentCtrl', ['$scope', '$interval', '$http', '$timeout', EncodePresentCtrlClass]);
 
-    function EncodePresentCtrlClass($scope, $interval) {
+    // _CLASS CONTROLLER
+    function EncodePresentCtrlClass($scope, $interval, $http, $timeout) {
         $scope.s_status = 'Controller is wired up';
         $scope.s_interval = 0;
+        let isLocal = (window.location.hostname.indexOf('localhost') > -1);
+        let localUri = 'http://localhost/redstone/tools/get-removed-encodes/' + AngularJS_id;
+        let proUri = 'http://192.168.7.17/redstone/tools/get-removed-encodes/' + AngularJS_id;
+        let getRemovedEncodesUri = isLocal ? localUri : proUri;
         
         // sf = scope function
         $scope.sf_getEncodeInfo = function ($event) {
             //$event.preventDefault();
             console.log('AngularJS picked up click');
-            
             console.log("The ngid from PHP = " + AngularJS_id);
+            $timeout(function(){
+                $http.get(getRemovedEncodesUri).then(function(res) {
+                    console.log('The response from the redstone tools API = ', res);
+                });
+            }, 1000);
         };
         /*
         // simple interval test to ensure app can maintain state
