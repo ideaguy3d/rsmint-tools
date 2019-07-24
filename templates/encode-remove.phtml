@@ -109,22 +109,26 @@
     <p>
         <small>{{s_status}}, interval: <b>{{s_interval}};</b></small>
     </p>
+    <p>&#131;</p>
     <table class="flat-table flat-table-2">
         <thead>
-        <th>encoded char</th>
-        <th>Row</th>
-        <th>Column</th>
-        <th>field {{firstField}} value</th>
+        <tr>
+            <th>encoded char</th>
+            <th>Row#</th>
+            <th>Column#</th>
+            <th>Column 1 value</th>
+        </tr>
+        
         </thead>
         <tbody>
-        <!--
-        <tr>
-            <td>�</td>
-            <td>56</td>
-            <td>27</td>
-            <td>5648932</td>
+        
+        <tr data-ng-repeat="rec in s_removedEncodes">
+            <td>&#{{rec.encode2}};</td>
+            <td>{{rec.rsm_row}}</td>
+            <td>{{rec.rsm_column}}</td>
+            <td>{{rec.first_field}}</td>
         </tr>
-        -->
+       
         </tbody>
     </table>
 </div>
@@ -144,7 +148,7 @@
         //document.rsmDownload.action = rsm_action();
         console.log('window loaded');
     };
-    
+
     function rsm_action(form) {
         const bil = 9000000000;
         const rand = Math.floor((Math.random() * bil) + 1);
@@ -156,27 +160,40 @@
         form.action = phpAction;
         //return phpAction;
     }
-    
+
     // _ANGULARJS APP
     let app = angular.module('rsm-encode-remove', []);
     app.controller('EncodePresentCtrl', ['$scope', '$interval', '$http', '$timeout', EncodePresentCtrlClass]);
 
     // _CLASS CONTROLLER
     function EncodePresentCtrlClass($scope, $interval, $http, $timeout) {
+
         $scope.s_status = 'Controller is wired up';
         $scope.s_interval = 0;
+        /*
+            angularjs_id: "ng3321592l"
+            created_at: "2019-07-23 19:43:48.630"
+            encode2: "227"
+            first_field: "11078"
+            id: "4490"
+            rsm_column: "1"
+            rsm_file_name: "21127fd3076cfb87"
+            rsm_row: "1"
+        */
+        $scope.s_removedEncodes = null;
         let isLocal = (window.location.hostname.indexOf('localhost') > -1);
         let localUri = 'http://localhost/redstone/tools/get-removed-encodes/' + AngularJS_id;
         let proUri = 'http://192.168.7.17/redstone/tools/get-removed-encodes/' + AngularJS_id;
         let getRemovedEncodesUri = isLocal ? localUri : proUri;
-        
+
         // sf = scope function
         $scope.sf_getEncodeInfo = function ($event) {
             //$event.preventDefault();
             console.log('AngularJS picked up click');
             console.log("The ngid from PHP = " + AngularJS_id);
-            $timeout(function(){
-                $http.get(getRemovedEncodesUri).then(function(res) {
+            $timeout(function () {
+                $http.get(getRemovedEncodesUri).then(function (res) {
+                    $scope.s_removedEncodes = res.data;
                     console.log('The response from the redstone tools API = ', res);
                 });
             }, 1000);
