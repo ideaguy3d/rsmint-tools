@@ -176,7 +176,7 @@ class EncodeRemove
     ): bool {
         $isEncoded = false;
         // okay chars "[,\.\/\-_]" means ,./-_
-        $goodChars = "/([a-z]|[A-Z]|[0-9]|[,\.\/\-_])/";
+        $goodChars = "/([a-z]|[A-Z]|[0-9]|[,\.\/\-_#])/";
         $match = preg_match($goodChars, $ch);
         $matchSpace = preg_match("/\s/", $ch);
         // uphold DRY principle

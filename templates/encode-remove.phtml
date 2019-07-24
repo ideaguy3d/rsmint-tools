@@ -109,7 +109,7 @@
     <p>
         <small>{{s_status}}, interval: <b>{{s_interval}};</b></small>
     </p>
-    <p>&#131;</p>
+    <p>&#131; &#181; &#215; &#223;</p>
     <table class="flat-table flat-table-2">
         <thead>
         <tr>
@@ -118,17 +118,17 @@
             <th>Column#</th>
             <th>Column 1 value</th>
         </tr>
-        
+
         </thead>
         <tbody>
-        
+
         <tr data-ng-repeat="rec in s_removedEncodes">
-            <td><p data-ng-bind-html="rec.encode2"></p></td>
+            <td><p data-ng-bind-html="rec.encode2"></p> ({{rec.encode}})</td>
             <td>{{rec.rsm_row}}</td>
             <td>{{rec.rsm_column}}</td>
             <td>{{rec.first_field}}</td>
         </tr>
-       
+
         </tbody>
     </table>
 </div>
@@ -188,26 +188,41 @@
         let localUri = 'http://localhost/redstone/tools/get-removed-encodes/' + AngularJS_id;
         let proUri = 'http://192.168.7.17/redstone/tools/get-removed-encodes/' + AngularJS_id;
         let getRemovedEncodesUri = isLocal ? localUri : proUri;
+        let makeRequest = true;
 
         // sf = scope function
         $scope.sf_getEncodeInfo = function ($event) {
             //$event.preventDefault();
             console.log('AngularJS picked up click');
             console.log("The ngid from PHP = " + AngularJS_id);
-            $timeout(function () {
-                $http.get(getRemovedEncodesUri).then(function (res) {
-                    let data = res.data;
-                    let htmlEncode;
-                    let rec;
-                    for(let i=0; i<data.length; i++) {
-                        rec = data[i];
-                        htmlEncode = `<span>&#${rec.encode2};</span>`;
-                        rec.encode2 = $sce.trustAsHtml(htmlEncode);
-                    }
-                    $scope.s_removedEncodes = data;
-                    console.log('The response from the redstone tools API = ', res);
-                });
-            }, 1000);
+            if (makeRequest) {
+                $timeout(function () {
+                    $http.get(getRemovedEncodesUri).then(function (res) {
+                        let data = res.data;
+                        console.log('The response from the redstone tools API = ', res);
+                        if(data.length > 0) {
+                            let htmlEncode;
+                            let rec;
+                            for (let i = 0; i < data.length; i++) {
+                                rec = data[i];
+                                htmlEncode = `<span>&#${rec.encode2};</span>`;
+                                rec.encode = rec.encode2;
+                                rec.encode2 = $sce.trustAsHtml(htmlEncode);
+                            }
+                        }
+                        else {
+                            data = []; 
+                            data[0] = {encode : 'empty', rsm_column: 'empty', rsm_row: 'empty', first_field: 'empty'};
+                            //data[0].rsm_column = 'empty';
+                            //data[0].rsm_row = 'empty';
+                            //data[0].first_field = 'empty'; 
+                        }
+                        $scope.s_removedEncodes = data;
+                        
+                    });
+                }, 1500);
+            }
+
         };
         /*
         // simple interval test to ensure app can maintain state
