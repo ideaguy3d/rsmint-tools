@@ -190,8 +190,17 @@ class EncodeRemove
             ];
         };
         //TODO: check for escape encodes e.g. "\t"
+    
         
-        //-- 1ST WAVE OF SCANS:
+        if(ord($ch) < 32 || ord($ch) > 126) {
+            $trackEncoded();
+            return ($isEncoded = true);
+        }
+        // the char is not encoded
+        else if(ord($ch) > 32 || ord($ch) <= 126) {
+            return $isEncoded;
+        }
+        
         if($match === 1 || $matchSpace === 1) {
             return $isEncoded;
         }
@@ -201,12 +210,6 @@ class EncodeRemove
         }
         else if($match === false) {
             exit("\n __>> ERROR - can't match, the char = $ch\n");
-        }
-        
-        //-- 2ND WAVE OF SCANS: 
-        if(ord($ch) < 32 || ord($ch) > 126) {
-            $trackEncoded();
-            return ($isEncoded = true);
         }
         
         return $isEncoded;

@@ -87,29 +87,34 @@
 <body data-ng-controller="EncodePresentCtrl">
 
 <div style="margin: auto; width: 80%;">
-    <h1>
+    <h1 class="rsm-title-bar">
         <img src="https://redstonemail.com/companies/renderLogo/568ae6c2103fb4f64f2337d2" alt="logo" width="150px">
         Remove Encodes
     </h1>
 
     <br>
 
-    <form data-ng-submit="sf_getEncodeInfo($event)" name="rsmDownload" enctype="multipart/form-data"
-          action="/redstone/tools/<?= isset($php_action) ? $php_action : '' ?>" method="POST">
+    <!-- isset($php_action) ? $php_action : '' -->
+    <form data-ng-submit="sf_toggleLoad()" name="rsmDownload" enctype="multipart/form-data"
+          action="/redstone/tools/<?= $php_action ?? '' ?>" method="POST">
         <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
         <br><br>
         <input type="submit">
     </form>
 
     <br>
+
+    <img data-ng-show="s_showLoad" src="http://192.168.7.17/images/load.gif" alt="load">
 </div>
 
 <div class="rsm-text-center">
     <h2>encodes that were removed</h2>
-    <p>
-        <small>{{s_status}}, interval: <b>{{s_interval}};</b></small>
+    <p class="rsm-encode-check">
+        <small>When clean file downloads click:</small>
+        <button data-ng-click="sf_getEncodeInfo()">See Encodes</button>
     </p>
-    <p>&#131; &#181; &#215; &#223;</p>
+    <p>&#131; &#181; &#215; &#223; = &#189; &#234;&#178;</p>
+    
     <table class="flat-table flat-table-2">
         <thead>
         <tr>
@@ -118,17 +123,15 @@
             <th>Column#</th>
             <th>Column 1 value</th>
         </tr>
-
         </thead>
-        <tbody>
 
+        <tbody>
         <tr data-ng-repeat="rec in s_removedEncodes">
             <td><p data-ng-bind-html="rec.encode2"></p> ({{rec.encode}})</td>
             <td>{{rec.rsm_row}}</td>
             <td>{{rec.rsm_column}}</td>
             <td>{{rec.first_field}}</td>
         </tr>
-
         </tbody>
     </table>
 </div>
@@ -142,7 +145,8 @@
         crossorigin="anonymous"></script>
 
 <script>
-    let AngularJS_id = "<?= isset($ngid) ? $ngid : '' ?>";
+    // isset($ngid) ? $ngid : ''
+    let AngularJS_id = "<?= $ngid ?? null ?>";
     window.onload = function () {
         // e.g. /redstone/tools/?angularjs-id=ng488641789g
         //document.rsmDownload.action = rsm_action();
@@ -184,6 +188,7 @@
             rsm_row: "1"
         */
         $scope.s_removedEncodes = null;
+        $scope.s_showLoad = false;
         let isLocal = (window.location.hostname.indexOf('localhost') > -1);
         let localUri = 'http://localhost/redstone/tools/get-removed-encodes/' + AngularJS_id;
         let proUri = 'http://192.168.7.17/redstone/tools/get-removed-encodes/' + AngularJS_id;
@@ -192,6 +197,46 @@
 
         // sf = scope function
         $scope.sf_getEncodeInfo = function ($event) {
+            $scope.s_showLoad = false;
+            
+            //$event.preventDefault();
+            $http.get(getRemovedEncodesUri)
+                .then(function (res) {
+                    let data = res.data;
+                    console.log('The response from the redstone tools API = ', res);
+                    if (data.length > 0) {
+                        let htmlEncode;
+                        let rec;
+                        for (let i = 0; i < data.length; i++) {
+                            rec = data[i];
+                            htmlEncode = `<span>&#${rec.encode2};</span>`;
+                            rec.encode = rec.encode2;
+                            rec.encode2 = $sce.trustAsHtml(htmlEncode);
+                        }
+                    }
+                    else {
+                        data = [];
+                        data[0] = {
+                            encode: 'empty',
+                            rsm_column: 'empty',
+                            rsm_row: 'empty',
+                            first_field: 'empty'
+                        };
+                    }
+                    $scope.s_removedEncodes = data;
+                    
+                })
+                .catch(function (err) {
+                    console.log('__>> ERROR - not able to GET request: ' + getRemovedEncodesUri, err);
+                }); // END OF: $http.get()
+
+        };
+        
+        $scope.sf_toggleLoad = function() {
+            $scope.s_showLoad = !$scope.s_showLoad;
+        };
+
+        $scope.sf_getEncodeInfoTimeout = function ($event) {
             //$event.preventDefault();
             console.log('AngularJS picked up click');
             console.log("The ngid from PHP = " + AngularJS_id);
@@ -200,7 +245,7 @@
                     $http.get(getRemovedEncodesUri).then(function (res) {
                         let data = res.data;
                         console.log('The response from the redstone tools API = ', res);
-                        if(data.length > 0) {
+                        if (data.length > 0) {
                             let htmlEncode;
                             let rec;
                             for (let i = 0; i < data.length; i++) {
@@ -209,17 +254,19 @@
                                 rec.encode = rec.encode2;
                                 rec.encode2 = $sce.trustAsHtml(htmlEncode);
                             }
-                        }
-                        else {
-                            data = []; 
-                            data[0] = {encode : 'empty', rsm_column: 'empty', rsm_row: 'empty', first_field: 'empty'};
-                            //data[0].rsm_column = 'empty';
-                            //data[0].rsm_row = 'empty';
-                            //data[0].first_field = 'empty'; 
+                        } else {
+                            data = [];
+                            data[0] = {
+                                encode: 'empty',
+                                rsm_column: 'empty',
+                                rsm_row: 'empty',
+                                first_field: 'empty'
+                            };
                         }
                         $scope.s_removedEncodes = data;
-                        
-                    });
+                    }).catch(function (err) {
+                        console.log('__>> ERROR - not able to GET request: ' + getRemovedEncodesUri, err);
+                    }); // END OF: $http.get()
                 }, 1500);
             }
 

@@ -27,5 +27,19 @@ ALTER TABLE [RSMint_1].[dbo].[RemovedEncodes]
 DROP COLUMN [encode]
 GO
 
+-- create encode tracker table
+CREATE TABLE EncodeTracker
+(
+    id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    angularjs_id VARCHAR(256) NOT NULL,
+    char_count INT NULL,
+    status VARCHAR(256) NULL
+)
+GO
+
+
+
+
 
 --
