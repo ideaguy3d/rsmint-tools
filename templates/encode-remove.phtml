@@ -94,8 +94,8 @@
 
     <br>
 
-    <form data-ng-submit="sf_getEncodeInfo($event)" action="/redstone/tools/<?= '?angularjs-id=test123' ?>"
-          name="rsmDownload" method="POST" enctype="multipart/form-data">
+    <form data-ng-submit="sf_getEncodeInfo($event)" name="rsmDownload" enctype="multipart/form-data"
+          action="/redstone/tools/<?php echo isset($php_action) ? $php_action : '' ?>" method="POST">
         <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
         <br><br>
         <input type="submit">
@@ -138,6 +138,7 @@
         crossorigin="anonymous"></script>
 
 <script>
+    let AngularJS_id = "<?php echo isset($ngid) ? $ngid : '' ?>";
     window.onload = function () {
         // e.g. /redstone/tools/?angularjs-id=ng488641789g
         //document.rsmDownload.action = rsm_action();
@@ -167,7 +168,9 @@
         // sf = scope function
         $scope.sf_getEncodeInfo = function ($event) {
             //$event.preventDefault();
-            console.log('AngularJS picked up click')
+            console.log('AngularJS picked up click');
+            
+            console.log("The ngid from PHP = " + AngularJS_id);
         };
         /*
         // simple interval test to ensure app can maintain state

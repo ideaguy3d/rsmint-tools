@@ -109,7 +109,12 @@ class EncodeRemove
                 /** LOOP OVER FIELDS **/
                 for($f = 0; $f < count($record); $f++) {
                     // field in the current record
-                    $field = $record[$f];
+                    $field = trim($record[$f]);
+                    $multiSpacePattern = "/\s{2,}/";
+                    $matchMultiSpace = preg_match($multiSpacePattern, $field);
+                    if($matchMultiSpace === 1) {
+                        preg_replace($multiSpacePattern, ' ', $field);
+                    }
                     $cleanField = '';
                     // $f is basically the column
                     $column = $f;
@@ -122,13 +127,11 @@ class EncodeRemove
                     for($c = 0; $c < strlen($field); $c++) {
                         $ch = $field[$c];
                         
+                        // _ENCODE REPLACE
                         if(!$this->isEncodedChar($ch, $row, $column, $firstField)) {
                             $cleanField .= $ch;
                         }
-                        // _ENCODE REPLACE - $ch is an encoded char so make it " "
-                        else {
-                            $cleanField .= " ";
-                        }
+                        //else {$cleanField .= "";}
                     }
                     
                     $record[$f] = trim($cleanField);
@@ -172,6 +175,7 @@ class EncodeRemove
         string $ch, int $row, int $column, string $firstField
     ): bool {
         $isEncoded = false;
+        // okay chars "[,\.\/\-_]" means ,./-_
         $goodChars = "/([a-z]|[A-Z]|[0-9]|[,\.\/\-_])/";
         $match = preg_match($goodChars, $ch);
         $matchSpace = preg_match("/\s/", $ch);
@@ -185,6 +189,7 @@ class EncodeRemove
                 'first_field' => $firstField
             ];
         };
+        //TODO: check for escape encodes e.g. "\t"
         
         //-- 1ST WAVE OF SCANS:
         if($match === 1 || $matchSpace === 1) {

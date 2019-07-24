@@ -53,6 +53,7 @@ return function(App $app) {
                 // read a "debug test" file into memory
                 $folder = 'C:\xampp\htdocs\redstone\uploads';
                 $file = 'test.csv';
+                $AngularJS_id = 'AngularJS_id';
                 
                 // debug EncodeRemove code & app logic
                 $encodeRemove = new EncodeRemove($folder, $file, $dbRSMint_1, $AngularJS_id);
@@ -115,6 +116,10 @@ return function(App $app) {
      */
     $app->get('/encode-remove',
         function(Request $request, Response $response, array $args) use ($container) {
+            $ng = "angularjsphpsqlcompsciwebapp";
+            $ngid = "ng" . rand(0, 9000000) . $ng[(rand(0, strlen($ng)) - 1)];
+            $args['ngid'] = $ngid;
+            $args['php_action'] = "?angularjs-id=$ngid";
             $container->get('renderer')->render($response, 'encode-remove.phtml', $args);
         }
     );
