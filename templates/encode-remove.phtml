@@ -123,7 +123,7 @@
         <tbody>
         
         <tr data-ng-repeat="rec in s_removedEncodes">
-            <td>&#{{rec.encode2}};</td>
+            <td><p data-ng-bind-html="rec.encode2"></p></td>
             <td>{{rec.rsm_row}}</td>
             <td>{{rec.rsm_column}}</td>
             <td>{{rec.first_field}}</td>
@@ -163,10 +163,13 @@
 
     // _ANGULARJS APP
     let app = angular.module('rsm-encode-remove', []);
-    app.controller('EncodePresentCtrl', ['$scope', '$interval', '$http', '$timeout', EncodePresentCtrlClass]);
+    app.controller('EncodePresentCtrl', [
+        '$scope', '$interval', '$http', '$timeout', '$sce',
+        EncodePresentCtrlClass
+    ]);
 
     // _CLASS CONTROLLER
-    function EncodePresentCtrlClass($scope, $interval, $http, $timeout) {
+    function EncodePresentCtrlClass($scope, $interval, $http, $timeout, $sce) {
 
         $scope.s_status = 'Controller is wired up';
         $scope.s_interval = 0;
@@ -193,7 +196,15 @@
             console.log("The ngid from PHP = " + AngularJS_id);
             $timeout(function () {
                 $http.get(getRemovedEncodesUri).then(function (res) {
-                    $scope.s_removedEncodes = res.data;
+                    let data = res.data;
+                    let htmlEncode;
+                    let rec;
+                    for(let i=0; i<data.length; i++) {
+                        rec = data[i];
+                        htmlEncode = `<span>&#${rec.encode2};</span>`;
+                        rec.encode2 = $sce.trustAsHtml(htmlEncode);
+                    }
+                    $scope.s_removedEncodes = data;
                     console.log('The response from the redstone tools API = ', res);
                 });
             }, 1000);
