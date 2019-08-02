@@ -116,11 +116,20 @@ return function(App $app) {
      */
     $app->get('/encode-remove',
         function(Request $request, Response $response, array $args) use ($container) {
-            $ng = "angularjsphpsqlcompsciwebapp";
+            $ng = "thequickbrownfoxjumpsoverthelazydog";
             $ngid = "ng" . rand(0, 9000000) . $ng[(rand(0, strlen($ng)) - 1)];
             $args['ngid'] = $ngid;
             $args['php_action'] = "?angularjs-id=$ngid";
             $container->get('renderer')->render($response, 'encode-remove.phtml', $args);
+        }
+    );
+    
+    /**  .17/redstone/tools/comauto
+     *
+     */
+    $app->get('/comauto',
+        function(Request $request, Response $response, array $args) use ($container) {
+            $container->get('renderer')->render($response, 'comauto.php', $args);
         }
     );
     
@@ -132,6 +141,7 @@ return function(App $app) {
         function(Request $request, Response $response, array $args) use ($container) {
             $RSMint_1 = $this->dbRSMint_1;
             $db = new EncodeRemoveSql($RSMint_1, $args['ng-id']);
+            
             return $response->withJson($db->getRemovedEncodes());
         }
     );

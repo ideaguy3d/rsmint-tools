@@ -1,5 +1,11 @@
+<?php
+
+$appName = "ComAuto self service.";
+
+?>
+
 <!DOCTYPE html>
-<html lang="en" data-ng-app="rsm-encode-remove">
+<html lang="en" data-ng-app="rsm-comauto-self-service">
 
 <head>
     <title>Redstone Mint</title>
@@ -7,19 +13,19 @@
         body {
             font-family: sans-serif;
         }
-
+        
         table {
             margin: auto;
         }
-
+        
         .rsm-text-center {
             text-align: center;
         }
-
+        
         .rsm-mt {
             margin-top: 10%;
         }
-
+        
         .flat-table {
             margin-bottom: 20px;
             border-collapse: collapse;
@@ -29,12 +35,12 @@
             -webkit-border-radius: 3px;
             -moz-border-radius: 3px;
         }
-
+        
         .flat-table th, .flat-table td {
             box-shadow: inset 0 -1px rgba(0, 0, 0, 0.25),
             inset 0 1px rgba(0, 0, 0, 0.25);
         }
-
+        
         .flat-table th {
             font-weight: normal;
             -webkit-font-smoothing: antialiased;
@@ -43,40 +49,40 @@
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
             font-size: 1.5em;
         }
-
+        
         .flat-table td {
             color: #f7f7f7;
             padding: 0.7em 1em 0.7em 1.15em;
             text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
             font-size: 1.4em;
         }
-
+        
         .flat-table tr {
             -webkit-transition: background 0.3s, box-shadow 0.3s;
             -moz-transition: background 0.3s, box-shadow 0.3s;
             transition: background 0.3s, box-shadow 0.3s;
         }
-
+        
         .flat-table-1 {
             background: #336ca6;
         }
-
+        
         .flat-table-1 tr:hover {
             background: rgba(0, 0, 0, 0.19);
         }
-
+        
         .flat-table-2 tr:hover {
             background: rgba(0, 0, 0, 0.1);
         }
-
+        
         .flat-table-2 {
             background: #f06060;
         }
-
+        
         .flat-table-3 {
             background: #52be7f;
         }
-
+        
         .flat-table-3 tr:hover {
             background: rgba(0, 0, 0, 0.1);
         }
@@ -89,11 +95,11 @@
 <div style="margin: auto; width: 80%;">
     <h1 class="rsm-title-bar">
         <img src="https://redstonemail.com/companies/renderLogo/568ae6c2103fb4f64f2337d2" alt="logo" width="150px">
-        Remove Encodes
+        <?= $appName ?>
     </h1>
-
+    
     <br>
-
+    
     <!-- isset($php_action) ? $php_action : '' -->
     <form data-ng-submit="sf_toggleLoad()" name="rsmDownload" enctype="multipart/form-data"
           action="/redstone/tools/<?= $php_action ?? '' ?>" method="POST">
@@ -101,39 +107,16 @@
         <br><br>
         <input type="submit">
     </form>
-
+    
     <br>
-
-    <img data-ng-show="s_showLoad" src="http://192.168.7.17/images/load.gif" alt="load">
+    
 </div>
 
 <div class="rsm-text-center">
-    <h2>encodes that were removed</h2>
+    <h2>Upload CSV to compute Job Costing and Commission</h2>
     <p class="rsm-encode-check">
-        <small>When clean file downloads click:</small>
-        <button data-ng-click="sf_getEncodeInfo()">See Encodes</button>
+        <small>When the program completes a zipped folder will get downloaded.</small>
     </p>
-    <p>&#131; &#181; &#215; &#223; = &#189; &#234;&#178;</p>
-    
-    <table class="flat-table flat-table-2">
-        <thead>
-        <tr>
-            <th>encoded char</th>
-            <th>Row#</th>
-            <th>Column#</th>
-            <th>Column 1 value</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr data-ng-repeat="rec in s_removedEncodes">
-            <td><p data-ng-bind-html="rec.encode2"></p> ({{rec.encode}})</td>
-            <td>{{rec.rsm_row}}</td>
-            <td>{{rec.rsm_column}}</td>
-            <td>{{rec.first_field}}</td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 
 <footer class="rsm-text-center rsm-mt">
@@ -145,28 +128,9 @@
         crossorigin="anonymous"></script>
 
 <script>
-    // isset($ngid) ? $ngid : ''
-    let AngularJS_id = "<?= $ngid ?? null ?>";
-    window.onload = function () {
-        // e.g. /redstone/tools/?angularjs-id=ng488641789g
-        //document.rsmDownload.action = rsm_action();
-        console.log('window loaded');
-    };
-
-    function rsm_action(form) {
-        const bil = 9000000000;
-        const rand = Math.floor((Math.random() * bil) + 1);
-        const ng = "angularjsphpsqlcompsciwebapp";
-        const rLetter = ng.charAt(Math.floor((Math.random() * ng.length) + 1));
-        const ngid = `ng${rand}${rLetter}`;
-        const phpAction = "/redstone/tools/?angularjs-id=" + ngid;
-        console.log("phpAction = " + phpAction);
-        form.action = phpAction;
-        //return phpAction;
-    }
-
+    
     // _ANGULARJS APP
-    let app = angular.module('rsm-encode-remove', []);
+    let app = angular.module('rsm-comauto-self-service', []);
     app.controller('EncodePresentCtrl', [
         '$scope', '$interval', '$http', '$timeout', '$sce',
         EncodePresentCtrlClass
@@ -190,52 +154,22 @@
         $scope.s_removedEncodes = null;
         $scope.s_showLoad = false;
         let isLocal = (window.location.hostname.indexOf('localhost') > -1);
-        let localUri = 'http://localhost/redstone/tools/get-removed-encodes/' + AngularJS_id;
-        let proUri = 'http://192.168.7.17/redstone/tools/get-removed-encodes/' + AngularJS_id;
-        let getRemovedEncodesUri = isLocal ? localUri : proUri;
+        //-- AngularJS_id was a PHP computed value echoed out to a js var
+        //let localUri = 'http://localhost/redstone/tools/get-removed-encodes/' + AngularJS_id;
+        //let proUri = 'http://192.168.7.17/redstone/tools/get-removed-encodes/' + AngularJS_id;
+        //let getRemovedEncodesUri = isLocal ? localUri : proUri;
         let makeRequest = true;
-        
+
         // sf = scope function
         $scope.sf_getEncodeInfo = function ($event) {
             $scope.s_showLoad = false;
-            
-            //$event.preventDefault();
-            $http.get(getRemovedEncodesUri)
-                .then(function (res) {
-                    let data = res.data;
-                    console.log('The response from the redstone tools API = ', res);
-                    if (data.length > 0) {
-                        let htmlEncode;
-                        let rec;
-                        for (let i = 0; i < data.length; i++) {
-                            rec = data[i];
-                            htmlEncode = `<span>&#${rec.encode2};</span>`;
-                            rec.encode = rec.encode2;
-                            rec.encode2 = $sce.trustAsHtml(htmlEncode);
-                        }
-                    }
-                    else {
-                        data = [];
-                        data[0] = {
-                            encode: 'empty',
-                            rsm_column: 'empty',
-                            rsm_row: 'empty',
-                            first_field: 'empty'
-                        };
-                    }
-                    $scope.s_removedEncodes = data;
-                    
-                })
-                .catch(function (err) {
-                    console.log('__>> ERROR - not able to GET request: ' + getRemovedEncodesUri, err);
-                }); // END OF: $http.get()
 
         };
-        
+
         $scope.sf_toggleLoad = function() {
             $scope.s_showLoad = !$scope.s_showLoad;
         };
-        
+
         $scope.sf_getEncodeInfoTimeout = function ($event) {
             //$event.preventDefault();
             console.log('AngularJS picked up click');
@@ -271,7 +205,7 @@
             }
 
         };
-        
+
         /*
         // simple interval test to ensure app can maintain state
         $interval(function () {
@@ -283,3 +217,5 @@
 
 </body>
 </html>
+
+
