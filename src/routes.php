@@ -20,7 +20,6 @@ if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
     
     $_SERVER['REQUEST_URI'] = '/';
     $_SERVER['REQUEST_METHOD'] = 'POST';
-    
 }
 
 return function(App $app) {
@@ -113,29 +112,34 @@ return function(App $app) {
     /**  .17/redstone/tools
      *
      * a GET req, this route will render the AngularJS UI so the user can upload a file
+     *
      */
-    $app->get('/encode-remove',
+    $app->get('/encodes',
         function(Request $request, Response $response, array $args) use ($container) {
-            $ng = "thequickbrownfoxjumpsoverthelazydog";
+            $ng = "aquickbrownfoxjumpsoverthelazydog";
             $ngid = "ng" . rand(0, 9000000) . $ng[(rand(0, strlen($ng)) - 1)];
             $args['ngid'] = $ngid;
             $args['php_action'] = "?angularjs-id=$ngid";
+            
             $container->get('renderer')->render($response, 'encode-remove.phtml', $args);
         }
     );
     
     /**  .17/redstone/tools/comauto
      *
+     * this will render the file upload tool to allow comauto to become self service
+     * it is intended to be iframed from the UI being built with the grunt build system
      */
     $app->get('/comauto',
         function(Request $request, Response $response, array $args) use ($container) {
-            $container->get('renderer')->render($response, 'comauto.php', $args);
+            $container->get('renderer')->render($response, 'comauto.phtml', $args);
         }
     );
     
     /**  .17/redstone/tools/get-removed-encodes/{ng-id}
      *
-     *  Return the info for the removed encodes from SQL Server
+     * Return the info for the removed encodes from SQL Server
+     *
      */
     $app->get('/get-removed-encodes/{ng-id}',
         function(Request $request, Response $response, array $args) use ($container) {
@@ -158,10 +162,9 @@ return function(App $app) {
             $container->get('logger')->info("\n\rRedstone '/' route\n\r");
             
             // Render index view
-            return $container->get('renderer')->render($response, 'index.phtml', $args);
+            return $container->get('renderer')->render($response, 'temp-index.phtml', $args);
             
         } // END OF: root route ctrl i.e. "/[{optional-route-var}]"
-    
     );
     
 };

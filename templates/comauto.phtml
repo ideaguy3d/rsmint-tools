@@ -1,6 +1,6 @@
 <?php
 
-$appName = "ComAuto self service.";
+$appName = "ComAuto app";
 
 ?>
 
@@ -9,6 +9,9 @@ $appName = "ComAuto self service.";
 
 <head>
     <title>Redstone Mint</title>
+    <meta name="description" content="Data Engineering">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="author" content="Julius Alvarado">
     <style>
         body {
             font-family: sans-serif;
@@ -93,10 +96,11 @@ $appName = "ComAuto self service.";
 <body data-ng-controller="EncodePresentCtrl">
 
 <div style="margin: auto; width: 80%;">
-    <h1 class="rsm-title-bar">
-        <img src="https://redstonemail.com/companies/renderLogo/568ae6c2103fb4f64f2337d2" alt="logo" width="150px">
-        <?= $appName ?>
-    </h1>
+    <h2 class="rsm-title-bar">
+        <img src="http://192.168.7.17/img/rs-sm.png"
+             alt="logo" width="120px">
+        <span style="position: relative; top: -20px"><?= $appName ?></span>
+    </h2>
     
     <br>
     
@@ -113,7 +117,7 @@ $appName = "ComAuto self service.";
 </div>
 
 <div class="rsm-text-center">
-    <h2>Upload CSV to compute Job Costing and Commission</h2>
+    <h4>Upload CSV to compute <br>Job Costing and Commission</h4>
     <p class="rsm-encode-check">
         <small>When the program completes a zipped folder will get downloaded.</small>
     </p>
