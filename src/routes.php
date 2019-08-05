@@ -109,17 +109,20 @@ return function(App $app) {
         }
     );
     
-    /**
+    /** .17/redstone/tools/comauto-upload2/upload
+     *
+     * The ComAuto self service iframe will post a file to this route
+     * so that the normal process of of "comauto" can get invoked.
      *
      */
     $app->post('/comauto-upload2/upload',
-        function(Request $request, Response $response) use ($container) {
+        function(Request $request, Response $response) use ($container, $app) {
             $log = $container->get('logger');
-            $comautoFolder = AppGlobals::PathToUploadDirectory();
+            $comautoFolder = AppGlobals::PathToNinjacommissionCsvDirectory();
             $uploadedFiles = $request->getUploadedFiles();
             $file = $uploadedFiles['csv_file'] ?? null;
             
-            //TODO: may want to scan uploaded file to make sure it has the correct fields
+            //TODO: may want to scan uploaded file to make sure it has the correct fields for comauto
             
             // we're in debug mode
             if(AppGlobals::$NINJA_AUTO_DEBUG) {
@@ -127,8 +130,17 @@ return function(App $app) {
             }
             // NOT in debug mode
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
-            
+                RsmUploader::moveUploadedComAutoFile($app, $comautoFolder, $file);
             }
+            // file upload broke
+            else {
+                $errorInfo = '<h1>No file selected and the submit button was clicked</h1> <br/>';
+                $fileError = 'Error ' . (string)$file->getError();
+                $startOver = "<br><br> <a href='/redstone/tools/encode-remove'><b>Start Over</b></a>";
+                return $response->getBody()->write($errorInfo . $fileError . $startOver);
+            }
+            
+            //exit("An error happened ~routes.php L140");
         }
     );
     

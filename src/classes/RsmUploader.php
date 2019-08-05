@@ -12,10 +12,11 @@ class RsmUploader
      * Move file to upload folder and give it a unique name
      *
      * @param App $app - this is reference to the Slim app
-     * @param string $directory -
-     * @param UploadedFile $uploadedFile -
+     * @param string $directory - the folder the file will be moved to
+     * @param UploadedFile $uploadedFile - the uploaded CSV
      *
-     * @return string - the path to the ???
+     * @return string - the new name of the uploaded file
+     *
      */
     public static function moveUploadedFile(
         App $app, string $directory, UploadedFile $uploadedFile
@@ -52,14 +53,27 @@ class RsmUploader
      * "accounting-php.csv" which is what ComAuto expects file name to be.
      *
      * @param App $app - the ref to the slim app
-     * @param string $directory - the folder to ?!?
+     * @param string $directory - the folder the file will be moved to
      * @param UploadedFile $uploadedFile - the uploaded file from within the slim app
-     *
-     * @return string -
+
      */
     public static function moveUploadedComAutoFile(
         App $app, string $directory, UploadedFile $uploadedFile
-    ) {
-    
+    ): void {
+        $log = $app->getContainer()->get('logger');
+        $extension = pathinfo(
+            $uploadedFile->getClientFilename(), PATHINFO_EXTENSION
+        );
+        
+        $log->info("\n__>> ComAuto File extension = $extension\n");
+        
+        if($extension !== 'csv') {
+            exit("__>> ERROR: Only CSV files can be uploaded");
+        }
+        
+        $filename = "accounting-php.csv";
+        $moveTo = $directory . DIRECTORY_SEPARATOR . $filename;
+        $log->info("\nMoving ComAuto file to: $moveTo\n");
+        $uploadedFile->moveTo($moveTo);
     }
 }
