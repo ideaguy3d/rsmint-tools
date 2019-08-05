@@ -34,6 +34,8 @@ $middleware($app);
 // Register routes
 $routes = require __DIR__ . '/../src/routes.php';
 $routes($app);
+$routes_sql = require __DIR__ . '/../src/route_sql.php';
+$routes_sql($app);
 
 // Run app
 $app->run();

@@ -141,6 +141,8 @@ return function(App $app) {
             }
             
             //exit("An error happened ~routes.php L140");
+            $newResponse = $response->withStatus(200);
+            return $newResponse;
         }
     );
     

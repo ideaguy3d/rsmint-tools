@@ -95,18 +95,9 @@ $php_action = "?some=action";
     </style>
 </head>
 
-
 <body data-ng-controller="EncodePresentCtrl">
 
-<div style="margin: auto; width: 80%;">
-    <h2 class="rsm-title-bar">
-        <img src="http://192.168.7.17/img/rs-sm.png"
-             alt="logo" width="120px">
-        <span style="position: relative; top: -20px"><?= $appName ?></span>
-    </h2>
-    <h4>status: {{s_status}}</h4>
-    
-    <br>
+<div style="margin: auto; width: 80%; padding-top: 10%">
     
     <form data-ng-submit="sf_toggleLoad()" name="rsmDownload" enctype="multipart/form-data"
           action="/redstone/tools/comauto-upload2/upload" method="POST">
@@ -115,25 +106,14 @@ $php_action = "?some=action";
         <input type="submit">
     </form>
     
-    <br>
-    
 </div>
 
-<div class="rsm-text-center">
-    <h4>Upload CSV to compute <br>Job Costing and Commission</h4>
-    <p class="rsm-encode-check">
-        <small>When the program completes a zipped folder will get downloaded.</small>
-    </p>
-</div>
-
-<footer class="rsm-text-center rsm-mt">
-    <h5>Redstone Automation v0.0.{{8-9+2}}</h5>
-</footer>
 
 <!-- Node.js Modules -->
 <script src="node_modules/modules.js"></script>
 <!-- Custom JavaScript -->
 <script src="comauto-upload/app.js"></script>
+
 
 </body>
 </html>
