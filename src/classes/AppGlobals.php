@@ -35,7 +35,7 @@ class AppGlobals
             : 'C:\inetpub\wwwroot\redstone\uploads';
     }
     
-    public static function PathToNinjaCommissionCsv() {
+    public static function PathToNinjaCommissionCsvDirectory() {
         //TODO: try to figure out how to cache whether current env is local or production
         return (gethostname() === 'Julius1')
             ? 'C:\xampp\htdocs\ninja\app\commission-csv'

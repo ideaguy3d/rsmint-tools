@@ -109,9 +109,26 @@ return function(App $app) {
         }
     );
     
+    /**
+     *
+     */
     $app->post('/comauto-upload2/upload',
-        function(Request $request, Response $response) use ($container, $app) {
-        
+        function(Request $request, Response $response) use ($container) {
+            $log = $container->get('logger');
+            $comautoFolder = AppGlobals::PathToUploadDirectory();
+            $uploadedFiles = $request->getUploadedFiles();
+            $file = $uploadedFiles['csv_file'] ?? null;
+            
+            //TODO: may want to scan uploaded file to make sure it has the correct fields
+            
+            // we're in debug mode
+            if(AppGlobals::$NINJA_AUTO_DEBUG) {
+                $debugFolder = '';
+            }
+            // NOT in debug mode
+            else if($file && $file->getError() === UPLOAD_ERR_OK) {
+            
+            }
         }
     );
     
