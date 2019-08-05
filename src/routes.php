@@ -109,6 +109,12 @@ return function(App $app) {
         }
     );
     
+    $app->post('/comauto-upload2/upload',
+        function(Request $request, Response $response) use ($container, $app) {
+        
+        }
+    );
+    
     /**  .17/redstone/tools
      *
      * a GET req, this route will render the AngularJS UI so the user can upload a file
@@ -121,18 +127,23 @@ return function(App $app) {
             $args['ngid'] = $ngid;
             $args['php_action'] = "?angularjs-id=$ngid";
             
-            $container->get('renderer')->render($response, 'encode-remove.phtml', $args);
+            $container->get('renderer')->render($response, 'temp.encode-remove.phtml', $args);
         }
     );
     
     /**  .17/redstone/tools/comauto
      *
      * this will render the file upload tool to allow comauto to become self service
-     * it is intended to be iframed from the UI being built with the grunt build system
+     * it is intended to be iframe'd from the UI being built with the grunt build system
+     *
+     * ERROR info:
+     * I have to suffix a "2" because for some reason when the template file named is changed
+     * for the route a "page not found" error happens so giving a new route name when I change
+     * template file name fixes this.
      */
-    $app->get('/comauto',
+    $app->get('/comauto-upload2',
         function(Request $request, Response $response, array $args) use ($container) {
-            $container->get('renderer')->render($response, 'comauto.phtml', $args);
+            $container->get('renderer')->render($response, 'temp.comauto-upload.phtml', $args);
         }
     );
     
@@ -162,7 +173,7 @@ return function(App $app) {
             $container->get('logger')->info("\n\rRedstone '/' route\n\r");
             
             // Render index view
-            return $container->get('renderer')->render($response, 'temp-index.phtml', $args);
+            return $container->get('renderer')->render($response, 'temp.index.phtml', $args);
             
         } // END OF: root route ctrl i.e. "/[{optional-route-var}]"
     );

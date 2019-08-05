@@ -29,9 +29,17 @@ class AppGlobals
     public static $coordinator_csv = 'coordinator-php.csv';
     
     public static function PathToUploadDirectory() {
+        //TODO: try to figure out how to cache whether current env is local or production
         return (gethostname() === 'Julius1')
             ? 'C:\xampp\htdocs\redstone\uploads'
             : 'C:\inetpub\wwwroot\redstone\uploads';
+    }
+    
+    public static function PathToNinjaCommissionCsv() {
+        //TODO: try to figure out how to cache whether current env is local or production
+        return (gethostname() === 'Julius1')
+            ? 'C:\xampp\htdocs\ninja\app\commission-csv'
+            : 'C:\inetpub\wwwroot\ninja\app\commission-csv';
     }
     
     public static function LogComAutoInfo(string $info): void {
