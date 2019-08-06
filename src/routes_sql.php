@@ -24,9 +24,16 @@ return function(App $app) {
     
     $container = $app->getContainer();
     
+    /** .17/restone/tools/sql/total-by-month
+     *
+     */
     $app->get('/sql/total-by-month',
         function(Request $request, Response $response, array $args) use ($container) {
-        
+            $log = $container->get('logger');
+            $dbComAuto = $this->dbComAuto;
+            $sqlModel = new ComAutoSqlServerModel($dbComAuto, $log);
+            $result = $sqlModel->getJobMyMonthCount();
+            return $response->withJson($result);
         }
     );
 };

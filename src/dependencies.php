@@ -4,6 +4,10 @@ use Slim\App;
 
 return function(App $app) {
     
+    function constructUri($db) {
+        return "sqlsrv:Database={$db['dbname']};server={$db['host']}";
+    }
+    
     $container = $app->getContainer();
     
     // view renderer
@@ -23,10 +27,10 @@ return function(App $app) {
     
     // RSMint_1 db
     $container['dbRSMint_1'] = function($c) {
-        $dbRSMint_1 = $c['settings']['dbRSMint_1'];
-        $dsn = "sqlsrv:Database={$dbRSMint_1['dbname']};server={$dbRSMint_1['host']}";
-        $user = $dbRSMint_1['user'];
-        $pass = $dbRSMint_1['pass'];
+        $db = $c['settings']['dbRSMint_1'];
+        $dsn = constructUri($db);
+        $user = $db['user'];
+        $pass = $db['pass'];
         //TODO: make sure this is follows the singleton pattern
         $pdo = new PDO($dsn, $user, $pass);
         
@@ -38,16 +42,16 @@ return function(App $app) {
     
     // ComAuto db
     $container['dbComAuto'] = function($c) {
-        $dbComAuto = $c['settings']['dbComAuto'];
-        $dsn = "sqlsrv:Database={$dbComAuto['dbname']};server={$dbComAuto['host']}";
-        $user = $dbComAuto['user'];
-        $pass = $dbComAuto['pass'];
+        $db = $c['settings']['dbComAuto'];
+        $dsnComAuto = constructUri($db);
+        $user = $db['user'];
+        $pass = $db['pass'];
         //TODO: make sure this is follows the singleton pattern
-        $pdo = new PDO($dsn, $user, $pass);
+        $pdo = new PDO($dsnComAuto, $user, $pass);
         
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         
-        return $pdo; 
+        return $pdo;
     };
 };

@@ -27,7 +27,7 @@ return [
         ],
         
         'dbComAuto' => [
-            'host' => '192.168.7.16\\rsmatuo',
+            'host' => '192.168.7.16\\rsmauto',
             'dbname' => 'ComAuto',
             'user' => 'mhetadata',
             'pass' => 'miguel'
