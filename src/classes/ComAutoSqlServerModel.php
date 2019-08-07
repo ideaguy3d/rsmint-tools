@@ -19,7 +19,6 @@ class ComAutoSqlServerModel
      * this function will invoke the stored procedure that groups
      * all the jobs by month so this data can be seen in the "overview"
      * homepage of the ComAuto app
-     *
      */
     public function getJobMyMonthCount(): array {
         $query = "EXEC simple_one";

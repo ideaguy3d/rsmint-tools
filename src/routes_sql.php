@@ -26,6 +26,9 @@ return function(App $app) {
     
     /** .17/restone/tools/sql/total-by-month
      *
+     * This will invoke a stored procedure that groups and totals
+     * jobs per month
+     *
      */
     $app->get('/sql/total-by-month',
         function(Request $request, Response $response, array $args) use ($container) {
