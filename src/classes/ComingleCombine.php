@@ -41,7 +41,7 @@ class ComingleCombine
         } // END OF: foreach looping over all CSVs in dir
         
         $csv = new Csv();
-        $headerRow = array_unshift($this->comingleCsv);
+        $headerRow = array_shift($this->comingleCsv);
         $csv->output(
             './csv_comingle.csv', $this->comingleCsv,
             $headerRow, ','
