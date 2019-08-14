@@ -8,12 +8,14 @@ use ParseCsv\Csv;
 class ComingleCombine
 {
     private $extracted;
+    private $comingleCsv;
     
     public function startExtract() {
-        $allCsv = scandir('./csv');
+        // The dir to scan
+        $allCsv = scandir('./test');
 
         //TODO: refactor to a vector
-        $csvMingle = [
+        $this->comingleCsv = [
             // field title row
             ['job_name', 'address', 'city', 'state', 'zip'],
         ];
@@ -35,15 +37,18 @@ class ComingleCombine
     }
     
     public function extractFields(array $data, string $fileName): void {
-        $extracted = [];
         $filename = str_replace('.csv', '', $fileName);
         
         array_walk($data, function($item, $key, $filename) {
-            $this->extracted [] = $filename;
-            $this->extracted  [] = $item['address'];
-            $this->extracted  [] = $item['city'];
-            $this->extracted  [] = $item['state'];
-            $this->extracted  [] = $item['zip'];
+            $extracted = [];
+            $extracted [] = $filename;
+            // _HARD CODED field titles
+            $extracted  [] = $item['address'] ?? 'NO_ADDRESS_FIELD';
+            $extracted  [] = $item['city'] ?? 'NO_CITY_FIELD';
+            $extracted  [] = $item['st'] ?? 'NO_ST_FIELD';
+            $extracted  [] = $item['zip'] ?? 'NO_ZIP_FIELD';
+            $this->comingleCsv  [] = $extracted;
+            $break = 'point';
         }, $filename);
     }
     
