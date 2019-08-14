@@ -181,7 +181,6 @@ return function(App $app) {
     /**  .17/redstone/tools/get-removed-encodes/{ng-id}
      *
      * Return the info for the removed encodes from SQL Server
-     *
      */
     $app->get('/get-removed-encodes/{ng-id}',
         function(Request $request, Response $response, array $args) use ($container) {
