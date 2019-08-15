@@ -11,11 +11,6 @@ $comingle = new ComingleCombine();
 
 $comingle->startExtract();
 
+$totalRecs = $comingle->getTotalRecs();
+
 $break = 'point';
-
-
-
-
-
-
-// end of php file

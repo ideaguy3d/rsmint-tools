@@ -3,4 +3,4 @@
 !/logs/README.md
 .idea
 uploads
-**/csv
+**/**/*.csv

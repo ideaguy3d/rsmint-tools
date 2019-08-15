@@ -1,16 +1,15 @@
 <?php
-
+declare(strict_types=1);
 
 namespace Redstone\Tools;
 
 use ParseCsv\Csv;
 
-
 class ComingleCombine
 {
-    private $extracted;
+    
     private $comingleCsv;
-    private $csvDir = 'csv';
+    private $csvDir = 'test';
     
     public function startExtract() {
         // The dir to scan
@@ -23,33 +22,30 @@ class ComingleCombine
         ];
         
         foreach($allCsv as $c) {
-            // do not the relative symbols
+            // ignore relative symbols
             if($c !== "." && $c !== "..") {
-                
-                //echo "\n__>> Loading CSV into memory\n";
-                
-                // use test dir to see what output csv looks like
                 $csv = new Csv("./{$this->csvDir}/" . $c);
                 
-                // will mutate $this->extracted
+                // will mutate $this->comingleCsv
                 $this->extractFields($csv->data, $c);
-                
-                $break = 'point';
             }
             
             // free memory from buffer
             unset($csv);
+            
         } // END OF: foreach looping over all CSVs in dir
         
         $csv = new Csv();
         $headerRow = array_shift($this->comingleCsv);
         $csv->output(
-            './csv_comingle.csv', $this->comingleCsv,
+            './csv_comingle.csv',
+            $this->comingleCsv,
             $headerRow, ','
         );
         
         unset($csv);
-    }
+        
+    } // end of: startExtract()
     
     /**
      * This function gets called inside the main loop, it'll extract
@@ -58,7 +54,7 @@ class ComingleCombine
      * @param array $data
      * @param string $fileName
      */
-    public function extractFields(array $data, string $fileName): void {
+    private function extractFields(array $data, string $fileName): void {
         $filename = str_replace('.csv', '', $fileName);
         
         array_walk($data, function($item, $key, $filename) {
@@ -93,6 +89,12 @@ class ComingleCombine
         }, $filename);
         
         $break = 'point';
+    }
+    
+    // let web browser know how many recs were processed
+    public function getTotalRecs(): string {
+        $fRecs = number_format(count($this->comingleCsv));
+        return $fRecs;
     }
     
 } // END OF: class ComingleCombine
