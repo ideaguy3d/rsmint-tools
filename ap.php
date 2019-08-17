@@ -4,8 +4,12 @@ declare(strict_types=1);
 use Ds\Vector;
 
 
+//---------------------------------------------------------------
+//------------------ _Application_Start_  ----------------------
+//---------------------------------------------------------------
 
-echo "<br> <br><br> __>> ap";
+
+echo "<br> <br> __>> ap: <br><br>";
 
 $vector = new Vector();
 
@@ -14,12 +18,6 @@ $vector->push('b_vector', 'c_vector');
 $vector [] = 'd_vector';
 
 print_r($vector);
-
-
-//---------------------------------------------------------------
-//------------------ _Application_Start_  ----------------------
-//---------------------------------------------------------------
-
 
 function removeAsciiPrac () {
     $e1 = "Gonzã¡lez";
@@ -36,4 +34,4 @@ function removeAsciiPrac () {
 $break = 'point';
 
 
-//
+// end of php file
