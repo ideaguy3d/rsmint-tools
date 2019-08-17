@@ -7,7 +7,6 @@ use ParseCsv\Csv;
 
 class ComingleCombine
 {
-    
     private $comingleCsv;
     private $csvDir = 'test';
     
