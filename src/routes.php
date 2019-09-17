@@ -26,7 +26,7 @@ return function(App $app) {
     
     $container = $app->getContainer();
     
-    /**  .17/redstone/tools
+    /**  .17/redstone/tools/
      *
      * a POST to '/' will invoke the core portion of the "encode remove" program.
      * It'll look for the CSV the user just uploaded, removed encodes, and download it
@@ -60,7 +60,6 @@ return function(App $app) {
                 $sanitizedFilePath = $encodeRemove->getCleanFilePath();
                 $log->info("\n\r__>> RSM DEBUG MODE - testing app logic, sanitized file path = $sanitizedFilePath\n\r");
                 $encodeRemove->insertIntoSqlServer();
-                $break = 'point';
             }
             
             // NOT in debug mode, it's go time
@@ -162,6 +161,13 @@ return function(App $app) {
         }
     );
     
+    $app->get('/suppress',
+        function(Request $request, Response $response, array $args) use ($container) {
+            $x = 'y';
+            return $container->get('renderer')->render($response, 'temp.suppress.phtml', $args);
+        }
+    );
+    
     /**  .17/redstone/tools/comauto
      *
      * this will render the file upload tool to allow comauto to become self service
@@ -193,7 +199,7 @@ return function(App $app) {
     
     $app->get('/fac-dist',
         function(Request $request, Response $response, array $args) use ($container) {
-        
+            //TODO: render the facility distribution app from .phtml
         }
     );
     
