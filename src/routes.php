@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Redstone\Tools\RsmSuppress;
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -9,21 +10,24 @@ use Redstone\Tools\EncodeRemove;
 use Redstone\Tools\EncodeRemoveSql;
 use Redstone\Tools\AppGlobals;
 
-if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
-    /*
-        .17/.../street-view/user/mhetauser!@/lindsey@rsmail.com
-        .17/.../comauto/start/a/{action}
-    
-        //-- To do a "job board data mash" sql server insert:
-        .17/.../comauto/start/a/run?precision=exact&comauto-sql-insert=2
-    */
-    
-    $_SERVER['REQUEST_URI'] = '/';
-    $_SERVER['REQUEST_METHOD'] = 'POST';
-}
 
 return function(App $app) {
-    
+
+    if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
+        /*
+            .17/.../street-view/user/mhetauser!@/lindsey@rsmail.com
+            .17/.../comauto/start/a/{action}
+
+            //-- To do a "job board data mash" sql server insert:
+            .17/.../comauto/start/a/run?precision=exact&comauto-sql-insert=2
+        */
+
+        $_SERVER['REQUEST_URI'] = 'tools/suppress';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+    }
+
+    $break = 'point';
+
     $container = $app->getContainer();
     
     /**  .17/redstone/tools/
@@ -112,7 +116,6 @@ return function(App $app) {
      *
      * The ComAuto self service iframe will post a file to this route
      * so that the normal process of of "comauto" can get invoked.
-     *
      */
     $app->post('/comauto-upload2/upload',
         function(Request $request, Response $response) use ($container, $app) {
@@ -148,7 +151,6 @@ return function(App $app) {
     /**  .17/redstone/tools
      *
      * a GET req, this route will render the AngularJS UI so the user can upload a file
-     *
      */
     $app->get('/encodes',
         function(Request $request, Response $response, array $args) use ($container) {
@@ -157,13 +159,20 @@ return function(App $app) {
             $args['ngid'] = $ngid;
             $args['php_action'] = "?angularjs-id=$ngid";
             
-            $container->get('renderer')->render($response, 'temp.encode-remove.phtml', $args);
+            return $container->get('renderer')->render($response, 'temp.encode-remove.phtml', $args);
         }
     );
-    
+
+    /**
+     * This will be the UI for the suppression list tool that I will use heavily to run jobs and that
+     * other members of the Redstone team can also use if they want.
+     */
     $app->get('/suppress',
         function(Request $request, Response $response, array $args) use ($container) {
-            $x = 'y';
+            $suppress = new RsmSuppress();
+            
+            echo $suppress->getStatus();
+            
             return $container->get('renderer')->render($response, 'temp.suppress.phtml', $args);
         }
     );

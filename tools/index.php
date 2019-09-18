@@ -32,14 +32,16 @@ $middleware = require __DIR__ . '/../src/middleware.php';
 $middleware($app);
 
 // Register routes
-$routes = require __DIR__ . '/../src/routes.php';
-$routes($app);
-
 $routes_sql = require __DIR__ . '/../src/routes_sql.php';
 $routes_sql($app);
 
+$routes = require __DIR__ . '/../src/routes.php';
+$routes($app);
+
 $cors_route = require __DIR__ . '/../src/cors_route.php';
 $cors_route($app);
+
+
 
 // Run app
 $app->run();

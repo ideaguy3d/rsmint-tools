@@ -25,8 +25,7 @@ class CsvParseModel implements ICsvParseModel
         
         return $csv;
     }
-    
-    // THIS IS AN EXACT COPY OF "public static function getCsvArray()"
+
     public static function csv2array(string $path): array {
         $csvFileFolder = glob("$path\*.csv");
         $csvFile = $csvFileFolder[0];
@@ -53,6 +52,7 @@ class CsvParseModel implements ICsvParseModel
                 $csv[$count] = $data;
                 ++$count;
             }
+
             fclose($handle);
         }
         

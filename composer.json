@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Redstone\\Tools\\": "src/classes",
+            "Redstone\\Tools\\": ["src/classes", "src/abstracts"],
             "Redstone\\Tools\\Interfaces\\": "src/interfaces"
         }
     },

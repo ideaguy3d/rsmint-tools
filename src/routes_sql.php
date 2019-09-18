@@ -16,8 +16,10 @@ if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
         .17/.../comauto/start/a/run?precision=exact&comauto-sql-insert=2
     */
     
-    $_SERVER['REQUEST_URI'] = '/';
-    $_SERVER['REQUEST_METHOD'] = 'POST';
+    //$_SERVER['REQUEST_URI'] = '/';
+    //$_SERVER['REQUEST_METHOD'] = 'POST';
+
+    $break = 'point';
 }
 
 return function(App $app) {
@@ -28,7 +30,6 @@ return function(App $app) {
      *
      * This will invoke a stored procedure that groups and totals
      * jobs per month
-     *
      */
     $app->get('/sql/total-by-month',
         function(Request $request, Response $response, array $args) use ($container) {
@@ -36,6 +37,7 @@ return function(App $app) {
             $dbComAuto = $this->dbComAuto;
             $sqlModel = new ComAutoSqlServerModel($dbComAuto, $log);
             $result = $sqlModel->getJobMyMonthCount();
+
             return $response->withJson($result);
         }
     );
