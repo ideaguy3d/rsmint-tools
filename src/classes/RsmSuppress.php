@@ -4,31 +4,24 @@ declare(strict_types=1);
 namespace Redstone\Tools;
 
 
+use ParseCsv\Csv;
+
 class RsmSuppress extends RsmSuppressAbstract
 {
     public $status;
     private $path2dataFolder;
     private $path2suppressionFolder;
 
-    private $suppressData;
-
-    /**
-     * The base data. This data will have to get records removed based on
-     * the suppression lists.
-     *
-     * @var array
-     */
-    private $baseData;
-
     public function __construct() {
         parent::__construct();
         $this->status = 'RsmSuppress ready';
 
         //TODO: dynamically check the host to determine local or pro env
+
+        // _HARD CODED to my flash drive location
         $this->path2dataFolder = 'E:\redstone\uploads\77542\data';
         $this->path2suppressionFolder = 'E:\redstone\uploads\77542\suppress';
         $this->readFiles(); // this may be verbose
-        $this->suppressionCombine();
     }
 
     public function getStatus() {
@@ -36,7 +29,8 @@ class RsmSuppress extends RsmSuppressAbstract
     }
 
     public function readFiles() {
-        $this->baseData = CsvParseModel::csv2array($this->path2dataFolder);
+        $this->parseCsvBaseData = new Csv($this->path2dataFolder . '\data.csv');
+        $this->suppressionCombine();
     }
 
     public function suppressionCombine() {
