@@ -17,7 +17,8 @@
         "monolog/monolog": "^1.17",
         "parsecsv/php-parsecsv": "^1.1",
         "slim/php-view": "^2.0",
-        "slim/slim": "^3.1"
+        "slim/slim": "^3.1",
+        "spatie/regex": "^1.4"
     },
     "require-dev": {
         "phpunit/phpunit": ">=5.0"

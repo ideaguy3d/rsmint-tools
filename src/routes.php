@@ -171,7 +171,9 @@ return function(App $app) {
         function(Request $request, Response $response, array $args) use ($container) {
             $suppress = new RsmSuppress();
             
-            echo $suppress->getStatus();
+            // do stuff, then:
+            
+            $suppress->suppressionStart();
             
             return $container->get('renderer')->render($response, 'temp.suppress.phtml', $args);
         }
