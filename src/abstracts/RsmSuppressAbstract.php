@@ -51,6 +51,26 @@ abstract class RsmSuppressAbstract
     ];
     
     /**
+     * DEVELOPMENT MODE property
+     *
+     * field to check for a 'contains' value, if it contains this
+     * value the record that it exists in will be removed
+     *
+     * Eventually this will be what gets set in a web form
+     *
+     * @var string
+     */
+    protected $ignoreField = 'last_name';
+    
+    /**
+     * A comma separated list of values to ignore, it'll become an array
+     * it'll get transformed to lower case
+     *
+     * @var string
+     */
+    protected $contains = 'jones, smith, lopez';
+    
+    /**
      * Add more to these feature sets as I study more input data
      * When dynamically finding these titles remove non alphanumerics
      *
@@ -90,7 +110,7 @@ abstract class RsmSuppressAbstract
                 'address' => null,
                 'city' => null,
                 'state' => null,
-                'zip' => null
+                'zip' => null,
             ];
             
             // set the [address], [city], [state]/[st], [zip] fields for base keys
@@ -109,6 +129,7 @@ abstract class RsmSuppressAbstract
                             break;
                         }
                     }
+                    
                     $results['address'] = 'address';
                     $results['city'] = 'city';
                     $results['zip'] = 'zip';
@@ -132,7 +153,7 @@ abstract class RsmSuppressAbstract
             // convert it to a string
             return (string)$elem;
         }, array_keys($this->parseCsvBaseData->data[0]));
-    
+        
         // best case results
         $bcResults = $getBestCase($baseKeys);
         $this->kAddress = $bcResults['address'];
@@ -161,6 +182,60 @@ abstract class RsmSuppressAbstract
         if(!$wasBestCase) {
             // a simple [address], [city], [state]/[st], [zip] couldn't be found
             $this->suppressionStartDynamic();
+        }
+        else {
+            $this->suppress();
+        }
+    }
+    
+    /**
+     * This function will create a hash by combining address, city, state, zip fields
+     * and removing all the non alphanumeric chars
+     */
+    public function suppress() {
+        // function scoped properties, the hash arrays will probably
+        // be what get exported as the suppressed CSV
+        $baseHashArray = [];
+        $suppressionHashArray = [];
+        $alphaNumPattern = '/[^0-9a-zA-Z]/';
+        
+        // create a hash to suppress on by getting rid of all alphanumeric chars
+        foreach($this->parseCsvBaseData->data as $item) {
+            // 1117 s 9th st San Jose, ca 95112
+            // address + city + state + zip
+            $coreFieldCombine = $item[$this->kAddress];
+            $coreFieldCombine .= $item[$this->kCity];
+            $coreFieldCombine .= $item[$this->kState];
+            $coreFieldCombine .= $item[$this->kZip];
+            
+            // Perhaps refactor this to a lambda to upload dry rule
+            $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
+            if($coreFieldsRegex->hasMatch()) {
+                // now get rid of all non alphanumeric chars
+                $hash = Regex::replace($alphaNumPattern, '', $coreFieldCombine)->result();
+                $baseHashArray[$hash] = $item;
+            }
+        }
+        
+        foreach($this->parseCsvSuppressData as $file) {
+            $data = $file->data;
+            for($i = 0; $i < count($data); $i++) {
+                $item = $data[$i];
+                // 1117 s 9th st San Jose, ca 95112
+                // address + city + state + zip
+                $coreFieldCombine = $item[$this->kSup[$i]['address']];
+                $coreFieldCombine .= $item[$this->kSup[$i]['city']];
+                $coreFieldCombine .= $item[$this->kSup[$i]['state']];
+                $coreFieldCombine .= $item[$this->kSup[$i]['zip']];
+    
+                // Perhaps refactor this to a lambda to upload dry rule
+                $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
+                if($coreFieldsRegex->hasMatch()) {
+                    // now get rid of all non alphanumeric chars
+                    $hash = Regex::replace($alphaNumPattern, '', $coreFieldCombine)->result();
+                    $suppressionHashArray[$hash] = $item; // varies here
+                }
+            }
         }
     }
     
