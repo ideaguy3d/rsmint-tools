@@ -22,7 +22,7 @@ abstract class RsmSuppressAbstract
      * The base data. This data will have to get records removed based on
      * the suppression lists.
      *
-     * @var Csv
+     * @var Csv class
      */
     protected $parseCsvBaseData;
     
@@ -30,10 +30,31 @@ abstract class RsmSuppressAbstract
     protected $city;
     protected $state;
     protected $zip;
+    /**
+     * $sk = suppress keys
+     *
+     * This is an example of how the $sk data structure should look with
+     * realistic possible field titles
+     *
+     * This will get removed in the construction so it doesn't get
+     * in the way when the program actually dynamically fills it
+     *
+     * @var array
+     */
+    protected $sk = [
+        [
+            'address' => 'street address',
+            'city' => 'prop_city',
+            'state' => 'o state',
+            'zip' => 'city-zip'
+        ],
+    ];
     
     /**
      * Add more to these feature sets as I study more input data
      * When dynamically finding these titles remove non alphanumerics
+     *
+     * These will get used in the "Dynamic" functions
      *
      * @var array
      */
@@ -45,6 +66,7 @@ abstract class RsmSuppressAbstract
     protected $zipFeatureSet = ['zip', 'ozip', 'propzip'];
     
     public function __construct() {
+        array_shift($this->sk);
         $this->status = 'RsmSuppressAbstract Ready';
     }
     
@@ -62,21 +84,31 @@ abstract class RsmSuppressAbstract
         $bestCase = ['address', 'city', 'state', 'st', 'zip'];
         $suppressionKeys = [];
         
-        // get the keys from the base csv and the suppression lists
-        // just grab the keys at [0] because all N obs will have the same keys
-        $baseKeys = array_keys($this->parseCsvBaseData->data[0]);
-        // lower case all the keys
+        /*
+          get the keys from the base csv and the suppression lists
+          just grab the keys at [0] because all N obs will have the same keys
+        */
+        
+        // lower case all the base keys
         $baseKeys = array_map(function($elem) {
             if(is_string($elem)) {
                 return strtolower($elem);
             }
-            return $elem;
-        }, $baseKeys);
+            // convert it to a string
+            return (string)$elem;
+        }, array_keys($this->parseCsvBaseData->data[0]));
         
+        // get the suppression list keys, lowercase them
         foreach($this->parseCsvSuppressData as $suppressionList) {
-            $suppressionKeys[] = $suppressionList->data[0];
+            $suppressionKeys[] = array_map(function($elem) {
+                if(is_string($elem)) {
+                    return strtolower($elem);
+                }
+                return (string)$elem;
+            }, array_keys($suppressionList->data[0]));
         }
         
+        // set the [address], [city], [state]/[st], [zip] fields for base keys
         foreach($bestCase as $case) {
             if(in_array($case, $baseKeys)) {
                 if($case = 'state' || $case = 'st') {
@@ -92,6 +124,8 @@ abstract class RsmSuppressAbstract
         }
         
         $break = 'point';
+        
+        // a simple [address], [city], [state]/[st], [zip] couldn't be found
         $this->suppressionStartDynamic();
     }
     
