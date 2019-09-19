@@ -26,10 +26,10 @@ abstract class RsmSuppressAbstract
      */
     protected $parseCsvBaseData;
     
-    protected $address;
-    protected $city;
-    protected $state;
-    protected $zip;
+    protected $kAddress;
+    protected $kCity;
+    protected $kState;
+    protected $kZip;
     /**
      * $sk = suppress keys
      *
@@ -41,7 +41,7 @@ abstract class RsmSuppressAbstract
      *
      * @var array
      */
-    protected $sk = [
+    protected $kSup = [
         [
             'address' => 'street address',
             'city' => 'prop_city',
@@ -66,7 +66,7 @@ abstract class RsmSuppressAbstract
     protected $zipFeatureSet = ['zip', 'ozip', 'propzip'];
     
     public function __construct() {
-        array_shift($this->sk);
+        array_shift($this->kSup);
         $this->status = 'RsmSuppressAbstract Ready';
     }
     
@@ -85,6 +85,40 @@ abstract class RsmSuppressAbstract
         $suppressionKeys = [];
         $wasBestCase = false; // assume worst case
         
+        $getBestCase = function(array $keys) use ($bestCase, &$wasBestCase): array {
+            $results = [
+                'address' => null,
+                'city' => null,
+                'state' => null,
+                'zip' => null
+            ];
+            
+            // set the [address], [city], [state]/[st], [zip] fields for base keys
+            foreach($bestCase as $case) {
+                if(in_array($case, $keys)) {
+                    if('state' === $case || 'st' === $case) {
+                        // I just need to know if it's "st" or "state"
+                        if(array_search('state', $keys)) {
+                            $results['state'] = 'state';
+                        }
+                        else if(array_search('st', $keys)) {
+                            $results['state'] = 'st';
+                        }
+                        else {
+                            $wasBestCase = false;
+                            break;
+                        }
+                    }
+                    $results['address'] = 'address';
+                    $results['city'] = 'city';
+                    $results['zip'] = 'zip';
+                    $wasBestCase = true;
+                }
+            }
+            
+            return $results;
+        };
+        
         /*
           get the keys from the base csv and the suppression lists
           just grab the keys at [0] because all N obs will have the same keys
@@ -98,40 +132,28 @@ abstract class RsmSuppressAbstract
             // convert it to a string
             return (string)$elem;
         }, array_keys($this->parseCsvBaseData->data[0]));
+    
+        // best case results
+        $bcResults = $getBestCase($baseKeys);
+        $this->kAddress = $bcResults['address'];
+        $this->kCity = $bcResults['city'];
+        $this->kState = $bcResults['state'];
+        $this->kZip = $bcResults['zip'];
         
-        // get the suppression list keys, lowercase them
+        // get the suppression list keys, lowercase them and
+        // set the [address], [city], [state]/[st], [zip] fields
         foreach($this->parseCsvSuppressData as $suppressionList) {
-            $suppressionKeys[] = array_map(function($elem) {
+            $keys = array_map(function($elem) {
                 if(is_string($elem)) {
                     return strtolower($elem);
                 }
                 return (string)$elem;
             }, array_keys($suppressionList->data[0]));
-        }
-        
-        // set the [address], [city], [state]/[st], [zip] fields for base keys
-        foreach($bestCase as $case) {
-            if(in_array($case, $baseKeys)) {
-                if($case = 'state' || $case = 'st') {
-                    // I just need to know if it's "st" or "state"
-                    $stateIdx = array_search('state', $baseKeys);
-                    if(!$stateIdx) {
-                        $this->state = 'state';
-                    }
-                    else if(array_search('st', $baseKeys)) {
-                        $this->state = 'st';
-                    }
-                    else {
-                        $wasBestCase = false;
-                        break;
-                    }
-                    
-                }
-                $this->address = 'address';
-                $this->city = 'city';
-                $this->zip = 'zip';
-                $wasBestCase = true;
-            }
+            
+            $suppressionKeys[] = $keys;
+            
+            $bcResults = $getBestCase($keys);
+            $this->kSup[] = $bcResults;
         }
         
         $break = 'point';
