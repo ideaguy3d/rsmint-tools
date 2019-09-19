@@ -46,7 +46,7 @@ abstract class RsmSuppressAbstract
             'address' => 'street address',
             'city' => 'prop_city',
             'state' => 'o state',
-            'zip' => 'city-zip'
+            'zip' => 'city-zip',
         ],
     ];
     
@@ -83,6 +83,7 @@ abstract class RsmSuppressAbstract
         // function scoped properties
         $bestCase = ['address', 'city', 'state', 'st', 'zip'];
         $suppressionKeys = [];
+        $wasBestCase = false; // assume worst case
         
         /*
           get the keys from the base csv and the suppression lists
@@ -114,24 +115,36 @@ abstract class RsmSuppressAbstract
                 if($case = 'state' || $case = 'st') {
                     // I just need to know if it's "st" or "state"
                     $stateIdx = array_search('state', $baseKeys);
-                    if(!$stateIdx) $this->state = 'state';
-                    else $this->state = 'st';
+                    if(!$stateIdx) {
+                        $this->state = 'state';
+                    }
+                    else if(array_search('st', $baseKeys)) {
+                        $this->state = 'st';
+                    }
+                    else {
+                        $wasBestCase = false;
+                        break;
+                    }
+                    
                 }
                 $this->address = 'address';
                 $this->city = 'city';
                 $this->zip = 'zip';
+                $wasBestCase = true;
             }
         }
         
         $break = 'point';
         
-        // a simple [address], [city], [state]/[st], [zip] couldn't be found
-        $this->suppressionStartDynamic();
+        if(!$wasBestCase) {
+            // a simple [address], [city], [state]/[st], [zip] couldn't be found
+            $this->suppressionStartDynamic();
+        }
     }
     
     /**
      * This function is trying to dynamically figure out what the
-     * address, city, st, and zips fields are
+     * address, city, st, and zip fields are
      *
      * Because we don't know how many suppression lists there will be I will
      * scan each array in the collection and figure it out
