@@ -110,10 +110,8 @@ abstract class RsmSuppressAbstract
             $bestCase, &$wasBestCase
         ): array {
             $results = [
-                'address' => null,
-                'city' => null,
-                'state' => null,
-                'zip' => null,
+                'address' => null, 'city' => null,
+                'state' => null, 'zip' => null,
             ];
             
             // set the [address], [city], [state]/[st], [zip] fields for base keys
@@ -188,8 +186,6 @@ abstract class RsmSuppressAbstract
             $this->kSup[] = $bcResults;
         }
         
-        $break = 'point';
-        
         if(!$wasBestCase) {
             // a simple [address], [city], [state]/[st], [zip] couldn't be found
             $this->suppressionStartDynamic();
@@ -197,19 +193,28 @@ abstract class RsmSuppressAbstract
         else {
             $this->suppress();
         }
-    }
+    } // END OF: suppressionStart()
     
     /**
      * This function will create a hash by combining address, city, state, zip fields
      * and removing all the non alphanumeric chars
      */
-    public function suppress() {
+    public function suppress(): void {
+        $hashBaseArray = $this->createBaseHash();
+        $hashSuppressionArray = $this->createSuppressionHash();
+        
+        $break = 'point';
+    } // END OF: suppress()
+    
+    /**
+     * @return array
+     */
+    public function createBaseHash(): array {
         // function scoped properties, the hash arrays will probably
         // be what get exported as the suppressed CSV
         $hashBaseArray = [];
-        $hashSuppressionArray = [];
         $alphaNumPattern = '/[^0-9a-zA-Z]/';
-        
+    
         // loop over the 1D base csv array
         // create a hash to suppress on by getting rid of all alphanumeric chars
         foreach($this->parseCsvBaseData->data as $item) {
@@ -219,7 +224,7 @@ abstract class RsmSuppressAbstract
             $coreFieldCombine .= $item[$this->kCity];
             $coreFieldCombine .= $item[$this->kState];
             $coreFieldCombine .= $item[$this->kZip];
-            
+        
             // Perhaps refactor this to a lambda to upload dry rule
             $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
             if($coreFieldsRegex->hasMatch()) {
@@ -233,25 +238,37 @@ abstract class RsmSuppressAbstract
             }
         }
         
+        return $hashBaseArray;
+    }
+    
+    /**
+     * @return array
+     */
+    public function createSuppressionHash(): array {
+        $hashSuppressionArray = [];
+        $alphaNumPattern = '/[^0-9a-zA-Z]/';
+        
         // loop over the suppression 2D array and create a hash
         // The 1 to N sets will be transformed to a 1D array
         $c = 0;
         foreach($this->parseCsvSuppressData as $file) {
             $data = $file->data;
+        
             for($i = 0; $i < count($data); $i++) {
                 $item = $data[$i];
                 $_address = $this->kSup[$c]['address'];
                 $_city = $this->kSup[$c]['city'];
                 $_state = $this->kSup[$c]['state'];
                 $_zip = $this->kSup[$c]['zip'];
+            
                 // 1117 s 9th st San Jose, ca 95112
                 // address + city + state + zip
                 $coreFieldCombine = $item[$_address];
                 $coreFieldCombine .= $item[$_city];
                 $coreFieldCombine .= $item[$_state];
                 $coreFieldCombine .= $item[$_zip];
-                
-                // Perhaps refactor this to a lambda to upload dry rule
+            
+                // Perhaps refactor this to a lambda to uphold dry rule
                 $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
                 if($coreFieldsRegex->hasMatch()) {
                     // now get rid of all non alphanumeric chars
@@ -259,10 +276,11 @@ abstract class RsmSuppressAbstract
                     $hashSuppressionArray[$hash] = $item; // varies here
                 }
             }
+        
             $c++;
         }
         
-        $break = 'point';
+        return $hashSuppressionArray;
     }
     
     /**
@@ -291,5 +309,5 @@ abstract class RsmSuppressAbstract
         }, ARRAY_FILTER_USE_BOTH);
         
         $break = 'point';
-    }
+    } // END OF: suppressionStartDynamic()
 }
