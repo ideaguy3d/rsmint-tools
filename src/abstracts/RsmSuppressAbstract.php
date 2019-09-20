@@ -196,17 +196,52 @@ abstract class RsmSuppressAbstract
     } // END OF: suppressionStart()
     
     /**
-     * This function will create a hash by combining address, city, state, zip fields
-     * and removing all the non alphanumeric chars
+     * This function will start to remove records from the base CSV that are in
+     * the combined suppression CSVs
+     *
+     * @return void
      */
     public function suppress(): void {
         $hashBaseArray = $this->createBaseHash();
         $hashSuppressionArray = $this->createSuppressionHash();
+        $suppressedSet = [];
+        $recordsRemoved = [];
+        $C = 0;
+    
+        foreach($hashBaseArray as $key => $value) {
+            //****************************************
+            //******** O(N+1) time complexity ********
+            //****************************************
+            $temp = $hashSuppressionArray[$key] ?? null;
+            
+            if($C % 2 === 0) {
+                $formatC = number_format($C);
+                ob_end_flush();
+                $v = print_r($value, true);
+                echo "\n__>> Scanned $formatC records, current record = $v\n";
+                ob_start();
+            }
+            
+            // if temp has a value this record needs to get suppressed
+            if($temp === null) {
+                $suppressedSet[$key] = $value;
+            }
+            else {
+                $recordsRemoved[$key] = $value;
+            }
+            
+            $C++;
+        }
         
         $break = 'point';
     } // END OF: suppress()
     
     /**
+     * This function will create a hash by combining address, city, state, zip fields
+     * and removing all the non alphanumeric chars
+     *
+     * The hash is created for the 1 base csv file
+     *
      * @return array
      */
     public function createBaseHash(): array {
@@ -242,6 +277,11 @@ abstract class RsmSuppressAbstract
     }
     
     /**
+     * This function will create a hash by combining address, city, state, zip fields
+     * and removing all the non alphanumeric chars
+     *
+     * The hash combines N suppression csv files
+     *
      * @return array
      */
     public function createSuppressionHash(): array {
