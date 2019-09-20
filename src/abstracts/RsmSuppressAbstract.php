@@ -206,10 +206,11 @@ abstract class RsmSuppressAbstract
     public function suppress() {
         // function scoped properties, the hash arrays will probably
         // be what get exported as the suppressed CSV
-        $baseHashArray = [];
-        $suppressionHashArray = [];
+        $hashBaseArray = [];
+        $hashSuppressionArray = [];
         $alphaNumPattern = '/[^0-9a-zA-Z]/';
         
+        // loop over the 1D base csv array
         // create a hash to suppress on by getting rid of all alphanumeric chars
         foreach($this->parseCsvBaseData->data as $item) {
             // 1117 s 9th st San Jose, ca 95112
@@ -224,7 +225,7 @@ abstract class RsmSuppressAbstract
             if($coreFieldsRegex->hasMatch()) {
                 // now get rid of all non alphanumeric chars
                 $hash = Regex::replace($alphaNumPattern, '', $coreFieldCombine)->result();
-                $baseHashArray[$hash] = $item;
+                $hashBaseArray[$hash] = $item;
             }
             else {
                 // maybe throw an exception
@@ -232,25 +233,33 @@ abstract class RsmSuppressAbstract
             }
         }
         
+        // loop over the suppression 2D array and create a hash
+        // The 1 to N sets will be transformed to a 1D array
+        $c = 0;
         foreach($this->parseCsvSuppressData as $file) {
             $data = $file->data;
             for($i = 0; $i < count($data); $i++) {
                 $item = $data[$i];
+                $_address = $this->kSup[$c]['address'];
+                $_city = $this->kSup[$c]['city'];
+                $_state = $this->kSup[$c]['state'];
+                $_zip = $this->kSup[$c]['zip'];
                 // 1117 s 9th st San Jose, ca 95112
                 // address + city + state + zip
-                $coreFieldCombine = $item[$this->kSup[$i]['address']];
-                $coreFieldCombine .= $item[$this->kSup[$i]['city']];
-                $coreFieldCombine .= $item[$this->kSup[$i]['state']];
-                $coreFieldCombine .= $item[$this->kSup[$i]['zip']];
+                $coreFieldCombine = $item[$_address];
+                $coreFieldCombine .= $item[$_city];
+                $coreFieldCombine .= $item[$_state];
+                $coreFieldCombine .= $item[$_zip];
                 
                 // Perhaps refactor this to a lambda to upload dry rule
                 $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
                 if($coreFieldsRegex->hasMatch()) {
                     // now get rid of all non alphanumeric chars
                     $hash = Regex::replace($alphaNumPattern, '', $coreFieldCombine)->result();
-                    $suppressionHashArray[$hash] = $item; // varies here
+                    $hashSuppressionArray[$hash] = $item; // varies here
                 }
             }
+            $c++;
         }
         
         $break = 'point';
