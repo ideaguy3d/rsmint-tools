@@ -105,7 +105,10 @@ abstract class RsmSuppressAbstract
         $suppressionKeys = [];
         $wasBestCase = false; // assume worst case
         
-        $getBestCase = function(array $keys) use ($bestCase, &$wasBestCase): array {
+        // $keys are lowercase, $keysOrig is their original case
+        $getBestCase = function(array $keys, array $keysOrig) use (
+            $bestCase, &$wasBestCase
+        ): array {
             $results = [
                 'address' => null,
                 'city' => null,
@@ -117,22 +120,28 @@ abstract class RsmSuppressAbstract
             foreach($bestCase as $case) {
                 if(in_array($case, $keys)) {
                     if('state' === $case || 'st' === $case) {
+                        $idxState = array_search('state', $keys);
+                        $idxSt = array_search('st', $keys);
+                        
                         // I just need to know if it's "st" or "state"
-                        if(array_search('state', $keys)) {
-                            $results['state'] = 'state';
+                        if($idxState) {
+                            $results['state'] = $keysOrig[$idxState];
                         }
-                        else if(array_search('st', $keys)) {
-                            $results['state'] = 'st';
+                        else if($idxSt) {
+                            $results['state'] = $keysOrig[$idxSt];
                         }
                         else {
                             $wasBestCase = false;
                             break;
                         }
                     }
+                    $idxAddress = array_search('address', $keys);
+                    $idxCity = array_search('city', $keys);
+                    $idxZip = array_search('zip', $keys);
                     
-                    $results['address'] = 'address';
-                    $results['city'] = 'city';
-                    $results['zip'] = 'zip';
+                    $results['address'] = $keysOrig[$idxAddress];
+                    $results['city'] = $keysOrig[$idxCity];
+                    $results['zip'] = $keysOrig[$idxZip];
                     $wasBestCase = true;
                 }
             }
@@ -146,16 +155,17 @@ abstract class RsmSuppressAbstract
         */
         
         // lower case all the base keys
+        $origBaseKeys = array_keys($this->parseCsvBaseData->data[0]);
         $baseKeys = array_map(function($elem) {
             if(is_string($elem)) {
                 return strtolower($elem);
             }
             // convert it to a string
             return (string)$elem;
-        }, array_keys($this->parseCsvBaseData->data[0]));
+        }, $origBaseKeys);
         
         // best case results
-        $bcResults = $getBestCase($baseKeys);
+        $bcResults = $getBestCase($baseKeys, $origBaseKeys);
         $this->kAddress = $bcResults['address'];
         $this->kCity = $bcResults['city'];
         $this->kState = $bcResults['state'];
@@ -164,16 +174,17 @@ abstract class RsmSuppressAbstract
         // get the suppression list keys, lowercase them and
         // set the [address], [city], [state]/[st], [zip] fields
         foreach($this->parseCsvSuppressData as $suppressionList) {
+            $origSupKeys = array_keys($suppressionList->data[0]);
             $keys = array_map(function($elem) {
                 if(is_string($elem)) {
                     return strtolower($elem);
                 }
                 return (string)$elem;
-            }, array_keys($suppressionList->data[0]));
+            }, $origSupKeys);
             
             $suppressionKeys[] = $keys;
             
-            $bcResults = $getBestCase($keys);
+            $bcResults = $getBestCase($keys, $origSupKeys);
             $this->kSup[] = $bcResults;
         }
         
@@ -215,6 +226,10 @@ abstract class RsmSuppressAbstract
                 $hash = Regex::replace($alphaNumPattern, '', $coreFieldCombine)->result();
                 $baseHashArray[$hash] = $item;
             }
+            else {
+                // maybe throw an exception
+                $break = 'point';
+            }
         }
         
         foreach($this->parseCsvSuppressData as $file) {
@@ -227,7 +242,7 @@ abstract class RsmSuppressAbstract
                 $coreFieldCombine .= $item[$this->kSup[$i]['city']];
                 $coreFieldCombine .= $item[$this->kSup[$i]['state']];
                 $coreFieldCombine .= $item[$this->kSup[$i]['zip']];
-    
+                
                 // Perhaps refactor this to a lambda to upload dry rule
                 $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
                 if($coreFieldsRegex->hasMatch()) {
@@ -237,6 +252,8 @@ abstract class RsmSuppressAbstract
                 }
             }
         }
+        
+        $break = 'point';
     }
     
     /**
