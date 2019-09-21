@@ -31,6 +31,14 @@ abstract class RsmSuppressAbstract
     protected $kState;
     protected $kZip;
     /**
+     * This zip will be the "left 5" of the zip field
+     * I'll also need to check for 3 & 4 digit zips as well
+     *
+     * @var string
+     */
+    protected $kZip5;
+    
+    /**
      * $sk = suppress keys
      *
      * This is an example of how the $sk data structure should look with
@@ -46,7 +54,8 @@ abstract class RsmSuppressAbstract
             'address' => 'street address',
             'city' => 'prop_city',
             'state' => 'o state',
-            'zip' => 'city-zip',
+            'zip' => 'city_zipcode',
+            'zip5' => 'city_zipcode', // CALCULATED value
         ],
     ];
     
@@ -95,6 +104,31 @@ abstract class RsmSuppressAbstract
     }
     
     abstract protected function suppressionCombine();
+    
+    /**
+     * Get the left 5 of the zip, if it's < 5 pad with 0's
+     *
+     * @param string $oZip
+     *
+     * @return string
+     */
+    protected function zipExtract(string $oZip): string {
+        $oZipLen = strlen($oZip);
+        $coreFieldCombine = '';
+        if($oZipLen >= 5) {
+            $coreFieldCombine .= substr($oZip, 0, 5);
+        }
+        else if($oZipLen === 4) {
+            $coreFieldCombine .= ('0' . $oZip);
+        }
+        else if($oZipLen === 3){
+            $coreFieldCombine .= ('00' . $oZip);
+        }
+        else {
+            $coreFieldCombine .= $oZip;
+        }
+        return $coreFieldCombine;
+    }
     
     /**
      * This function will such for literal [address], [city], [state]/[st], and [zip]
@@ -162,12 +196,13 @@ abstract class RsmSuppressAbstract
             return (string)$elem;
         }, $origBaseKeys);
         
-        // best case results
+        // best case results for header row
         $bcResults = $getBestCase($baseKeys, $origBaseKeys);
         $this->kAddress = $bcResults['address'];
         $this->kCity = $bcResults['city'];
         $this->kState = $bcResults['state'];
         $this->kZip = $bcResults['zip'];
+        $this->kZip5 = '';
         
         // get the suppression list keys, lowercase them and
         // set the [address], [city], [state]/[st], [zip] fields
@@ -258,8 +293,12 @@ abstract class RsmSuppressAbstract
             $coreFieldCombine = $item[$this->kAddress];
             $coreFieldCombine .= $item[$this->kCity];
             $coreFieldCombine .= $item[$this->kState];
-            $coreFieldCombine .= $item[$this->kZip];
-        
+            
+            // the zip is special, it can be [95112, 7001, 95813-1111, 512]
+            // if it's < 5 digits it's because excel truncates leading 0's
+            $oZip = $item[$this->kZip];
+            $coreFieldCombine .= $this->zipExtract($oZip);
+            
             // Perhaps refactor this to a lambda to upload dry rule
             $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
             if($coreFieldsRegex->hasMatch()) {
@@ -306,7 +345,12 @@ abstract class RsmSuppressAbstract
                 $coreFieldCombine = $item[$_address];
                 $coreFieldCombine .= $item[$_city];
                 $coreFieldCombine .= $item[$_state];
-                $coreFieldCombine .= $item[$_zip];
+                
+                // the zip is special, it can be [95112, 7001, 95813-1111, 512]
+                // if it's < 5 digits it's because excel truncates leading 0's
+                $oZip = $item[$_zip];
+                $coreFieldCombine .= $this->zipExtract($oZip);
+                
             
                 // Perhaps refactor this to a lambda to uphold dry rule
                 $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
