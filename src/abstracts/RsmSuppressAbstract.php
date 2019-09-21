@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Redstone\Tools;
 
-use mysql_xdevapi\Exception;
 use ParseCsv\Csv;
 use Spatie\Regex\Regex;
 
@@ -72,6 +71,16 @@ abstract class RsmSuppressAbstract
     protected $ignoreField = 'last_name';
     
     /**
+     * @var array
+     */
+    protected $suppressedSet = [];
+    
+    /**
+     * @var array
+     */
+    protected $recordsRemoved = [];
+    
+    /**
      * A comma separated list of values to ignore, it'll become an array
      * it'll get transformed to lower case
      *
@@ -103,7 +112,13 @@ abstract class RsmSuppressAbstract
         return $this->status;
     }
     
-    abstract protected function suppressionCombine();
+    /**
+     * The child class for now will combine all the suppression files
+     * It'll mutate abstract class property's
+     *
+     * @return mixed
+     */
+    abstract protected function suppressionCombine(): void;
     
     /**
      * Get the left 5 of the zip, if it's < 5 pad with 0's
@@ -112,7 +127,7 @@ abstract class RsmSuppressAbstract
      *
      * @return string
      */
-    protected function zipExtract(string $oZip): string {
+    private function zipExtract(string $oZip): string {
         $oZipLen = strlen($oZip);
         $coreFieldCombine = '';
         if($oZipLen >= 5) {
@@ -236,7 +251,7 @@ abstract class RsmSuppressAbstract
      *
      * @return void
      */
-    public function suppress(): void {
+    private function suppress(): void {
         $hashBaseArray = $this->createBaseHash();
         $hashSuppressionArray = $this->createSuppressionHash();
         $suppressedSet = [];
@@ -268,6 +283,9 @@ abstract class RsmSuppressAbstract
             $C++;
         }
         
+        $this->suppressedSet = $suppressedSet;
+        $this->recordsRemoved = $recordsRemoved;
+        
         $break = 'point';
     } // END OF: suppress()
     
@@ -279,7 +297,7 @@ abstract class RsmSuppressAbstract
      *
      * @return array
      */
-    public function createBaseHash(): array {
+    private function createBaseHash(): array {
         // function scoped properties, the hash arrays will probably
         // be what get exported as the suppressed CSV
         $hashBaseArray = [];
@@ -323,7 +341,7 @@ abstract class RsmSuppressAbstract
      *
      * @return array
      */
-    public function createSuppressionHash(): array {
+    private function createSuppressionHash(): array {
         $hashSuppressionArray = [];
         $alphaNumPattern = '/[^0-9a-zA-Z]/';
         
@@ -374,7 +392,7 @@ abstract class RsmSuppressAbstract
      * Because we don't know how many suppression lists there will be I will
      * scan each array in the collection and figure it out
      */
-    public function suppressionStartDynamic() {
+    private function suppressionStartDynamic() {
         // _SUPER HARDCODED purely for testing/development purposes
         $currentKeys = array_keys($this->parseCsvSuppressData[1]->data[2]);
         $activeAddress = array_filter($currentKeys, function($key, $val) {

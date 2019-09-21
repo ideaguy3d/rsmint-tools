@@ -40,7 +40,7 @@ class RsmSuppress extends RsmSuppressAbstract
         $this->suppressionCombine(); // this may also be verbose
     }
     
-    public function suppressionCombine() {
+    public function suppressionCombine(): void {
         $suppressionFiles = scandir($this->path2suppressionFolder);
         array_shift($suppressionFiles);
         array_shift($suppressionFiles);
@@ -50,8 +50,20 @@ class RsmSuppress extends RsmSuppressAbstract
                 $this->path2suppressionFolder . DIRECTORY_SEPARATOR . $suppressionFile
             );
         }
-        
-        $break = 'point';
+    }
+    
+    /**
+     * @return array
+     */
+    public function getRecordsRemoved(): array {
+        return $this->recordsRemoved;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getSuppressedSet(): array {
+        return $this->suppressedSet;
     }
     
 } // END OF: RsmSuppress

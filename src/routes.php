@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Redstone\Tools\CsvParseModel;
 use Redstone\Tools\RsmSuppress;
 use Slim\App;
 use Slim\Http\Request;
@@ -171,9 +172,18 @@ return function(App $app) {
         function(Request $request, Response $response, array $args) use ($container) {
             $suppress = new RsmSuppress();
             
-            // do stuff, then:
-            
             $suppress->suppressionStart();
+            $suppressedSet = $suppress->getSuppressedSet();
+            $recordsRemoved = $suppress->getRecordsRemoved();
+            $jobId = '77542';
+            // this will need to become dynamic
+            $exportPath = "../uploads/$jobId/results";
+            CsvParseModel::export2csv(
+                $suppressedSet, $exportPath, "suppressed_$jobId"
+            );
+            CsvParseModel::export2csv(
+                $recordsRemoved, $exportPath, "removed_$jobId"
+            );
             
             return $container->get('renderer')->render($response, 'temp.suppress.phtml', $args);
         }
