@@ -293,8 +293,13 @@ abstract class RsmSuppressAbstract
         $suppressedSet = [];
         $recordsRemoved = [];
         $C = 0;
+        $headerRow = null;
         
         foreach($hashBaseArray as $key => $value) {
+            if($C === 0) {
+                // get header row real quick
+                $headerRow = array_keys($value);
+            }
             //****************************************
             //******** O(N+1) time complexity ********
             //****************************************
@@ -318,6 +323,10 @@ abstract class RsmSuppressAbstract
             
             $C++;
         }
+        
+        // add the header row
+        array_unshift($suppressedSet, $headerRow);
+        array_unshift($recordsRemoved, $headerRow);
         
         $this->suppressedSet = $suppressedSet;
         $this->recordsRemoved = $recordsRemoved;
@@ -519,9 +528,11 @@ abstract class RsmSuppressAbstract
         
         // SUPPRESSION SET, loop over suppression files, check if best_case was set
         $c = 0;
+        // move the "pointer" till it reaches a record that was not 'best_case'
         while(isset($this->kSup[$c]) && $this->kSup[$c]['best_case'] === true) {
             $c++;
         }
+        // start at the point where there was not a 'best_case' via $i = $c
         for($i = $c; $i < count($this->parseCsvSuppressData); $i++){
             $item = $this->parseCsvSuppressData[$i];
             $currentKeys = $item->titles;
@@ -543,6 +554,9 @@ abstract class RsmSuppressAbstract
             );
         }
         
-        $break = 'point';
+        // Now that the base and suppression header fields have been mapped,
+        // suppress() the base file
+        $this->suppress();
+        
     } // END OF: suppressionStartDynamic()
 }
