@@ -95,6 +95,9 @@ abstract class RsmSuppressAbstract
      *
      * These will get used in the "Dynamic" functions
      *
+     * Right now if there is a tie / multiple matches I think
+     * the lowest index will always win at the moment
+     *
      * @var array
      */
     protected $featureSetAddress = [
@@ -454,7 +457,7 @@ abstract class RsmSuppressAbstract
         };
         
         // MATCH BASE SET HEADER ROW
-        // get all the address matches just in case there is more than 1 match
+        // get all the [address] matches just in case there is more than 1 match
         $activeAddress = $lambdaMatch($currentKeys, $this->featureSetAddress);
         if(count($activeAddress) === 1) {
             $this->kAddress = $activeAddress[0];
@@ -463,6 +466,16 @@ abstract class RsmSuppressAbstract
             echo "<br>|| There was more than 1 [address] match<br>";
         }
     
+        // get all the [city] matches just in case there is more than 1 match
+        $activeCity = $lambdaMatch($currentKeys, $this->featureSetCity);
+        if(count($activeCity) === 1) {
+            $this->kAddress = $activeCity[0];
+        }
+        else {
+            echo "<br>|| There was more than 1 [city] match<br>";
+            //TODO: implement a "tie breaker" algorithm when there is more than 1 match
+            $this->kAddress = $activeCity[0];
+        }
         
         // MATCH SUPPRESSION SET HEADER ROWS
         $C = 0;
