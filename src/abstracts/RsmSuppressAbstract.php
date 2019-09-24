@@ -425,24 +425,25 @@ abstract class RsmSuppressAbstract
      * scan each array in the collection and figure it out
      */
     private function suppressionStartDynamic() {
-        // _SUPER HARDCODED purely for testing/development purposes
-        $currentKeys = array_keys($this->parseCsvSuppressData[1]->data[2]);
+        // idx array of field titles
+        $currentKeys = array_keys($this->parseCsvBaseData->titles);
         
-        $matchAddress = function(array $currentKeys): array {
-            return array_filter($currentKeys, function($val, $key) {
+        // match all [address] from header row
+        $lambdaMatch = function(array $currentKeys, array $featureSet): array {
+            return array_filter($currentKeys, function($val, $key) use ($featureSet) {
                 $alphaNum = '/[^0-9a-zA-Z]/';
         
                 if(Regex::match($alphaNum, $val)->hasMatch()) {
                     $tempVal = Regex::replace($alphaNum, '', $val)->result();
                     $tempVal = strtolower($tempVal);
-                    $addressKey = array_search($tempVal, $this->featureSetAddress);
+                    $addressKey = array_search($tempVal, $featureSet);
                     if($addressKey !== false) {
                         return true;
                     }
                 }
                 else {
                     $tempVal = strtolower($val);
-                    $addressKey = array_search($tempVal, $this->featureSetAddress);
+                    $addressKey = array_search($tempVal, $featureSet);
                     if($addressKey !== false) {
                         return true;
                     }
@@ -452,26 +453,31 @@ abstract class RsmSuppressAbstract
             }, ARRAY_FILTER_USE_BOTH); // end of array_filter()
         };
         
-        $matchCity = function() {
-        
-        };
-        
-        $matchState = function() {
-        
-        };
-        
-        $matchZip = function() {
-        
-        };
-        
-        // start with base data set
+        // MATCH BASE SET HEADER ROW
         // get all the address matches just in case there is more than 1 match
-        $activeAddress = $matchAddress($currentKeys);
+        $activeAddress = $lambdaMatch($currentKeys, $this->featureSetAddress);
         if(count($activeAddress) === 1) {
             $this->kAddress = $activeAddress[0];
         }
         else {
             echo "<br>|| There was more than 1 [address] match<br>";
+        }
+    
+        
+        // MATCH SUPPRESSION SET HEADER ROWS
+        $C = 0;
+        foreach($this->parseCsvSuppressData as $item) {
+            $currentKeys = array_keys($item->titles);
+            // get all the address matches just in case there is more than 1 match
+            $activeAddress = $lambdaMatch($currentKeys, $this->featureSetAddress);
+            if(count($activeAddress) === 1) {
+                $this->kAddress = $activeAddress[0];
+            }
+            else {
+                echo "<br>|| There was more than 1 [address] match<br>";
+            }
+            
+            $C++;
         }
         
         $break = 'point';
