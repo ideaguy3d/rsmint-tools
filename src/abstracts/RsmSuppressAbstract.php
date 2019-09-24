@@ -435,7 +435,7 @@ abstract class RsmSuppressAbstract
         $lambdaMatch = function(array $currentKeys, array $featureSet): array {
             return array_filter($currentKeys, function($val, $key) use ($featureSet) {
                 $alphaNum = '/[^0-9a-zA-Z]/';
-        
+                
                 if(Regex::match($alphaNum, $val)->hasMatch()) {
                     $tempVal = Regex::replace($alphaNum, '', $val)->result();
                     $tempVal = strtolower($tempVal);
@@ -451,12 +451,12 @@ abstract class RsmSuppressAbstract
                         return true;
                     }
                 }
-        
+                
                 return false;
             }, ARRAY_FILTER_USE_BOTH); // end of array_filter()
         };
         
-        // MATCH BASE SET HEADER ROW
+        // BASE SET
         // get all the [address] matches just in case there is more than 1 match
         $activeAddress = $lambdaMatch($currentKeys, $this->featureSetAddress);
         if(count($activeAddress) === 1) {
@@ -464,20 +464,33 @@ abstract class RsmSuppressAbstract
         }
         else {
             echo "<br>|| There was more than 1 [address] match<br>";
+            //TODO: implement a "tie breaker" algorithm when there is more than 1 match
+            $this->kAddress = $activeAddress[0];
         }
-    
+        
         // get all the [city] matches just in case there is more than 1 match
         $activeCity = $lambdaMatch($currentKeys, $this->featureSetCity);
         if(count($activeCity) === 1) {
-            $this->kAddress = $activeCity[0];
+            $this->kCity = $activeCity[0];
         }
         else {
             echo "<br>|| There was more than 1 [city] match<br>";
             //TODO: implement a "tie breaker" algorithm when there is more than 1 match
-            $this->kAddress = $activeCity[0];
+            $this->kCity = $activeCity[0];
         }
         
-        // MATCH SUPPRESSION SET HEADER ROWS
+        // get all the [state] matches just in case there is more than 1 match
+        $activeState = $lambdaMatch($currentKeys, $this->featureSetState);
+        if(count($activeState) === 1) {
+            $this->kState = $activeState[0];
+        }
+        else {
+            echo "<br>|| There was more than 1 [state] match <br>";
+            //TODO: implement a "tie breaker" algorithm when there is more than 1 match
+            $this->kState = $activeState[0]; 
+        }
+        
+        // SUPPRESSION SET
         $C = 0;
         foreach($this->parseCsvSuppressData as $item) {
             $currentKeys = array_keys($item->titles);
