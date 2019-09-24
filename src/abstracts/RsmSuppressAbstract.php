@@ -487,7 +487,18 @@ abstract class RsmSuppressAbstract
         else {
             echo "<br>|| There was more than 1 [state] match <br>";
             //TODO: implement a "tie breaker" algorithm when there is more than 1 match
-            $this->kState = $activeState[0]; 
+            $this->kState = $activeState[0];
+        }
+    
+        // get all the [zip] matches just in case there is more than 1 match
+        $activeZip = $lambdaMatch($currentKeys, $this->featureSetZip);
+        if(count($activeZip) === 1) {
+            $this->kZip = $activeZip[0];
+        }
+        else {
+            echo "<br>|| There was more than 1 [zip] match <br>";
+            //TODO: implement a "tie breaker" algorithm when there is more than 1 match
+            $this->kZip = $activeZip[0];
         }
         
         // SUPPRESSION SET
