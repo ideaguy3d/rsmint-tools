@@ -431,7 +431,7 @@ abstract class RsmSuppressAbstract
         // idx array of field titles
         $currentKeys = array_keys($this->parseCsvBaseData->titles);
         
-        // match all [address] from header row
+        // match all the core fields to the feature set
         $lambdaMatch = function(array $currentKeys, array $featureSet): array {
             return array_filter($currentKeys, function($val, $key) use ($featureSet) {
                 $alphaNum = '/[^0-9a-zA-Z]/';
@@ -456,50 +456,56 @@ abstract class RsmSuppressAbstract
             }, ARRAY_FILTER_USE_BOTH); // end of array_filter()
         };
         
+        // mutate the ref $mapKey with the $lambdaMatch() match
+        $lambdaMapKey = function(
+            string &$address, string &$city, string &$state, string &$zip, array $currentKeys
+        ) use ($lambdaMatch): void {
+            // get all the [address] matches just in case there is more than 1 match
+            $activeAddress = $lambdaMatch($currentKeys, $this->featureSetAddress);
+            if(count($activeAddress) === 1) {
+                $address = $activeAddress[0];
+            }
+            else {
+                echo "<br>|| There was more than 1 [address] match<br>";
+                //TODO: implement a "tie breaker" algorithm when there is more than 1 match
+                $address = $activeAddress[0];
+            }
+            
+            // get all the [city] matches just in case there is more than 1 match
+            $activeCity = $lambdaMatch($currentKeys, $this->featureSetCity);
+            if(count($activeCity) === 1) {
+                $city = $activeCity[0];
+            }
+            else {
+                echo "<br>|| There was more than 1 [city] match<br>";
+                //TODO: implement a "tie breaker" algorithm when there is more than 1 match
+                $city = $activeCity[0];
+            }
+            
+            // get all the [state] matches just in case there is more than 1 match
+            $activeState = $lambdaMatch($currentKeys, $this->featureSetState);
+            if(count($activeState) === 1) {
+                $state = $activeState[0];
+            }
+            else {
+                echo "<br>|| There was more than 1 [state] match <br>";
+                //TODO: implement a "tie breaker" algorithm when there is more than 1 match
+                $state = $activeState[0];
+            }
+            
+            // get all the [zip] matches just in case there is more than 1 match
+            $activeZip = $lambdaMatch($currentKeys, $this->featureSetZip);
+            if(count($activeZip) === 1) {
+                $zip = $activeZip[0];
+            }
+            else {
+                echo "<br>|| There was more than 1 [zip] match <br>";
+                //TODO: implement a "tie breaker" algorithm when there is more than 1 match
+                $zip = $activeZip[0];
+            }
+        };
+        
         // BASE SET
-        // get all the [address] matches just in case there is more than 1 match
-        $activeAddress = $lambdaMatch($currentKeys, $this->featureSetAddress);
-        if(count($activeAddress) === 1) {
-            $this->kAddress = $activeAddress[0];
-        }
-        else {
-            echo "<br>|| There was more than 1 [address] match<br>";
-            //TODO: implement a "tie breaker" algorithm when there is more than 1 match
-            $this->kAddress = $activeAddress[0];
-        }
-        
-        // get all the [city] matches just in case there is more than 1 match
-        $activeCity = $lambdaMatch($currentKeys, $this->featureSetCity);
-        if(count($activeCity) === 1) {
-            $this->kCity = $activeCity[0];
-        }
-        else {
-            echo "<br>|| There was more than 1 [city] match<br>";
-            //TODO: implement a "tie breaker" algorithm when there is more than 1 match
-            $this->kCity = $activeCity[0];
-        }
-        
-        // get all the [state] matches just in case there is more than 1 match
-        $activeState = $lambdaMatch($currentKeys, $this->featureSetState);
-        if(count($activeState) === 1) {
-            $this->kState = $activeState[0];
-        }
-        else {
-            echo "<br>|| There was more than 1 [state] match <br>";
-            //TODO: implement a "tie breaker" algorithm when there is more than 1 match
-            $this->kState = $activeState[0];
-        }
-    
-        // get all the [zip] matches just in case there is more than 1 match
-        $activeZip = $lambdaMatch($currentKeys, $this->featureSetZip);
-        if(count($activeZip) === 1) {
-            $this->kZip = $activeZip[0];
-        }
-        else {
-            echo "<br>|| There was more than 1 [zip] match <br>";
-            //TODO: implement a "tie breaker" algorithm when there is more than 1 match
-            $this->kZip = $activeZip[0];
-        }
         
         // SUPPRESSION SET
         $C = 0;
