@@ -11,9 +11,9 @@ abstract class RsmSuppressAbstract
     private $status;
     
     /**
-     * This data will use the ParseCsv library
+     * This is the combined array of all the suppression CSVs
      *
-     * @var Csv
+     * @var array
      */
     protected $parseCsvSuppressData;
     
@@ -107,7 +107,7 @@ abstract class RsmSuppressAbstract
         'city', 'ocity', 'propcity',
     ];
     protected $featureSetState = [
-        'state', 'ostate', 'propstate',
+        'state', 'st', 'ostate', 'propstate',
     ];
     protected $featureSetZip = [
         'zip', 'zipcode', 'ozip', 'propzip',
@@ -429,7 +429,7 @@ abstract class RsmSuppressAbstract
      */
     private function suppressionStartDynamic() {
         // idx array of field titles
-        $currentKeys = array_keys($this->parseCsvBaseData->titles);
+        $currentKeys = $this->parseCsvBaseData->titles;
         
         // match all the core fields to the feature set
         $lambdaMatch = function(array $currentKeys, array $featureSet): array {
@@ -458,10 +458,13 @@ abstract class RsmSuppressAbstract
         
         // mutate the ref $mapKey with the $lambdaMatch() match
         $lambdaMapKey = function(
-            string &$address, string &$city, string &$state, string &$zip, array $currentKeys
+            ?string &$address, ?string &$city, ?string &$state, ?string &$zip, array $currentKeys
         ) use ($lambdaMatch): void {
+            
+            /* I have to use array_values() because array_filter() preserves the keys */
+            
             // get all the [address] matches just in case there is more than 1 match
-            $activeAddress = $lambdaMatch($currentKeys, $this->featureSetAddress);
+            $activeAddress = array_values($lambdaMatch($currentKeys, $this->featureSetAddress));
             if(count($activeAddress) === 1) {
                 $address = $activeAddress[0];
             }
@@ -472,7 +475,7 @@ abstract class RsmSuppressAbstract
             }
             
             // get all the [city] matches just in case there is more than 1 match
-            $activeCity = $lambdaMatch($currentKeys, $this->featureSetCity);
+            $activeCity = array_values($lambdaMatch($currentKeys, $this->featureSetCity));
             if(count($activeCity) === 1) {
                 $city = $activeCity[0];
             }
@@ -483,7 +486,7 @@ abstract class RsmSuppressAbstract
             }
             
             // get all the [state] matches just in case there is more than 1 match
-            $activeState = $lambdaMatch($currentKeys, $this->featureSetState);
+            $activeState = array_values($lambdaMatch($currentKeys, $this->featureSetState));
             if(count($activeState) === 1) {
                 $state = $activeState[0];
             }
@@ -494,7 +497,7 @@ abstract class RsmSuppressAbstract
             }
             
             // get all the [zip] matches just in case there is more than 1 match
-            $activeZip = $lambdaMatch($currentKeys, $this->featureSetZip);
+            $activeZip = array_values($lambdaMatch($currentKeys, $this->featureSetZip));
             if(count($activeZip) === 1) {
                 $zip = $activeZip[0];
             }
@@ -506,21 +509,38 @@ abstract class RsmSuppressAbstract
         };
         
         // BASE SET
+        $lambdaMapKey(
+            $this->kAddress,
+            $this->kCity,
+            $this->kState,
+            $this->kZip,
+            $currentKeys
+        );
         
-        // SUPPRESSION SET
-        $C = 0;
-        foreach($this->parseCsvSuppressData as $item) {
-            $currentKeys = array_keys($item->titles);
-            // get all the address matches just in case there is more than 1 match
-            $activeAddress = $lambdaMatch($currentKeys, $this->featureSetAddress);
-            if(count($activeAddress) === 1) {
-                $this->kAddress = $activeAddress[0];
-            }
-            else {
-                echo "<br>|| There was more than 1 [address] match<br>";
-            }
-            
-            $C++;
+        // SUPPRESSION SET, loop over suppression files, check if best_case was set
+        $c = 0;
+        while(isset($this->kSup[$c]) && $this->kSup[$c]['best_case'] === true) {
+            $c++;
+        }
+        for($i = $c; $i < count($this->parseCsvSuppressData); $i++){
+            $item = $this->parseCsvSuppressData[$i];
+            $currentKeys = $item->titles;
+            $this->kSup[] = ['best_case' => false];
+            $curIdx = (count($this->kSup)-1);
+            $rec = &$this->kSup[$curIdx];
+            $rec['address'] = null;
+            $rec['city'] = null;
+            $rec['state'] = null;
+            $rec['zip'] = null;
+    
+            $address = &$rec['address'];
+            $city = &$rec['city'];
+            $state = &$rec['state'];
+            $zip = &$rec['zip'];
+            $lambdaMapKey(
+                $address, $city, $state,
+                $zip, $currentKeys
+            );
         }
         
         $break = 'point';
