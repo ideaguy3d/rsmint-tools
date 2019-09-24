@@ -103,10 +103,10 @@ abstract class RsmSuppressAbstract
     protected $featureSetCity = [
         'city', 'ocity', 'propcity',
     ];
-    protected $stateFeatureSet = [
+    protected $featureSetState = [
         'state', 'ostate', 'propstate',
     ];
-    protected $zipFeatureSet = [
+    protected $featureSetZip = [
         'zip', 'zipcode', 'ozip', 'propzip',
     ];
     
@@ -214,6 +214,11 @@ abstract class RsmSuppressAbstract
                 }
             }
             
+            if(in_array(null, $results)) {
+                $wasBestCase = false;
+                $results['best_case'] = $wasBestCase;
+            }
+            
             return $results;
         };
         
@@ -255,6 +260,7 @@ abstract class RsmSuppressAbstract
             
             // best case results
             $bcResults = $getBestCase($keys, $origSupKeys);
+            if(!$wasBestCase) break;
             $this->kSup[] = $bcResults;
         }
         
@@ -265,6 +271,7 @@ abstract class RsmSuppressAbstract
         else {
             $this->suppress();
         }
+        
     } // END OF: suppressionStart()
     
     /**
@@ -421,19 +428,51 @@ abstract class RsmSuppressAbstract
         // _SUPER HARDCODED purely for testing/development purposes
         $currentKeys = array_keys($this->parseCsvSuppressData[1]->data[2]);
         
-        $activeAddress = array_filter($currentKeys, function($key, $val) {
-            $alphaNum = '/[^0-9a-zA-Z]/';
-            
-            if(Regex::match($alphaNum, $key)->hasMatch()) {
-                $tempVal = Regex::replace($alphaNum, '', $key)->result();
-                $tempVal = strtolower($tempVal);
-                if($addressKey = array_search($tempVal, $this->featureSetAddress)) {
-                    return true;
+        $matchAddress = function(array $currentKeys): array {
+            return array_filter($currentKeys, function($val, $key) {
+                $alphaNum = '/[^0-9a-zA-Z]/';
+        
+                if(Regex::match($alphaNum, $val)->hasMatch()) {
+                    $tempVal = Regex::replace($alphaNum, '', $val)->result();
+                    $tempVal = strtolower($tempVal);
+                    $addressKey = array_search($tempVal, $this->featureSetAddress);
+                    if($addressKey !== false) {
+                        return true;
+                    }
                 }
-            }
-            
-            return false;
-        }, ARRAY_FILTER_USE_BOTH);
+                else {
+                    $tempVal = strtolower($val);
+                    $addressKey = array_search($tempVal, $this->featureSetAddress);
+                    if($addressKey !== false) {
+                        return true;
+                    }
+                }
+        
+                return false;
+            }, ARRAY_FILTER_USE_BOTH); // end of array_filter()
+        };
+        
+        $matchCity = function() {
+        
+        };
+        
+        $matchState = function() {
+        
+        };
+        
+        $matchZip = function() {
+        
+        };
+        
+        // start with base data set
+        // get all the address matches just in case there is more than 1 match
+        $activeAddress = $matchAddress($currentKeys);
+        if(count($activeAddress) === 1) {
+            $this->kAddress = $activeAddress[0];
+        }
+        else {
+            echo "<br>|| There was more than 1 [address] match<br>";
+        }
         
         $break = 'point';
     } // END OF: suppressionStartDynamic()
