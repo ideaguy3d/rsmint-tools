@@ -55,7 +55,7 @@ interface ICsvParseModel
      * The prior export2csv assumed 1 csv file would exist in the folder
      * this function does not, which is why $csvName must be given
      *
-     * @param string $path      -
+     * @param string $path
      * @param string $csvName
      *
      * @return array

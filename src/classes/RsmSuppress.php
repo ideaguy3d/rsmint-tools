@@ -24,18 +24,18 @@ class RsmSuppress extends RsmSuppressAbstract
         //TODO: dynamically check the host to determine local or pro env
         
         // _HARD CODED to my flash drive location
-        // flash drive: 'E:\redstone\uploads\77542\data', 'E:\redstone\uploads\77542\suppress'
-        // localhost:
+        // flash drive: E:\redstone\uploads\77542\data, E:\redstone\uploads\77542\suppress
+        // localhost: C:\xampp\htdocs\redstone\uploads\77542\data, C:\xampp\htdocs\redstone\uploads\77542\suppress
         $this->path2dataFolder = 'C:\xampp\htdocs\redstone\uploads\77542\data';
         $this->path2suppressionFolder = 'C:\xampp\htdocs\redstone\uploads\77542\suppress';
         $this->readFiles(); // this may be verbose
     }
     
-    public function getStatus() {
+    public function getStatus(): string {
         return parent::getStatus() . ' > ' . $this->status;
     }
     
-    public function readFiles() {
+    public function readFiles(): void {
         $this->parseCsvBaseData = new Csv($this->path2dataFolder . '\data.csv');
         $this->suppressionCombine(); // this may also be verbose
     }

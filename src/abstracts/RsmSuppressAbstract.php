@@ -29,6 +29,7 @@ abstract class RsmSuppressAbstract
     protected $kCity;
     protected $kState;
     protected $kZip;
+    
     /**
      * This zip will be the "left 5" of the zip field
      * I'll also need to check for 3 & 4 digit zips as well
@@ -54,12 +55,12 @@ abstract class RsmSuppressAbstract
             'city' => 'prop_city',
             'state' => 'o state',
             'zip' => 'city_zipcode',
-            'zip5' => 'city_zipcode', // CALCULATED value
+            'zip5' => 'LEFT(5, zip)', // CALCULATED value
         ],
     ];
     
     /**
-     * DEVELOPMENT MODE property
+     * DEVELOPMENT MODE property... for now.
      *
      * field to check for a 'contains' value, if it contains this
      * value the record that it exists in will be removed
@@ -69,6 +70,14 @@ abstract class RsmSuppressAbstract
      * @var string
      */
     protected $ignoreField = 'last_name';
+    
+    /**
+     * A comma separated list of values to ignore, it'll become an array
+     * and it'll get transformed to lower case
+     *
+     * @var string
+     */
+    protected $ignoreFieldContains = 'jones, smith, lopez';
     
     /**
      * @var array
@@ -81,14 +90,6 @@ abstract class RsmSuppressAbstract
     protected $recordsRemoved = [];
     
     /**
-     * A comma separated list of values to ignore, it'll become an array
-     * it'll get transformed to lower case
-     *
-     * @var string
-     */
-    protected $contains = 'jones, smith, lopez';
-    
-    /**
      * Add more to these feature sets as I study more input data
      * When dynamically finding these titles remove non alphanumerics
      *
@@ -96,12 +97,18 @@ abstract class RsmSuppressAbstract
      *
      * @var array
      */
-    protected $addressFeatureSet = [
-        'address', 'addr', 'propadr', 'streetaddress',
+    protected $featureSetAddress = [
+        'address', 'addr', 'propaddr', 'streetaddress',
     ];
-    protected $cityFeatureSet = ['city', 'ocity', 'propcity'];
-    protected $stateFeatureSet = ['state', 'ostate', 'propstate'];
-    protected $zipFeatureSet = ['zip', 'ozip', 'propzip'];
+    protected $featureSetCity = [
+        'city', 'ocity', 'propcity',
+    ];
+    protected $stateFeatureSet = [
+        'state', 'ostate', 'propstate',
+    ];
+    protected $zipFeatureSet = [
+        'zip', 'zipcode', 'ozip', 'propzip',
+    ];
     
     public function __construct() {
         array_shift($this->kSup);
@@ -136,7 +143,7 @@ abstract class RsmSuppressAbstract
         else if($oZipLen === 4) {
             $coreFieldCombine .= ('0' . $oZip);
         }
-        else if($oZipLen === 3){
+        else if($oZipLen === 3) {
             $coreFieldCombine .= ('00' . $oZip);
         }
         else {
@@ -146,7 +153,7 @@ abstract class RsmSuppressAbstract
     }
     
     /**
-     * This function will such for literal [address], [city], [state]/[st], and [zip]
+     * This function will search for literal [address], [city], [state]/[st], and [zip]
      */
     public function suppressionStart() {
         // function scoped properties
@@ -159,7 +166,7 @@ abstract class RsmSuppressAbstract
             $bestCase, &$wasBestCase
         ): array {
             $results = [
-                'address' => null, 'city' => null,
+                'best_case' => null, 'address' => null, 'city' => null,
                 'state' => null, 'zip' => null,
             ];
             
@@ -179,17 +186,31 @@ abstract class RsmSuppressAbstract
                         }
                         else {
                             $wasBestCase = false;
+                            $results['best_case'] = $wasBestCase;
                             break;
                         }
                     }
-                    $idxAddress = array_search('address', $keys);
-                    $idxCity = array_search('city', $keys);
-                    $idxZip = array_search('zip', $keys);
                     
-                    $results['address'] = $keysOrig[$idxAddress];
-                    $results['city'] = $keysOrig[$idxCity];
-                    $results['zip'] = $keysOrig[$idxZip];
-                    $wasBestCase = true;
+                    switch($case) {
+                        case 'address':
+                            $idxAddress = array_search('address', $keys);
+                            $results['address'] = $keysOrig[$idxAddress];
+                            $wasBestCase = true;
+                            $results['best_case'] = $wasBestCase;
+                            break;
+                        case 'city':
+                            $idxCity = array_search('city', $keys);
+                            $results['city'] = $keysOrig[$idxCity];
+                            $wasBestCase = true;
+                            $results['best_case'] = $wasBestCase;
+                            break;
+                        case 'zip':
+                            $idxZip = array_search('zip', $keys);
+                            $results['zip'] = $keysOrig[$idxZip];
+                            $wasBestCase = true;
+                            $results['best_case'] = $wasBestCase;
+                            break;
+                    }
                 }
             }
             
@@ -211,16 +232,16 @@ abstract class RsmSuppressAbstract
             return (string)$elem;
         }, $origBaseKeys);
         
-        // best case results for header row
+        // bc = best case i.e. best case results for header row
         $bcResults = $getBestCase($baseKeys, $origBaseKeys);
         $this->kAddress = $bcResults['address'];
         $this->kCity = $bcResults['city'];
         $this->kState = $bcResults['state'];
         $this->kZip = $bcResults['zip'];
-        $this->kZip5 = '';
         
         // get the suppression list keys, lowercase them and
         // set the [address], [city], [state]/[st], [zip] fields
+        // this will also look for "best case"
         foreach($this->parseCsvSuppressData as $suppressionList) {
             $origSupKeys = array_keys($suppressionList->data[0]);
             $keys = array_map(function($elem) {
@@ -232,6 +253,7 @@ abstract class RsmSuppressAbstract
             
             $suppressionKeys[] = $keys;
             
+            // best case results
             $bcResults = $getBestCase($keys, $origSupKeys);
             $this->kSup[] = $bcResults;
         }
@@ -249,6 +271,10 @@ abstract class RsmSuppressAbstract
      * This function will start to remove records from the base CSV that are in
      * the combined suppression CSVs
      *
+     * It returns void because it mutates class properties
+     *
+     * It will also invoke createBaseHash() and createSuppressionHash()
+     *
      * @return void
      */
     private function suppress(): void {
@@ -257,7 +283,7 @@ abstract class RsmSuppressAbstract
         $suppressedSet = [];
         $recordsRemoved = [];
         $C = 0;
-    
+        
         foreach($hashBaseArray as $key => $value) {
             //****************************************
             //******** O(N+1) time complexity ********
@@ -286,7 +312,6 @@ abstract class RsmSuppressAbstract
         $this->suppressedSet = $suppressedSet;
         $this->recordsRemoved = $recordsRemoved;
         
-        $break = 'point';
     } // END OF: suppress()
     
     /**
@@ -302,7 +327,7 @@ abstract class RsmSuppressAbstract
         // be what get exported as the suppressed CSV
         $hashBaseArray = [];
         $alphaNumPattern = '/[^0-9a-zA-Z]/';
-    
+        
         // loop over the 1D base csv array
         // create a hash to suppress on by getting rid of all alphanumeric chars
         foreach($this->parseCsvBaseData->data as $item) {
@@ -350,14 +375,14 @@ abstract class RsmSuppressAbstract
         $c = 0;
         foreach($this->parseCsvSuppressData as $file) {
             $data = $file->data;
-        
+            
             for($i = 0; $i < count($data); $i++) {
                 $item = $data[$i];
                 $_address = $this->kSup[$c]['address'];
                 $_city = $this->kSup[$c]['city'];
                 $_state = $this->kSup[$c]['state'];
                 $_zip = $this->kSup[$c]['zip'];
-            
+                
                 // 1117 s 9th st San Jose, ca 95112
                 // address + city + state + zip
                 $coreFieldCombine = $item[$_address];
@@ -369,7 +394,7 @@ abstract class RsmSuppressAbstract
                 $oZip = $item[$_zip];
                 $coreFieldCombine .= $this->zipExtract($oZip);
                 
-            
+                
                 // Perhaps refactor this to a lambda to uphold dry rule
                 $coreFieldsRegex = Regex::match($alphaNumPattern, $coreFieldCombine);
                 if($coreFieldsRegex->hasMatch()) {
@@ -378,7 +403,7 @@ abstract class RsmSuppressAbstract
                     $hashSuppressionArray[$hash] = $item; // varies here
                 }
             }
-        
+            
             $c++;
         }
         
@@ -387,7 +412,7 @@ abstract class RsmSuppressAbstract
     
     /**
      * This function is trying to dynamically figure out what the
-     * address, city, st, and zip fields are
+     * address, city, st, and zip fields are using the feature sets
      *
      * Because we don't know how many suppression lists there will be I will
      * scan each array in the collection and figure it out
@@ -395,19 +420,19 @@ abstract class RsmSuppressAbstract
     private function suppressionStartDynamic() {
         // _SUPER HARDCODED purely for testing/development purposes
         $currentKeys = array_keys($this->parseCsvSuppressData[1]->data[2]);
+        
         $activeAddress = array_filter($currentKeys, function($key, $val) {
             $alphaNum = '/[^0-9a-zA-Z]/';
             
             if(Regex::match($alphaNum, $key)->hasMatch()) {
                 $tempVal = Regex::replace($alphaNum, '', $key)->result();
                 $tempVal = strtolower($tempVal);
-                if($addressKey = array_search($tempVal, $this->addressFeatureSet)) {
+                if($addressKey = array_search($tempVal, $this->featureSetAddress)) {
                     return true;
                 }
             }
             
             return false;
-            
         }, ARRAY_FILTER_USE_BOTH);
         
         $break = 'point';

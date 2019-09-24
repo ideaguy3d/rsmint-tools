@@ -165,8 +165,8 @@ return function(App $app) {
     );
 
     /**
-     * This will be the UI for the suppression list tool that I will use heavily to run jobs and that
-     * other members of the Redstone team can also use if they want.
+     * This will be the UI for the suppression list tool that I will use heavily to run
+     * jobs and that other members of the Redstone team can also use if they want.
      */
     $app->get('/suppress',
         function(Request $request, Response $response, array $args) use ($container) {
@@ -176,6 +176,7 @@ return function(App $app) {
             $suppressedSet = $suppress->getSuppressedSet();
             $recordsRemoved = $suppress->getRecordsRemoved();
             $jobId = '77542';
+            
             // this will need to become dynamic
             $exportPath = "../uploads/$jobId/results";
             CsvParseModel::export2csv(
