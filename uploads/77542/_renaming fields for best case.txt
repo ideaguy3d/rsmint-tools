@@ -1,0 +1,27 @@
+
+
+Just so I could just start working on the core app logic I am renaming header row to hit the best case
+after the header row has been converted to lowercase 
+
+e.g. 
+[address], [city], [state], [zip]
+
+
+
+... Once I get this working, then I implement the app logic to dynamically map fields
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
