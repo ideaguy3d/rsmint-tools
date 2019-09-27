@@ -12,15 +12,41 @@ $info = 'Suppression List View wired up.';
     <link rel="stylesheet" href="./ui/redstone.css">
 </head>
 
-
 <body>
 
 <!-- The horizontal Navigation -->
 <div data-ng-include="'ui/nav.horiz.html'"></div>
 
-<section class="rsm-text-center">
-    <h1>Suppression List</h1>
-    <p><small><?= $info ?></small></p>
+<section id="rsm-suppression-list-controls">
+    <div class="rsm-text-center">
+        <h1>Suppression List</h1>
+        <p><small><?= $info ?></small></p>
+    </div>
+    
+    <div data-md-layout="column" data-md-layout-align="start center" data-layout-padding data-layout-margin>
+        <!-- isset($php_action) ? $php_action : '' -->
+        <form data-ng-submit="sf_toggleLoad()" name="rsmDownload" enctype="multipart/form-data"
+              action="/redstone/tools/<?= $php_action ?? '' ?>" method="POST">
+            <h1>Choose the BASE file</h1>
+            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+            <br><br>
+
+            <h1>Choose suppression list files</h1>
+            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+            <br><br>
+            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+            <br><br>
+            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+            <br><br>
+            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+            <br><br>
+            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+            <br><br>
+
+            <md-button class="md-primary md-raised" type="submit">Submit</md-button>
+        </form>
+    </div>
+    
 </section>
 
 <br><br><br>
