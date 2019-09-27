@@ -170,9 +170,11 @@ return function(App $app) {
      */
     $app->get('/suppress',
         function(Request $request, Response $response, array $args) use ($container) {
-            $suppress = new RsmSuppress();
+            
             $run = false;
+
             if($run) {
+                $suppress = new RsmSuppress();
                 $suppress->suppressionStart();
                 $suppressedSet = $suppress->getSuppressedSet();
                 $recordsRemoved = $suppress->getRecordsRemoved();
