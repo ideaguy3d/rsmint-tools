@@ -31,7 +31,7 @@ $info = 'Suppression List View wired up.';
                 <!-- isset($php_action) ? $php_action : '' -->
                 <h1>Choose the BASE file</h1>
                 <form data-ng-submit="sf_toggleLoad()" name="rsmDownload" enctype="multipart/form-data"
-                      action="/tools/app/<?= $php_action ?? '' ?>" method="POST">
+                      action="/tools/app/suppress/upload" method="POST">
 
                     <!-- the BASE csv file -->
                     <input type="file" name="base_file" data-flex="60" style="margin-right: 6px;">

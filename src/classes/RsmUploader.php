@@ -26,18 +26,18 @@ class RsmUploader
         // get the logger for debugging in production environment
         $log = $app->getContainer()->get('logger');
         
-        return self::moveOp($uploadedFile, $log, $n, $directory);
+        return self::moveOp($uploadedFile, $log, $n, $directory, true);
     }
     
     /**
      * @param App $app
      * @param string $directory
-     * @param UploadedFile $uploadedFiles
+     * @param array $uploadedFiles this param is an array of UploadedFile classes
      *
      * @return array - will return an array of the file names
      */
     public static function moveMultipleUploadedFiles(
-        App $app, string $directory, UploadedFile $uploadedFiles
+        App $app, string $directory, array $uploadedFiles
     ): array {
         $fileNames = [];
         $n = "\n\r\n\r";
@@ -46,34 +46,59 @@ class RsmUploader
         $log = $app->getContainer()->get('logger');
         
         foreach($uploadedFiles as $uploadedFile) {
-           $fileNames[] = self::moveOp($uploadedFile, $log, $n, $directory);
+            if($uploadedFile->getSize() === 0) continue;
+            $fileType = get_class($uploadedFile);
+            $log->info(" | file type = $fileType | ");
+            // Slim\Http\UploadedFile
+            if($fileType === 'Slim\Http\UploadedFile') {
+                $fileNames[] = self::moveOp(
+                    $uploadedFile, $log, $n, $directory, false
+                );
+            }
         }
         
         return $fileNames;
     }
     
-    
-    private static function moveOp($uploadedFile, $log, $n, $directory): string {
+    /**
+     * @param UploadedFile $uploadedFile
+     * @param $log
+     * @param string $n
+     * @param string $directory
+     * @param bool $doEncode
+     *
+     * @return string
+     */
+    private static function moveOp(
+        UploadedFile $uploadedFile, $log, string $n, string $directory, bool $doEncode
+    ): string {
         $extension = pathinfo(
             $uploadedFile->getClientFilename(), PATHINFO_EXTENSION
         );
+        
+        $filename = null;
     
         //TODO: EXIT program is any of the files are NOT csv
-        try {
-            // encode file name
-            $basename = bin2hex(random_bytes(8));
+        if($doEncode) {
+            try {
+                // encode file name
+                $basename = bin2hex(random_bytes(8));
+            }
+            catch(\Exception $e) {
+                $message = $e->getMessage();
+                $log->info("$n __>> EXCEPTION: $message $n");
+                $basename = '';
+            }
+            $filename = sprintf('%s.%0.8s', $basename, $extension);
         }
-        catch(\Exception $e) {
-            $message = $e->getMessage();
-            $log->info("$n __>> EXCEPTION: $message $n");
-            $basename = '';
+        else {
+            $filename = $uploadedFile->getClientFilename();
         }
-        $filename = sprintf('%s.%0.8s', $basename, $extension);
-    
+        
         $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
     
         $info = "__>> RsmUploader.php L38 - Successfully uploaded file";
-        $log->info("$n $info $n");
+        $log->info($info);
         
         return $filename;
     }

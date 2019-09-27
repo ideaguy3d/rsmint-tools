@@ -203,10 +203,12 @@ return function(App $app) {
             $log = $app->getContainer()->get('logger');
             // get the db
             $dbRSMint_1 = $this->dbRSMint_1;
+            
             // get uploaded files
             $uploadedFiles = $request->getUploadedFiles();
-            $baseFile = $uploadedFiles['base_file'];
+            $baseFile = $uploadedFiles['base_file'] ?? null;
             $suppressFiles = $uploadedFiles['suppress'] ?? null;
+            $suppressFiles = array_filter($suppressFiles);
             
             // function declarations
             $sanitizedFilePath = null;
