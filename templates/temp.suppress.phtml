@@ -23,30 +23,46 @@ $info = 'Suppression List View wired up.';
         <p><small><?= $info ?></small></p>
     </div>
     
-    <div data-md-layout="column" data-md-layout-align="start center" data-layout-padding data-layout-margin>
-        <!-- isset($php_action) ? $php_action : '' -->
-        <form data-ng-submit="sf_toggleLoad()" name="rsmDownload" enctype="multipart/form-data"
-              action="/redstone/tools/<?= $php_action ?? '' ?>" method="POST">
-            <h1>Choose the BASE file</h1>
-            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
-            <br><br>
+    <div data-layout="row" data-layout-align="center start">
+        <!-- left side -->
+        <div data-flex="50" data-flex-gt-xs="33" data-flex-gt-md="25">
+            <div data-layout="column" data-md-layout-align="start center" data-layout-padding data-layout-margin>
+                <!-- isset($php_action) ? $php_action : '' -->
+                <h1>Choose the BASE file</h1>
+                <form data-ng-submit="sf_toggleLoad()" name="rsmDownload" enctype="multipart/form-data"
+                      action="/redstone/tools/<?= $php_action ?? '' ?>" method="POST">
+             
+                    <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+                    
+                    <br><br><br>
 
-            <h1>Choose suppression list files</h1>
-            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
-            <br><br>
-            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
-            <br><br>
-            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
-            <br><br>
-            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
-            <br><br>
-            <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
-            <br><br>
+                    <h1>Choose suppression list files</h1>
+                    <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+                    <br><br>
+                    <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+                    <br><br>
+                    <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+                    <br><br>
+                    <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+                    <br><br>
+                    <input type="file" name="csv_file" data-flex="60" style="margin-right: 6px;">
+                    <br><br>
 
-            <md-button class="md-primary md-raised" type="submit">Submit</md-button>
-        </form>
+                    <md-button class="md-primary md-raised" type="submit">Submit</md-button>
+                </form>
+            </div>
+        </div>
+
+        <!-- right side -->
+        <div data-flex="50" data-flex-gt-xs="33" data-flex-gt-md="25">
+            <div data-layout="column" data-md-layout-align="start center" data-layout-padding data-layout-margin>
+                <h1>Future special conditions area</h1>
+                <h4>
+                    Suppress record when [SOME_FIELD] contains [SOME_VALUES]
+                </h4>
+            </div>
+        </div>
     </div>
-    
 </section>
 
 <br><br><br>
