@@ -1,0 +1,4 @@
+[27-Sep-2019 17:43:35 UTC] PHP Warning:  is_readable(): open_basedir restriction in effect. File(C:\xampp\htdocs\redstone\uploads\77542\data\data.csv) is not within the allowed path(s): (C:\inetpub\wwwroot) in C:\inetpub\wwwroot\tools\vendor\parsecsv\php-parsecsv\src\Csv.php on line 379
+[27-Sep-2019 17:43:35 UTC] PHP Warning:  scandir(): open_basedir restriction in effect. File(C:\xampp\htdocs\redstone\uploads\77542\suppress) is not within the allowed path(s): (C:\inetpub\wwwroot) in C:\inetpub\wwwroot\tools\src\classes\RsmSuppress.php on line 44
+[27-Sep-2019 17:43:35 UTC] PHP Warning:  scandir(C:\xampp\htdocs\redstone\uploads\77542\suppress): failed to open dir: Operation not permitted in C:\inetpub\wwwroot\tools\src\classes\RsmSuppress.php on line 44
+[27-Sep-2019 17:43:35 UTC] PHP Warning:  scandir(): (errno 1): Operation not permitted in C:\inetpub\wwwroot\tools\src\classes\RsmSuppress.php on line 44

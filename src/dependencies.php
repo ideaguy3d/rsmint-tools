@@ -17,6 +17,7 @@ return function(App $app) {
     };
     
     // monolog
+    /**/
     $container['logger'] = function($c) {
         $settings = $c->get('settings')['logger'];
         $logger = new \Monolog\Logger($settings['name']);
@@ -24,6 +25,7 @@ return function(App $app) {
         $logger->pushHandler(new \Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
         return $logger;
     };
+    
     
     // RSMint_1 db
     $container['dbRSMint_1'] = function($c) {
