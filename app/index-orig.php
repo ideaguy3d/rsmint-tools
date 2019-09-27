@@ -15,6 +15,8 @@ if(PHP_SAPI == 'cli-server') {
     if(is_file($file)) return false;
 }
 
+echo "/../vendor/autoload.php";
+
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
