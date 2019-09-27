@@ -168,11 +168,11 @@ return function(App $app) {
      * This will be the UI for the suppression list tool that I will use heavily to run
      * jobs and that other members of the Redstone team can also use if they want.
      */
-    $app->get('/suppress[/{run}]',
+    $app->get('/suppress',
         function(Request $request, Response $response, array $args) use ($container) {
             $suppress = new RsmSuppress();
-            
-            if($args['run']) {
+            $run = false;
+            if($run) {
                 $suppress->suppressionStart();
                 $suppressedSet = $suppress->getSuppressedSet();
                 $recordsRemoved = $suppress->getRecordsRemoved();
