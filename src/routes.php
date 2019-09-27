@@ -13,7 +13,7 @@ use Redstone\Tools\AppGlobals;
 
 
 return function(App $app) {
-
+    
     if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
         /*
             .17/.../street-view/user/mhetauser!@/lindsey@rsmail.com
@@ -22,13 +22,11 @@ return function(App $app) {
             //-- To do a "job board data mash" sql server insert:
             .17/.../comauto/start/a/run?precision=exact&comauto-sql-insert=2
         */
-
+        
         $_SERVER['REQUEST_URI'] = 'tools/suppress';
         $_SERVER['REQUEST_METHOD'] = 'GET';
     }
-
-    $break = 'point';
-
+    
     $container = $app->getContainer();
     
     /**  .17/redstone/tools/
@@ -44,7 +42,9 @@ return function(App $app) {
             // function field initializations
             $directory = AppGlobals::PathToUploadDirectory();
             $log = $app->getContainer()->get('logger');
+            // get the db
             $dbRSMint_1 = $this->dbRSMint_1;
+            // get uploaded files
             $uploadedFiles = $request->getUploadedFiles();
             $file = $uploadedFiles['csv_file'] ?? null;
             $AngularJS_id = $request->getQueryParam('angularjs-id');
@@ -54,9 +54,9 @@ return function(App $app) {
             
             // in Debug Mode
             if(AppGlobals::$NINJA_AUTO_DEBUG) {
-                // read a "debug test" file into memory
+                // read a "debug" file into memory
                 $folder = 'C:\xampp\htdocs\redstone\uploads';
-                $file = 'test.csv';
+                $file = 'debug.csv';
                 $AngularJS_id = 'AngularJS_id';
                 
                 // debug EncodeRemove code & app logic
@@ -69,6 +69,7 @@ return function(App $app) {
             
             // NOT in debug mode, it's go time
             else if($file && $file->getError() === UPLOAD_ERR_OK) {
+                
                 $fileName = RsmUploader::moveUploadedFile($app, $directory, $file);
                 $encodeRemove = new EncodeRemove($directory, $fileName, $dbRSMint_1, $AngularJS_id);
                 
@@ -101,7 +102,8 @@ return function(App $app) {
                 
                 return $response;
             }
-            // something broke
+            
+            // something broke :'(
             else {
                 $errorInfo = '<h1>No file selected and the submit button was clicked</h1> <br/>';
                 $fileError = 'Error ' . (string)$file->getError();
@@ -163,7 +165,7 @@ return function(App $app) {
             return $container->get('renderer')->render($response, 'temp.encode-remove.phtml', $args);
         }
     );
-
+    
     /**
      * This will be the UI for the suppression list tool that I will use heavily to run
      * jobs and that other members of the Redstone team can also use if they want.
@@ -172,14 +174,14 @@ return function(App $app) {
         function(Request $request, Response $response, array $args) use ($container) {
             
             $run = false;
-
+            
             if($run) {
                 $suppress = new RsmSuppress();
                 $suppress->suppressionStart();
                 $suppressedSet = $suppress->getSuppressedSet();
                 $recordsRemoved = $suppress->getRecordsRemoved();
                 $jobId = '77542';
-    
+                
                 // this will need to become dynamic
                 $exportPath = "../uploads/$jobId/results";
                 CsvParseModel::export2csv(
@@ -192,6 +194,42 @@ return function(App $app) {
             
             
             return $container->get('renderer')->render($response, 'temp.suppress.phtml', $args);
+        }
+    );
+    
+    $app->post('/suppress/upload',
+        function(Request $request, Response $response, array $args) use ($container, $app) {
+            $directory = AppGlobals::PathToUploadDirectory();
+            $log = $app->getContainer()->get('logger');
+            // get the db
+            $dbRSMint_1 = $this->dbRSMint_1;
+            // get uploaded files
+            $uploadedFiles = $request->getUploadedFiles();
+            $baseFile = $uploadedFiles['base_file'];
+            $suppressFiles = $uploadedFiles['suppress'] ?? null;
+            
+            // function declarations
+            $sanitizedFilePath = null;
+            
+            // in Debug Mode
+            if(AppGlobals::$NINJA_AUTO_DEBUG) {
+                // read a "debug" file into memory
+                $folder = 'C:\xampp\htdocs\redstone\uploads';
+                $file = 'debug.csv';
+                
+                $info = "__>> RSM DEBUG MODE - testing app logic, suppression file path = ";
+                $log->info("\n\r$info $sanitizedFilePath\n\r");
+            }
+            
+            //// NOT in debug mode, it's go time
+            else if(
+                $baseFile && $baseFile->getError() === UPLOAD_ERR_OK && $suppressFiles
+            ) {
+                $baseFileName = RsmUploader::moveUploadedFile($app, $directory, $baseFile);
+                $suppressionFileNames = RsmUploader::moveMultipleUploadedFiles(
+                    $app, $directory, $suppressFiles
+                );
+            }
         }
     );
     

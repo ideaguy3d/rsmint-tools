@@ -15,11 +15,9 @@ if(PHP_SAPI == 'cli-server') {
     if(is_file($file)) return false;
 }
 
-echo "/../vendor/autoload.php";
-
 require __DIR__ . '/../vendor/autoload.php';
 
-//-- starting a session causes an internal server error
+//-- starting a session causes an internal server error 🤔
 //session_start();
 
 // Instantiate the app

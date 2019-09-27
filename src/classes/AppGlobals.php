@@ -31,8 +31,8 @@ class AppGlobals
     public static function PathToUploadDirectory() {
         //TODO: try to figure out how to cache whether current env is local or production
         return (gethostname() === 'Julius1')
-            ? 'C:\xampp\htdocs\redstone\uploads'
-            : 'C:\inetpub\wwwroot\redstone\uploads';
+            ? 'C:\xampp\htdocs\tools\uploads'
+            : 'C:\inetpub\wwwroot\tools\uploads';
     }
     
     public static function PathToNinjaCommissionCsvDirectory() {

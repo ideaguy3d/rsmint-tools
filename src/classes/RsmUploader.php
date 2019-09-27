@@ -21,14 +21,44 @@ class RsmUploader
     public static function moveUploadedFile(
         App $app, string $directory, UploadedFile $uploadedFile
     ): string {
-        
         $n = "\n\r\n\r";
+        
+        // get the logger for debugging in production environment
         $log = $app->getContainer()->get('logger');
         
+        return self::moveOp($uploadedFile, $log, $n, $directory);
+    }
+    
+    /**
+     * @param App $app
+     * @param string $directory
+     * @param UploadedFile $uploadedFiles
+     *
+     * @return array - will return an array of the file names
+     */
+    public static function moveMultipleUploadedFiles(
+        App $app, string $directory, UploadedFile $uploadedFiles
+    ): array {
+        $fileNames = [];
+        $n = "\n\r\n\r";
+        
+        // get the logger for debugging in production environment
+        $log = $app->getContainer()->get('logger');
+        
+        foreach($uploadedFiles as $uploadedFile) {
+           $fileNames[] = self::moveOp($uploadedFile, $log, $n, $directory);
+        }
+        
+        return $fileNames;
+    }
+    
+    
+    private static function moveOp($uploadedFile, $log, $n, $directory): string {
         $extension = pathinfo(
             $uploadedFile->getClientFilename(), PATHINFO_EXTENSION
         );
-        
+    
+        //TODO: EXIT program is any of the files are NOT csv
         try {
             // encode file name
             $basename = bin2hex(random_bytes(8));
@@ -39,9 +69,9 @@ class RsmUploader
             $basename = '';
         }
         $filename = sprintf('%s.%0.8s', $basename, $extension);
-        
+    
         $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
-        
+    
         $info = "__>> RsmUploader.php L38 - Successfully uploaded file";
         $log->info("$n $info $n");
         
