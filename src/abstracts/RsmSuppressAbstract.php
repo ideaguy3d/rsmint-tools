@@ -31,15 +31,7 @@ abstract class RsmSuppressAbstract
     protected $kZip;
     
     /**
-     * This zip will be the "left 5" of the zip field
-     * I'll also need to check for 3 & 4 digit zips as well
-     *
-     * @var string
-     */
-    protected $kZip5;
-    
-    /**
-     * $sk = suppress keys
+     * $kSup = suppression keys
      *
      * This is an example of how the $sk data structure should look with
      * realistic possible field titles
@@ -300,12 +292,13 @@ abstract class RsmSuppressAbstract
                 // get header row real quick
                 $headerRow = array_keys($value);
             }
+            
             //****************************************
             //******** O(N+1) time complexity ********
             //****************************************
             $temp = $hashSuppressionArray[$key] ?? null;
             
-            if($C % 2 === 0) {
+            if(AppGlobals::$NINJA_AUTO_DEBUG === true && $C % 2 === 0) {
                 $formatC = number_format($C);
                 ob_end_flush();
                 $v = print_r($value, true);
