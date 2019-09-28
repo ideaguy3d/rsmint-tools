@@ -8,6 +8,8 @@ use Slim\Http\UploadedFile;
 
 class RsmUploader
 {
+    public static $suppressId;
+    
     /**
      * Move file to upload folder and give it a unique name
      *
@@ -21,10 +23,18 @@ class RsmUploader
     public static function moveUploadedFile(
         App $app, string $directory, UploadedFile $uploadedFile
     ): string {
-        $n = "\n\r\n\r";
-        
         // get the logger for debugging in production environment
         $log = $app->getContainer()->get('logger');
+        
+        $n = "\n\r\n\r";
+        
+        $suppressId = substr($uploadedFile->getClientFilename(), 0 , 5);
+        self::$suppressId = $suppressId;
+        $baseDirectory = $directory . DIRECTORY_SEPARATOR . $suppressId . DIRECTORY_SEPARATOR . 'base';
+        $log->info(" | base dir = $baseDirectory | ");
+        
+        if(!mkdir($baseDirectory)) $log->info(" | SUCCESSFULLY made base dir = $baseDirectory | ");
+        else $log->info(" | FAILURE to make base dir = $baseDirectory | ");
         
         return self::moveOp($uploadedFile, $log, $n, $directory, true);
     }
@@ -39,14 +49,17 @@ class RsmUploader
     public static function moveMultipleUploadedFiles(
         App $app, string $directory, array $uploadedFiles
     ): array {
-        $fileNames = [];
-        $n = "\n\r\n\r";
-        
         // get the logger for debugging in production environment
         $log = $app->getContainer()->get('logger');
         
+        $fileNames = [];
+        $n = "\n\r\n\r";
+        
         foreach($uploadedFiles as $uploadedFile) {
             if($uploadedFile->getSize() === 0) continue;
+            
+            $suppressId = substr($uploadedFile->getClientFilename(), 0 , 5);
+            $suppressDirectory =  $directory . DIRECTORY_SEPARATOR . self::$suppressId . DIRECTORY_SEPARATOR . 'base';
     
             // looking for Slim\Http\UploadedFile
             $fileType = get_class($uploadedFile);
@@ -54,7 +67,7 @@ class RsmUploader
             
             if($fileType === 'Slim\Http\UploadedFile') {
                 $fileNames[] = self::moveOp(
-                    $uploadedFile, $log, $n, $directory, false
+                    $uploadedFile, $log, $n, $directory, true
                 );
             }
         }

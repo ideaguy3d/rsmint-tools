@@ -9,25 +9,47 @@ use ParseCsv\Csv;
 class RsmSuppress extends RsmSuppressAbstract
 {
     public $status;
+    
     private $path2dataFolder;
     private $path2suppressionFolder;
+    private $baseFile;
+    private $baseFileFullPath;
+    
+    /**
+     * @var array
+     */
+    private $suppressionFiles = [];
     
     /**
      * The constructor will scan the csv files, and convert them all to in-memory objects
      *
+     * @param string $baseFile
+     * @param array $suppressionFiles
+     * @param $log
+     *
      * RsmSuppress constructor.
      */
-    public function __construct() {
+    public function __construct(?string $baseFile, array $suppressionFiles, $log) {
         parent::__construct();
+        $this->log = $log;
         $this->status = 'RsmSuppress ready';
+        $this->baseFile = $baseFile;
+        foreach($suppressionFiles as $suppressionFile) {
+            $this->suppressionFiles[] = $suppressionFile;
+        }
         
-        //TODO: dynamically check the host to determine local or pro env
+        // this may not be the lit
+        $this->suppressId =  substr($baseFile, 0, 5);
+        $folder = AppGlobals::PathToUploadDirectory();
+        $this->baseFileFullPath = $folder . DIRECTORY_SEPARATOR . $baseFile;
+        $this->exportPath = $folder;
         
         // _HARD CODED to my flash drive location
         // flash drive: E:\redstone\uploads\77542\data, E:\redstone\uploads\77542\suppress
         // localhost: C:\xampp\htdocs\redstone\uploads\77542\data, C:\xampp\htdocs\redstone\uploads\77542\suppress
-        $this->path2dataFolder = 'C:\xampp\htdocs\redstone\uploads\77542\data';
-        $this->path2suppressionFolder = 'C:\xampp\htdocs\redstone\uploads\77542\suppress';
+        $this->path2dataFolder = "$folder\data";
+        $this->path2suppressionFolder = "$folder\suppress";
+        
         $this->readFiles(); // this may be verbose
     }
     
@@ -36,18 +58,23 @@ class RsmSuppress extends RsmSuppressAbstract
     }
     
     public function readFiles(): void {
-        $this->parseCsvBaseData = new Csv($this->path2dataFolder . '\data.csv');
+        $this->log->info(" | base file full path = {$this->exportPath} | ");
+        $this->parseCsvBaseData = new Csv($this->baseFileFullPath);
         $this->suppressionCombine(); // this may also be verbose
     }
     
     public function suppressionCombine(): void {
+        /*
         $suppressionFiles = scandir($this->path2suppressionFolder);
         array_shift($suppressionFiles);
         array_shift($suppressionFiles);
+        */
         
-        foreach($suppressionFiles as $suppressionFile) {
+        $this->log->info("| export path =  {$this->exportPath}|");
+        
+        foreach($this->suppressionFiles as $suppressionFile) {
             $this->parseCsvSuppressData[] = new Csv(
-                $this->path2suppressionFolder . DIRECTORY_SEPARATOR . $suppressionFile
+                $this->exportPath . DIRECTORY_SEPARATOR . $suppressionFile
             );
         }
     }

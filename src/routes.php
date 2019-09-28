@@ -47,6 +47,7 @@ return function(App $app) {
             // get uploaded files
             $uploadedFiles = $request->getUploadedFiles();
             $file = $uploadedFiles['csv_file'] ?? null;
+            // get query param
             $AngularJS_id = $request->getQueryParam('angularjs-id');
             
             // function declarations
@@ -173,27 +174,7 @@ return function(App $app) {
      */
     $app->get('/suppress',
         function(Request $request, Response $response, array $args) use ($container) {
-            
-            $run = false;
-            
-            if($run) {
-                $suppress = new RsmSuppress();
-                $suppress->suppressionStart();
-                $suppressedSet = $suppress->getSuppressedSet();
-                $recordsRemoved = $suppress->getRecordsRemoved();
-                $jobId = '77542';
-                
-                // this will need to become dynamic
-                $exportPath = "../uploads/$jobId/results";
-                CsvParseModel::export2csv(
-                    $suppressedSet, $exportPath, "suppressed_$jobId"
-                );
-                CsvParseModel::export2csv(
-                    $recordsRemoved, $exportPath, "removed_$jobId"
-                );
-            }
-            
-            
+            // just return the view
             return $container->get('renderer')->render($response, 'temp.suppress.phtml', $args);
         }
     );
@@ -202,8 +183,9 @@ return function(App $app) {
         function(Request $request, Response $response, array $args) use ($container, $app) {
             $directory = AppGlobals::PathToUploadDirectory();
             $log = $app->getContainer()->get('logger');
+            
             // get the db
-            $dbRSMint_1 = $this->dbRSMint_1;
+            //$dbRSMint_1 = $this->dbRSMint_1;
             
             // get uploaded files
             $uploadedFiles = $request->getUploadedFiles();
@@ -224,7 +206,7 @@ return function(App $app) {
                 $log->info("\n\r$info $sanitizedFilePath\n\r");
             }
             
-            //// NOT in debug mode, it's go time
+            //-- NOT in debug mode, it's go time --\\
             else if(
                 $baseFile && $baseFile->getError() === UPLOAD_ERR_OK && $suppressFiles
             ) {
@@ -232,6 +214,12 @@ return function(App $app) {
                 $suppressionFileNames = RsmUploader::moveMultipleUploadedFiles(
                     $app, $directory, $suppressFiles
                 );
+                
+                $suppressFilesPrint = print_r($suppressFiles, true);
+                $log->info("[ suppression files = $suppressFiles ]");
+    
+                $suppress = new RsmSuppress($baseFileName, $suppressionFileNames, $log);
+                $suppress->suppressionStart();
                 
                 //-- headers to change to download a file --\\
                 $cacheControl = 'Cache-Control';
@@ -243,13 +231,19 @@ return function(App $app) {
                 // test file path to see if this works
                 $testSuppressed = 'C:\xampp\htdocs\tools\uploads\test\suppressed_test.csv';
                 $testSuppressed = str_replace('\\', '/', $testSuppressed);
+                
+                $suppressed = $suppress->fullPathToSuppressed;
+                $removed = $suppress->fullPathToRemoves;
+                
                 $log->info($testSuppressed);
+                
                 $testRemoved = 'C:\xampp\htdocs\tools\uploads\test\removed_test.csv';
                 $testRemoved = str_replace('\\', '/', $testRemoved);
+                
                 $log->info($testRemoved);
-                $files = [$testSuppressed, $testRemoved];
-                //C:\xampp\htdocs\tools\uploads\test\
-                $zipTestName = 'C:\xampp\htdocs\tools\uploads\test\suppression.zip';
+                
+                $files = [$suppressed, $removed];
+                $zipTestName = $suppress->exportPath . '\suppression.zip';
                 $zip = new ZipArchive();
                 $zip->open($zipTestName, ZipArchive::CREATE);
                 foreach($files as $file) {

@@ -30,6 +30,15 @@ abstract class RsmSuppressAbstract
     protected $kState;
     protected $kZip;
     
+    public $log;
+    
+    public $exportPath;
+    
+    public $suppressId;
+    
+    public $fullPathToSuppressed;
+    public $fullPathToRemoves;
+    
     /**
      * $kSup = suppression keys
      *
@@ -323,6 +332,18 @@ abstract class RsmSuppressAbstract
         
         $this->suppressedSet = $suppressedSet;
         $this->recordsRemoved = $recordsRemoved;
+        $jobId = $this->suppressId;
+        $suppressedName = "suppressed_$jobId";
+        $removedName = "removed_$jobId";
+        $this->fullPathToSuppressed = $this->exportPath . $suppressedName;
+        $this->fullPathToRemoves = $this->exportPath . $removedName;
+    
+        CsvParseModel::export2csv(
+            $suppressedSet, $this->exportPath, $suppressedName
+        );
+        CsvParseModel::export2csv(
+            $recordsRemoved, $this->exportPath, $removedName
+        );
         
     } // END OF: suppress()
     
