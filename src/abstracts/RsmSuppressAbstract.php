@@ -335,8 +335,9 @@ abstract class RsmSuppressAbstract
         $jobId = $this->suppressId;
         $suppressedName = "suppressed_$jobId";
         $removedName = "removed_$jobId";
-        $this->fullPathToSuppressed = $this->exportPath . $suppressedName;
-        $this->fullPathToRemoves = $this->exportPath . $removedName;
+        
+        $this->fullPathToSuppressed = $this->exportPath . DIRECTORY_SEPARATOR . "$suppressedName.csv";
+        $this->fullPathToRemoves = $this->exportPath . DIRECTORY_SEPARATOR . "$removedName.csv";
     
         CsvParseModel::export2csv(
             $suppressedSet, $this->exportPath, $suppressedName

@@ -217,7 +217,7 @@ return function(App $app) {
                 
                 $suppressFilesPrint = print_r($suppressFiles, true);
                 $log->info("[ suppression files = $suppressFiles ]");
-    
+                
                 $suppress = new RsmSuppress($baseFileName, $suppressionFileNames, $log);
                 $suppress->suppressionStart();
                 
@@ -228,40 +228,56 @@ return function(App $app) {
                 $contentType = 'Content-Type';
                 $contentTransferEncoding = 'Content-Transfer-Encoding';
                 
-                // test file path to see if this works
+                
+                /* -- test file path to see if this works --
                 $testSuppressed = 'C:\xampp\htdocs\tools\uploads\test\suppressed_test.csv';
                 $testSuppressed = str_replace('\\', '/', $testSuppressed);
+                $testRemoved = 'C:\xampp\htdocs\tools\uploads\test\removed_test.csv';
+                $testRemoved = str_replace('\\', '/', $testRemoved);
+                */
+                
                 
                 $suppressed = $suppress->fullPathToSuppressed;
                 $removed = $suppress->fullPathToRemoves;
-                
-                $log->info($testSuppressed);
-                
-                $testRemoved = 'C:\xampp\htdocs\tools\uploads\test\removed_test.csv';
-                $testRemoved = str_replace('\\', '/', $testRemoved);
-                
-                $log->info($testRemoved);
-                
                 $files = [$suppressed, $removed];
-                $zipTestName = $suppress->exportPath . '\suppression.zip';
+                $sid = strstr(basename($suppressed), '.csv', true);
+                $log->info("_| suppression id = $sid |_");
+                $log->info("_| full path to suppressed = $suppressed |_");
+                $log->info("_| full path to removed = $removed |_");
+                
+                // START the .zip part
+                $zipName = $suppress->exportPath . DIRECTORY_SEPARATOR . "$sid.zip";
+                $log->info("_| zip name = $zipName |_");
                 $zip = new ZipArchive();
-                $zip->open($zipTestName, ZipArchive::CREATE);
+                $zip->open($zipName, ZipArchive::CREATE);
                 foreach($files as $file) {
                     $fileName = basename($file);
                     $zip->addFile($file, $fileName);
                 }
                 $zip->close();
                 
+                // START the file download part
+                /* -- old way --
                 $response = $response->withHeader($cacheControl, 'public');
                 $response = $response->withHeader($contentDescription, 'File Transfer');
                 $response = $response->withHeader($contentDisposition, "attachment; filename=suppression.zip");
                 $response = $response->withHeader($contentType, 'application/zip');
                 $response = $response->withHeader($contentTransferEncoding, 'binary');
                 
-                // have to add '.csv' to fix an annoying error
-                readfile($zipTestName); // . '.csv'
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/zip');
+                header('Content-Transfer-Encoding: binary');
+                header('Content-Disposition: attachment; filename="'.basename($zipName).'"');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($zipName));
+    
+                $log->info("_| 2nd check, zip name = $zipName |_");
+                readfile($zipName);
+                */
                 
-                return $response;
+                return $response->withRedirect("../../ap2.php?file=$zipName");
             }
             
             // something broke :'(
