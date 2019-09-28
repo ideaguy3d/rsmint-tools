@@ -29,7 +29,7 @@ $info = 'Suppression List View wired up.';
             <div data-layout="column" data-md-layout-align="center center"
                  data-layout-padding data-layout-margin>
                 <!-- isset($php_action) ? $php_action : '' -->
-                <h1>Choose the BASE file</h1>
+                <h1>Choose the BASE CSV file</h1>
                 <form data-ng-submit="sf_toggleLoad()" name="rsmDownload" enctype="multipart/form-data"
                       action="/tools/app/suppress/upload" method="POST">
 
@@ -38,7 +38,7 @@ $info = 'Suppression List View wired up.';
                     
                     <br><br><br>
 
-                    <h1>Choose suppression lists</h1>
+                    <h1>Choose suppression lists CSVs</h1>
                     <!-- 1-5 suppression lists... eventually 1-N -->
                     <input type="file" name="suppress[]" data-flex="60" style="margin-right: 6px;">
                     <br><br>
