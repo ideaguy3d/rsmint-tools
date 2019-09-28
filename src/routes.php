@@ -277,6 +277,8 @@ return function(App $app) {
                 readfile($zipName);
                 */
                 
+                //sleep(2);
+                
                 return $response->withRedirect("../../ap2.php?file=$zipName");
             }
             

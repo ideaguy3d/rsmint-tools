@@ -12,7 +12,7 @@ if(file_exists($file)) {
     header('Pragma: public');
     header('Content-Length: ' . filesize($file));
     
-    readfile('C:\xampp\htdocs\tools\uploads\suppressed_364b8687.zip');
+    readfile($file);
     exit;
 }
 else {
