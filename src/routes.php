@@ -87,6 +87,7 @@ return function(App $app) {
                 
                 // test file path to see if this works
                 $testFile = 'C:\xampp\htdocs\@ Good Prac Data' . DIRECTORY_SEPARATOR . "test.csv";
+                // _HARD CODED FILE NAME
                 $downloadFileName = 'rsm-encodes-removed.csv';
                 
                 $response = $response->withHeader($cacheControl, 'public');
@@ -231,6 +232,50 @@ return function(App $app) {
                 $suppressionFileNames = RsmUploader::moveMultipleUploadedFiles(
                     $app, $directory, $suppressFiles
                 );
+                
+                //-- headers to change to download a file --\\
+                $cacheControl = 'Cache-Control';
+                $contentDescription = 'Content-Description';
+                $contentDisposition = 'Content-Disposition';
+                $contentType = 'Content-Type';
+                $contentTransferEncoding = 'Content-Transfer-Encoding';
+                
+                // test file path to see if this works
+                $testSuppressed = 'C:\xampp\htdocs\tools\uploads\test\suppressed_test.csv';
+                $testSuppressed = str_replace('\\', '/', $testSuppressed);
+                $log->info($testSuppressed);
+                $testRemoved = 'C:\xampp\htdocs\tools\uploads\test\removed_test.csv';
+                $testRemoved = str_replace('\\', '/', $testRemoved);
+                $log->info($testRemoved);
+                $files = [$testSuppressed, $testRemoved];
+                //C:\xampp\htdocs\tools\uploads\test\
+                $zipTestName = 'C:\xampp\htdocs\tools\uploads\test\suppression.zip';
+                $zip = new ZipArchive();
+                $zip->open($zipTestName, ZipArchive::CREATE);
+                foreach($files as $file) {
+                    $fileName = basename($file);
+                    $zip->addFile($file, $fileName);
+                }
+                $zip->close();
+                
+                $response = $response->withHeader($cacheControl, 'public');
+                $response = $response->withHeader($contentDescription, 'File Transfer');
+                $response = $response->withHeader($contentDisposition, "attachment; filename=suppression.zip");
+                $response = $response->withHeader($contentType, 'application/zip');
+                $response = $response->withHeader($contentTransferEncoding, 'binary');
+                
+                // have to add '.csv' to fix an annoying error
+                readfile($zipTestName); // . '.csv'
+                
+                return $response;
+            }
+            
+            // something broke :'(
+            else {
+                $errorInfo = '<h1>No file selected and the submit button was clicked</h1> <br/>';
+                $fileError = 'Error ';
+                $startOver = "<br><br> <a href='/redstone/tools/encode-remove'><b>Start Over</b></a>";
+                return $response->getBody()->write($errorInfo . $fileError . $startOver);
             }
         }
     );

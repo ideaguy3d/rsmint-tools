@@ -47,9 +47,11 @@ class RsmUploader
         
         foreach($uploadedFiles as $uploadedFile) {
             if($uploadedFile->getSize() === 0) continue;
+    
+            // looking for Slim\Http\UploadedFile
             $fileType = get_class($uploadedFile);
             $log->info(" | file type = $fileType | ");
-            // Slim\Http\UploadedFile
+            
             if($fileType === 'Slim\Http\UploadedFile') {
                 $fileNames[] = self::moveOp(
                     $uploadedFile, $log, $n, $directory, false
@@ -72,14 +74,14 @@ class RsmUploader
     private static function moveOp(
         UploadedFile $uploadedFile, $log, string $n, string $directory, bool $doEncode
     ): string {
-        $extension = pathinfo(
-            $uploadedFile->getClientFilename(), PATHINFO_EXTENSION
-        );
         
         $filename = null;
     
         //TODO: EXIT program is any of the files are NOT csv
         if($doEncode) {
+            $extension = pathinfo(
+                $uploadedFile->getClientFilename(), PATHINFO_EXTENSION
+            );
             try {
                 // encode file name
                 $basename = bin2hex(random_bytes(8));
@@ -97,7 +99,7 @@ class RsmUploader
         
         $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
     
-        $info = "__>> RsmUploader.php L38 - Successfully uploaded file";
+        $info = "__>> RsmUploader.php L102 - Successfully uploaded file";
         $log->info($info);
         
         return $filename;

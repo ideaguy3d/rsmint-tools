@@ -58,3 +58,54 @@
 [2019-09-28 00:55:40] redstone-app.INFO: __>> RsmUploader.php L38 - Successfully uploaded file [] {"uid":"5858558"}
 [2019-09-28 00:55:40] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"5858558"}
 [2019-09-28 00:55:40] redstone-app.INFO: __>> RsmUploader.php L38 - Successfully uploaded file [] {"uid":"5858558"}
+[2019-09-28 01:33:21] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"df5e789"}
+[2019-09-28 01:33:21] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"df5e789"}
+[2019-09-28 01:33:21] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"df5e789"}
+[2019-09-28 01:33:21] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"df5e789"}
+[2019-09-28 01:33:21] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"df5e789"}
+[2019-09-28 01:35:04] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"6a8c970"}
+[2019-09-28 01:35:04] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"6a8c970"}
+[2019-09-28 01:35:04] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"6a8c970"}
+[2019-09-28 01:35:04] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"6a8c970"}
+[2019-09-28 01:35:04] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"6a8c970"}
+[2019-09-28 01:41:09] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"490d34c"}
+[2019-09-28 01:41:09] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"490d34c"}
+[2019-09-28 01:41:09] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"490d34c"}
+[2019-09-28 01:41:09] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"490d34c"}
+[2019-09-28 01:41:09] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"490d34c"}
+[2019-09-28 01:46:21] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"5474da7"}
+[2019-09-28 01:46:21] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"5474da7"}
+[2019-09-28 01:46:21] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"5474da7"}
+[2019-09-28 01:46:21] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"5474da7"}
+[2019-09-28 01:46:21] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"5474da7"}
+[2019-09-28 01:51:38] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"d89b0d5"}
+[2019-09-28 01:51:38] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"d89b0d5"}
+[2019-09-28 01:51:38] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"d89b0d5"}
+[2019-09-28 01:51:38] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"d89b0d5"}
+[2019-09-28 01:51:38] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"d89b0d5"}
+[2019-09-28 01:53:53] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"9c8e3bd"}
+[2019-09-28 01:53:53] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"9c8e3bd"}
+[2019-09-28 01:53:53] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"9c8e3bd"}
+[2019-09-28 01:53:53] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"9c8e3bd"}
+[2019-09-28 01:53:53] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"9c8e3bd"}
+[2019-09-28 01:54:46] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"dc123bd"}
+[2019-09-28 01:54:46] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"dc123bd"}
+[2019-09-28 01:54:46] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"dc123bd"}
+[2019-09-28 01:54:46] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"dc123bd"}
+[2019-09-28 01:54:46] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"dc123bd"}
+[2019-09-28 01:54:46] redstone-app.INFO: C:/xampp/htdocs/tools/uploads/test/suppressed_test.csv [] {"uid":"dc123bd"}
+[2019-09-28 01:54:46] redstone-app.INFO: C:/xampp/htdocs/tools/uploads/test/removed_test.csv [] {"uid":"dc123bd"}
+[2019-09-28 01:54:50] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"6989586"}
+[2019-09-28 01:54:50] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"6989586"}
+[2019-09-28 01:54:50] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"6989586"}
+[2019-09-28 01:54:50] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"6989586"}
+[2019-09-28 01:54:50] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"6989586"}
+[2019-09-28 01:54:50] redstone-app.INFO: C:/xampp/htdocs/tools/uploads/test/suppressed_test.csv [] {"uid":"6989586"}
+[2019-09-28 01:54:50] redstone-app.INFO: C:/xampp/htdocs/tools/uploads/test/removed_test.csv [] {"uid":"6989586"}
+[2019-09-28 02:05:01] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"12a2605"}
+[2019-09-28 02:05:01] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"12a2605"}
+[2019-09-28 02:05:01] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"12a2605"}
+[2019-09-28 02:05:01] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"12a2605"}
+[2019-09-28 02:05:01] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"12a2605"}
+[2019-09-28 02:05:01] redstone-app.INFO: C:/xampp/htdocs/tools/uploads/test/suppressed_test.csv [] {"uid":"12a2605"}
+[2019-09-28 02:05:01] redstone-app.INFO: C:/xampp/htdocs/tools/uploads/test/removed_test.csv [] {"uid":"12a2605"}
