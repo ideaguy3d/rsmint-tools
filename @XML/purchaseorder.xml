@@ -19,38 +19,38 @@
         <!-- DSF_VALUE: Company Name -->
         <documentelements left="20" top="13" width="20" height="6"
                           datasourcefield="basecompanyname" type="TEXT"
-                          fontsize="14" fontbold="B" align="L"></documentelements>
+                          fontsize="14" fontbold="B" align="R"></documentelements>
         <!-- DSF_VALUE: Company Address -->
         <documentelements left="20" top="21" width="20"
                           datasourcefield="companyaddressformatted1" dataprefix=""
-                          fontsize="9" fontbold="B" type="TEXT" align="L"></documentelements>
+                          fontsize="9" fontbold="B" type="TEXT" align="R"></documentelements>
         <!-- DSF_VALUE: Company City, State, Zip -->
         <documentelements left="20" top="25" width="20"
                           datasourcefield="companyaddressformatted2" fontsize="9"
-                          fontbold="B" type="TEXT" align="L"></documentelements>
+                          fontbold="B" type="TEXT" align="R"></documentelements>
         <!-- DSF_VALUE: Company Phone -->
         <documentelements left="20" top="29" width="20"
                           datasourcefield="companytelformatted" fontsize="9" fontbold="B"
-                          type="TEXT" align="L"></documentelements>
+                          type="TEXT" align="R"></documentelements>
+        <!-- HEADER TITLE: Purchase Order -->
+        <documentelements left="100" top="30" width="30" height="6"
+                          value="Purchase Order" type="TEXT" fontsize="12" fontbold="B"></documentelements>
 
 
         <!-- ________RIGHT SIDE OF HEADER________ -->
 
-        <!-- HEADER TITLE: Purchase Order -->
-        <documentelements left="150" top="10" width="30" height="12"
-                          value="Purchase Order" type="TEXT" fontsize="24" fontbold="B"></documentelements>
         <!-- KEY: PO NUMBER -->
-        <documentelements left="150" top="25" height="6"
+        <documentelements left="160" top="20" height="6"
                           value="P.O. No.:" type="TEXT" fontsize="12"></documentelements>
         <!-- DSF_VALUE: PO NUMBER -->
-        <documentelements left="199" top="25" height="6"
+        <documentelements left="197" top="20" height="6"
                           datasourcefield="pohaltid" type="TEXT" fontsize="12"></documentelements>
 
         <!-- KEY: DATE ISSUED -->
-        <documentelements left="150" top="32" height="6"
+        <documentelements left="160" top="27" height="6"
                           value="Date:" type="TEXT" fontsize="12"></documentelements>
         <!-- DSF_VALUE: DATE ISSUED -->
-        <documentelements left="190" top="32" height="6"
+        <documentelements left="190" top="27" height="6"
                           datasourcefield="pohprepareddate"
                           type="TEXT" dateformat="M d Y" fontsize="12"></documentelements>
     </header>
