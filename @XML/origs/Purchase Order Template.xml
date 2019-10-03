@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : pdfengine.xml
+    Created on : 09 August 2009, 14:17
+    Author     : Jason
+    Modified by: Daniel G
+    Description:
+        Purpose of the document follows.
+-->
+
+<pdfdocument orientation="P" title="Purchase Order" marginleft="0" marginright="0" margintop="0.5" fontname="Arial" fontbold="" fontsize="8" newpagepergroup="true" units="mm" papersize="letter">
+    <header height="15">
+        <documentelements left="185" top="13" width="20" height="6" datasourcefield="basecompanyname" type="TEXT" fontsize="14" fontbold="B" align="R"></documentelements>
+        <documentelements left="185" top="21" width="20" datasourcefield="companyaddressformatted1" dataprefix="" fontsize="9" fontbold="B" type="TEXT" align="R"></documentelements>
+        <documentelements left="185" top="25" width="20" datasourcefield="companyaddressformatted2" fontsize="9" fontbold="B" type="TEXT" align="R"></documentelements>
+        <documentelements left="185" top="29" width="20" datasourcefield="companytelformatted" fontsize="9" fontbold="B" type="TEXT" align="R"></documentelements>
+        <documentelements left="100" top="30" width="30" height="6" value="Purchase Order" type="TEXT" fontsize="12" fontbold="B" ></documentelements>
+    </header>
+
+    <groupheader height="106">
+        <documentelements left="20" top="20" height="6" value="Number:" type="TEXT" fontsize="12"></documentelements>
+        <documentelements left="20" top="27" height="6" value="Date Issued:" type="TEXT" fontsize="12"></documentelements>
+        <documentelements left="20" top="34" height="6" value="Date Required:" type="TEXT" fontsize="12"></documentelements>
+        
+        <documentelements left="37" top="20" height="6" datasourcefield="pohaltid" type="TEXT" fontsize="12"></documentelements>
+        <documentelements left="50" top="27" height="6" datasourcefield="pohprepareddate" type="TEXT" dateformat="M d Y" fontsize="12"></documentelements>
+        <documentelements left="50" top="34" height="6" datasourcefield="requiredbydate" type="TEXT" dateformat="M d Y" fontsize="12"></documentelements>
+
+        <documentelements left="20" top="40" width="85" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+           <documentelements left="20" top="40" width="85" height="6" align="C" fontsize="10" fontbold="B" value="To:" type="TEXT" ></documentelements>
+        <documentelements left="20" top="46" width="85" height="30" type="TEXT" allborders="Y" align="C"></documentelements>
+            <documentelements left="20" top="46" width="85" height="6" align="L" fontsize="12" datasourcefield="suppliername" type="TEXT" ></documentelements>
+            <documentelements left="20" top="52" width="85" height="6" align="L" fontsize="12" datasourcefield="supplieraddress1" type="TEXT" ></documentelements>
+            <documentelements left="20" top="58" width="85" height="6" align="L" fontsize="12" datasourcefield="supplieraddress2" type="TEXT" ></documentelements>
+            <documentelements left="20" top="64" width="85" height="6" align="L" fontsize="12" datasourcefield="supplierstatezip" type="TEXT" ></documentelements>
+            <documentelements left="20" top="70" width="85" height="6" align="L" fontsize="12" datasourcefield="suppliercountry" type="TEXT" ></documentelements>
+
+        <documentelements left="120" top="40" width="85" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="120" top="40" width="85" height="6" align="C" fontsize="10" fontbold="B" value="Ship To:" type="TEXT" ></documentelements>
+        <documentelements left="120" top="46" width="85" height="30" type="TEXT" allborders="Y" align="C"></documentelements>
+            <documentelements left="120" top="46" width="85" height="6" align="L" fontsize="12" datasourcefield="companyname" type="TEXT" ></documentelements>
+            <documentelements left="120" top="52" width="85" height="6" align="L" fontsize="12" datasourcefield="address1" type="TEXT" ></documentelements>
+            <documentelements left="120" top="58" width="85" height="6" align="L" fontsize="12" datasourcefield="address2" type="TEXT" ></documentelements>
+            <documentelements left="120" top="58" width="85" height="6" align="L" fontsize="12" datasourcefield="address3" type="TEXT" ></documentelements>
+            <documentelements left="120" top="64" width="85" height="6" align="L" fontsize="12" datasourcefield="statezip" type="TEXT" ></documentelements>
+        <documentelements left="20" top="80" width="60" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="20" top="80" width="60" height="6" align="C" fontsize="10" fontbold="B" value="Ship Via:" type="TEXT" ></documentelements>
+        <documentelements left="20" top="86" width="60" height="6" type="TEXT" allborders="Y" align="C"></documentelements>
+            <documentelements left="20" top="86" width="60" height="6" align="L" fontsize="12" datasourcefield="pohshipmethod" type="TEXT" ></documentelements>
+        <documentelements left="80" top="80" width="65" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="80" top="80" width="65" height="6" align="C" fontsize="10" fontbold="B" value="Account No:" type="TEXT" ></documentelements>
+        <documentelements left="80" top="86" width="65" height="6" type="TEXT" allborders="Y" align="C"></documentelements>
+            <documentelements left="80" top="86" width="65" height="6" align="L" fontsize="12" datasourcefield="supplieraccountno" type="TEXT" ></documentelements>
+        <documentelements left="145" top="80" width="60" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="145" top="80" width="60" height="6" align="C" fontsize="10" fontbold="B" value="Terms:" type="TEXT" ></documentelements>
+        <documentelements left="145" top="86" width="60" height="6" type="TEXT" allborders="Y" align="C"></documentelements>
+            <documentelements left="145" top="86" width="60" height="6" align="L" fontsize="12" datasourcefield="pohterms" type="TEXT" ></documentelements>
+
+       <documentelements left="20" top="100" width="15" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="20" top="100" width="15" height="6" align="C" fontsize="10" fontbold="B" value="QTY" type="TEXT" ></documentelements>
+        <documentelements left="35" top="100" width="20" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="35" top="100" width="20" height="6" align="C" fontsize="10" fontbold="B" value="UoM" type="TEXT" ></documentelements>
+        <documentelements left="55" top="100" width="30" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="55" top="100" width="30" height="6" align="C" fontsize="10" fontbold="B" value="Item" type="TEXT" ></documentelements>
+        <documentelements left="85" top="100" width="75" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="85" top="100" width="75" height="6" align="C" fontsize="10" fontbold="B" value="Description" type="TEXT" ></documentelements>
+        <documentelements left="160" top="100" width="21" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="160" top="100" width="21" height="6" align="C" fontsize="10" fontbold="B" value="Unit Cost" type="TEXT" ></documentelements>
+        <documentelements left="181" top="100" width="24" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
+            <documentelements left="181" top="100" width="24" height="6" align="C" fontsize="10" fontbold="B" value="Amount" type="TEXT" ></documentelements>
+
+    </groupheader>
+
+    <body height="18" linewrap="Y" fontsize="8">
+
+        <documentelements left="20" top="0" width="15" height="6" align="R" fontsize="12" allborders="Y" datasourcefield="polqty" type="TEXT" wrap="Y"></documentelements>
+        <documentelements left="35" top="0" width="20" height="6" align="L" fontsize="12" allborders="Y" datasourcefield="poluom" type="TEXT" wrap="Y"></documentelements>
+        <documentelements left="55" top="0" width="30" height="6" align="L" fontsize="12" allborders="Y" datasourcefield="polvitemno" type="TEXT" wrap="Y"></documentelements>
+        <documentelements left="85" top="0" width="75" height="6" align="L" fontsize="12" allborders="Y" datasourcefield="poldesc" type="TEXT" wrap="Y"></documentelements>
+        <documentelements left="160" top="0" width="21" height="6" align="R" fontsize="12" allborders="Y" datasourcefield="polunitcost" dataformat = "$%1.2f" type="TEXT" wrap="Y"></documentelements>
+        <documentelements left="181" top="0" width="24" height="6" align="R" fontsize="12" allborders="Y" datasourcefield="amount" dataformat = "$%1.2f" type="TEXT" wrap="Y"></documentelements>
+
+    </body>
+    <summary  height="61" fontsize="8">
+        <documentelements left="20" top="0" width="185" height="6" type="TEXT" allborders="Y" align="C"></documentelements>
+            <documentelements left="20" top="0" width="185" height="6" align="L" fontsize="12" value="Total:" type="TEXT" ></documentelements>
+            <documentelements left="181" top="0" width="25" height="6" align="R" fontsize="12" datasourcefield="total" dataformat = "$%1.2f" type="TEXT" ></documentelements>
+            <documentelements left="20" top="12" width="185" height="6" align="L" fontsize="12" value="Note:" type="TEXT" ></documentelements>
+            <documentelements left="35" top="12" width="155" height="6" align="L" fontsize="9" datasourcefield="notes" wrap="Y" type="TEXT" ></documentelements>
+            <documentelements left="20" top="52" width="60" height="0" type="TEXT" allborders="Y" align="C"></documentelements>
+            <documentelements left="20" top="55" width="60" height="6" align="C" fontsize="12" value="Authorized Signature" type="TEXT" ></documentelements>
+    </summary>
+</pdfdocument>
