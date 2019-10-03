@@ -128,14 +128,19 @@
 
         <documentelements left="20" top="0" width="15" height="6" align="R" fontsize="12" allborders="Y"
                           datasourcefield="polqty" type="TEXT" wrap="Y"></documentelements>
+
         <documentelements left="35" top="0" width="20" height="6" align="L" fontsize="12" allborders="Y"
                           datasourcefield="poluom" type="TEXT" wrap="Y"></documentelements>
+
         <documentelements left="55" top="0" width="30" height="6" align="L" fontsize="12" allborders="Y"
                           datasourcefield="polvitemno" type="TEXT" wrap="Y"></documentelements>
+
         <documentelements left="85" top="0" width="75" height="6" align="L" fontsize="12" allborders="Y"
                           datasourcefield="poldesc" type="TEXT" wrap="Y"></documentelements>
+
         <documentelements left="160" top="0" width="21" height="6" align="R" fontsize="12" allborders="Y"
                           datasourcefield="polunitcost" dataformat="$%1.2f" type="TEXT" wrap="Y"></documentelements>
+
         <documentelements left="181" top="0" width="24" height="6" align="R" fontsize="12" allborders="Y"
                           datasourcefield="amount" dataformat="$%1.2f" type="TEXT" wrap="Y"></documentelements>
 
