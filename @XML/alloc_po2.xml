@@ -37,20 +37,20 @@
         <!-- ________RIGHT SIDE OF HEADER________ -->
 
         <!-- HEADER TITLE: Purchase Order -->
-        <documentelements left="150" top="10" width="30" height="12"
+        <documentelements left="140" top="10" width="30" height="12"
                           value="Purchase Order" type="TEXT" fontsize="24" fontbold="B"></documentelements>
         <!-- KEY: PO NUMBER -->
-        <documentelements left="150" top="25" height="6"
+        <documentelements left="140" top="25" height="6"
                           value="P.O. No.:" type="TEXT" fontsize="12"></documentelements>
         <!-- DSF_VALUE: PO NUMBER -->
-        <documentelements left="199" top="25" height="6"
+        <documentelements left="189" top="25" height="6"
                           datasourcefield="pohaltid" type="TEXT" fontsize="12"></documentelements>
 
         <!-- KEY: DATE ISSUED -->
-        <documentelements left="150" top="32" height="6"
+        <documentelements left="140" top="32" height="6"
                           value="Date:" type="TEXT" fontsize="12"></documentelements>
         <!-- DSF_VALUE: DATE ISSUED -->
-        <documentelements left="190" top="32" height="6"
+        <documentelements left="180" top="32" height="6"
                           datasourcefield="pohprepareddate"
                           type="TEXT" dateformat="M d Y" fontsize="12"></documentelements>
     </header>
@@ -62,14 +62,13 @@
                           value="Date Required:" type="TEXT" fontsize="12"></documentelements>
         -->
 
-        <!-- STYLE -->
-        <documentelements left="20" top="40" width="85" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
-
-        <!-- KEY: VENDOR TO -->
-        <documentelements left="20" top="40" width="85" height="6" align="C" fontsize="10" fontbold="B"
-                          value="To:" type="TEXT"></documentelements>
+        <!-- STYLE: background -->
+        <documentelements left="20" top="40" width="85" height="6" type="TEXT" allborders="Y" align="C" backcolor="#E6897f"></documentelements>
+        <!-- KEY: VENDOR TO-->
+        <documentelements left="20" top="40" width="85" height="6" align="L" fontsize="12" fontbold="B"
+                          value="Vendor" type="TEXT"></documentelements>
+        <!-- STYLE: borders-->
         <documentelements left="20" top="46" width="85" height="30" type="TEXT" allborders="Y" align="C"></documentelements>
-
         <!-- VALUE(S): VENDOR TO -->
         <documentelements left="20" top="46" width="85" height="6" align="L" fontsize="12"
                           datasourcefield="suppliername" type="TEXT"></documentelements>
@@ -81,13 +80,14 @@
                           datasourcefield="supplierstatezip" type="TEXT"></documentelements>
         <documentelements left="20" top="70" width="85" height="6" align="L" fontsize="12"
                           datasourcefield="suppliercountry" type="TEXT"></documentelements>
-        <documentelements left="120" top="40" width="85" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
 
+        <!-- STYLE: background #E6897f-->
+        <documentelements left="120" top="40" width="85" height="6" type="TEXT" allborders="Y" align="C" backcolor="#E6897f"></documentelements>
         <!-- KEY: SHIP TO -->
-        <documentelements left="120" top="40" width="85" height="6" align="C" fontsize="10" fontbold="B"
-                          value="Ship To:" type="TEXT"></documentelements>
+        <documentelements left="120" top="40" width="85" height="6" align="L" fontsize="12" fontbold="B"
+                          value="Ship To" type="TEXT"></documentelements>
+        <!-- STYLE: borders-->
         <documentelements left="120" top="46" width="85" height="30" type="TEXT" allborders="Y" align="C"></documentelements>
-
         <!-- VALUE(S): SHIP TO -->
         <documentelements left="120" top="46" width="85" height="6" align="L" fontsize="12"
                           datasourcefield="companyname" type="TEXT"></documentelements>
@@ -99,64 +99,34 @@
                           datasourcefield="address3" type="TEXT"></documentelements>
         <documentelements left="120" top="64" width="85" height="6" align="L" fontsize="12"
                           datasourcefield="statezip" type="TEXT"></documentelements>
-        <documentelements left="20" top="80" width="60" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
-
-        <!-- KEY: SHIP VIA -->
-        <documentelements left="20" top="80" width="60" height="6" align="C" fontsize="10" fontbold="B"
-                          value="Ship Via:" type="TEXT"></documentelements>
-        <documentelements left="20" top="86" width="60" height="6" type="TEXT" allborders="Y" align="C"></documentelements>
-
-        <!-- VALUE: SHIP VIA -->
-        <documentelements left="20" top="86" width="60" height="6" align="L" fontsize="12"
-                          datasourcefield="pohshipmethod" type="TEXT"></documentelements>
-        <documentelements left="80" top="80" width="65" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
-
-        <!-- KEY: ACCOUNT NUMBER -->
-        <documentelements left="80" top="80" width="65" height="6" align="C" fontsize="10" fontbold="B"
-                          value="Account No:" type="TEXT"></documentelements>
-        <documentelements left="80" top="86" width="65" height="6" type="TEXT" allborders="Y" align="C"></documentelements>
-
-        <!-- VALUE: ACCOUNT NUMBER -->
-        <documentelements left="80" top="86" width="65" height="6" align="L" fontsize="12"
-                          datasourcefield="supplieraccountno" type="TEXT"></documentelements>
-        <documentelements left="145" top="80" width="60" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
-
-        <!-- KEY: TERMS -->
-        <documentelements left="145" top="80" width="60" height="6" align="C" fontsize="10" fontbold="B"
-                          value="Terms:" type="TEXT"></documentelements>
-        <documentelements left="145" top="86" width="60" height="6" type="TEXT" allborders="Y" align="C"></documentelements>
-
-        <!-- VALUE: TERMS -->
-        <documentelements left="145" top="86" width="60" height="6" align="L" fontsize="12"
-                          datasourcefield="pohterms" type="TEXT"></documentelements>
-        <documentelements left="20" top="100" width="15" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
 
         <!-- TITLE: QUANTITY -->
+        <documentelements left="20" top="100" width="20" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F2F2F2"></documentelements>
         <documentelements left="20" top="100" width="15" height="6" align="C" fontsize="10" fontbold="B"
                           value="QTY" type="TEXT"></documentelements>
-        <documentelements left="35" top="100" width="20" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
 
         <!-- TITLE: UNIT of MEASURE -->
+        <documentelements left="35" top="100" width="20" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F2F2F2"></documentelements>
         <documentelements left="35" top="100" width="20" height="6" align="C" fontsize="10" fontbold="B"
                           value="UoM" type="TEXT"></documentelements>
-        <documentelements left="55" top="100" width="30" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
 
         <!-- TITLE: ITEM -->
+        <documentelements left="55" top="100" width="30" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
         <documentelements left="55" top="100" width="30" height="6" align="C" fontsize="10" fontbold="B"
                           value="Item" type="TEXT"></documentelements>
-        <documentelements left="85" top="100" width="75" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
 
         <!-- TITLE: DESCRIPTION -->
+        <documentelements left="85" top="100" width="75" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
         <documentelements left="85" top="100" width="75" height="6" align="C" fontsize="10" fontbold="B" value="Description"
                           type="TEXT"></documentelements>
-        <documentelements left="160" top="100" width="21" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
 
         <!-- TITLE: UNIT COST -->
+        <documentelements left="160" top="100" width="21" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
         <documentelements left="160" top="100" width="21" height="6" align="C" fontsize="10" fontbold="B"
                           value="Unit Cost" type="TEXT"></documentelements>
-        <documentelements left="181" top="100" width="24" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
 
         <!-- TITLE: AMOUNT -->
+        <documentelements left="181" top="100" width="24" height="6" type="TEXT" allborders="Y" align="C" backcolor="#EEEEEE"></documentelements>
         <documentelements left="181" top="100" width="24" height="6" align="C" fontsize="10" fontbold="B"
                           value="Amount" type="TEXT"></documentelements>
 
