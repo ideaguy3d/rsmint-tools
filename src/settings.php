@@ -15,7 +15,8 @@ return [
         // Monolog settings
         'logger' => [
             'name' => 'redstone-app',
-            'path' => isset($_ENV['docker']) ? 'php://stdout' :'logs\app.log',
+            //isset($_ENV['docker']) ? 'php://stdout' :
+            'path' => 'logs\app.log',
             'level' => \Monolog\Logger::DEBUG,
         ],
         

@@ -8,7 +8,9 @@ use ParseCsv\Csv;
 class ComingleCombine
 {
     private $comingleCsv;
-    private $csvDir = 'test';
+    // if testing: 'test'
+    // if a real run: 'csv'
+    private $csvDir = 'csv';
     
     public function startExtract() {
         // The dir to scan
@@ -20,7 +22,8 @@ class ComingleCombine
             ['job_name', 'address', 'city', 'state', 'zip', 'rate'],
         ];
         
-        foreach($allCsv as $c) {
+        // Loop over all the CSV's
+        foreach($allCsv as $key => $c) {
             // ignore relative symbols
             if($c !== "." && $c !== "..") {
                 $csv = new Csv("./{$this->csvDir}/" . $c);
@@ -29,18 +32,27 @@ class ComingleCombine
                 $this->extractFields($csv->data, $c);
             }
             
+            echo "\n\nscanned csv: $key\n\n";
+            
+            
             // free memory from buffer
             unset($csv);
             
         } // END OF: foreach looping over all CSVs in dir
         
         $csv = new Csv();
-        $headerRow = array_shift($this->comingleCsv);
+        //$headerRow = array_shift($this->comingleCsv);
+        CsvParseModel::export2csv(
+            $this->comingleCsv, './', 'comingle_results'
+        );
+        
+        /*
         $csv->output(
             './csv_comingle.csv',
             $this->comingleCsv,
             $headerRow, ','
         );
+        */
         
         unset($csv);
         
@@ -53,7 +65,7 @@ class ComingleCombine
      * @param array $data
      * @param string $fileName
      */
-    private function extractFields(array $data, string $fileName): void {
+    private function extractFieldsWalk(array $data, string $fileName): void {
         $filename = str_replace('.csv', '', $fileName);
         
         array_walk($data, function($item, $key, $filename) {
@@ -66,6 +78,7 @@ class ComingleCombine
                 $rateMatch = preg_match("/$ratePattern/i", $elem);
                 return ($rateMatch === 1);
             });
+            
             // _HARD CODED field titles
             $extracted  [] = $item['address'] ?? 'NO_ADDRESS_FIELD';
             $extracted  [] = $item['city'] ?? 'NO_CITY_FIELD';
@@ -87,7 +100,46 @@ class ComingleCombine
             $break = 'point';
         }, $filename);
         
-        $break = 'point';
+    }
+    
+    private function extractFields(array $data, string $fileName) {
+        $filename = str_replace('.csv', '', $fileName);
+    
+        foreach($data as $key => $item) {
+            // skip header row:
+            if($key === 0) continue;
+            
+            $extracted = [];
+            $extracted [] = $filename;
+            $itemKeys = array_keys($item);
+            $rateFields = array_filter($itemKeys, function($elem) {
+                $ratePattern = "(rate|[\W]rate|[_\s-]rate[_\s-]|rate_|_rate)";
+                $elem = (string)$elem;
+                $rateMatch = preg_match("/$ratePattern/i", $elem);
+                return ($rateMatch === 1);
+            });
+            
+            // _HARD CODED field titles
+            $extracted  [] = $item['address'] ?? 'NO_ADDRESS_FIELD';
+            $extracted  [] = $item['city'] ?? 'NO_CITY_FIELD';
+            $extracted  [] = $item['st'] ?? 'NO_ST_FIELD';
+            $extracted  [] = $item['zip'] ?? 'NO_ZIP_FIELD';
+            if(count($rateFields) > 0) {
+                $rateStr = "";
+                
+                // dynamically add how many rate items there are
+                foreach($rateFields as $rate) {
+                    $itemRate = $item[$rate];
+                    $rateStr .= "[$rate] = $itemRate | ";
+                }
+                $extracted  [] = $rateStr;
+            }
+            else {
+                $extracted  [] = 'NO_RATE_FIELD';
+            }
+            $this->comingleCsv  [] = $extracted;
+        }
+    
     }
     
     // let web browser know how many recs were processed

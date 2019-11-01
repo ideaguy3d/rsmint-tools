@@ -9,6 +9,7 @@
         Purpose of the document follows with Redstone Print & Mail modifications.
 -->
 
+<!--suppress ALL, CheckTagEmptyBody -->
 <pdfdocument orientation="P" title="Purchase Order" marginleft="0" marginright="0" margintop="0.5" fontname="Arial"
              fontbold="" fontsize="8" newpagepergroup="true" units="mm" papersize="letter">
 
@@ -104,24 +105,18 @@
         <!-- data header row -->
 
         <!-- TITLE: QUANTITY -->
-        <documentelements left="20" top="80" width="40" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F5F5F5"></documentelements>
-        <documentelements left="20" top="80" width="40" height="6" align="C" fontsize="10" fontbold="B"
+        <documentelements left="20" top="80" width="30" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F5F5F5"></documentelements>
+        <documentelements left="20" top="80" width="30" height="6" align="C" fontsize="10" fontbold="B"
                           value="Quantity" type="TEXT"></documentelements>
 
-        <!-- TITLE: UNIT of MEASURE
-        <documentelements left="35" top="80" width="20" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F2F2F2"></documentelements>
-        <documentelements left="35" top="80" width="20" height="6" align="C" fontsize="10" fontbold="B"
-                          value="UoM" type="TEXT"></documentelements>
-        -->
-
         <!-- TITLE: ITEM -->
-        <documentelements left="55" top="80" width="30" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F5F5F5"></documentelements>
-        <documentelements left="55" top="80" width="30" height="6" align="C" fontsize="10" fontbold="B"
+        <documentelements left="50" top="80" width="40" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F5F5F5"></documentelements>
+        <documentelements left="50" top="80" width="40" height="6" align="C" fontsize="10" fontbold="B"
                           value="Item" type="TEXT"></documentelements>
 
         <!-- TITLE: DESCRIPTION -->
-        <documentelements left="85" top="80" width="75" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F5F5F5"></documentelements>
-        <documentelements left="85" top="80" width="75" height="6" align="C" fontsize="10" fontbold="B" value="Description"
+        <documentelements left="90" top="80" width="70" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F5F5F5"></documentelements>
+        <documentelements left="90" top="80" width="70" height="6" align="C" fontsize="10" fontbold="B" value="Description"
                           type="TEXT"></documentelements>
 
         <!-- TITLE: UNIT COST -->
@@ -139,20 +134,25 @@
     <body height="18" linewrap="Y" fontsize="8">
 
         <!-- DYNAMICALLY RENDERED DATA -->
-        <documentelements left="20" top="0" width="35" height="6" align="C" fontsize="12" allborders="Y"
+
+        <!-- Quantity -->
+        <documentelements left="20" top="0" width="30" height="6" align="C" fontsize="10" allborders="Y"
                           datasourcefield="polqty" type="TEXT" wrap="Y"></documentelements>
 
-        <!--  
-        <documentelements left="35" top="0" width="20" height="6" align="L" fontsize="12" allborders="Y"
-                          datasourcefield="poluom" type="TEXT" wrap="Y"></documentelements>
-        -->
-        <documentelements left="55" top="0" width="30" height="6" align="L" fontsize="12" allborders="Y"
+        <!-- Item -->
+        <documentelements left="50" top="0" width="40" height="6" align="L" fontsize="10" allborders="Y"
                           datasourcefield="polvitemno" type="TEXT" wrap="Y"></documentelements>
-        <documentelements left="85" top="0" width="75" height="6" align="L" fontsize="12" allborders="Y"
+
+        <!-- Description -->
+        <documentelements left="90" top="0" width="70" height="6" align="L" fontsize="10" allborders="Y"
                           datasourcefield="poldesc" type="TEXT" wrap="Y"></documentelements>
-        <documentelements left="160" top="0" width="21" height="6" align="R" fontsize="12" allborders="Y"
+
+        <!-- Unit Cost -->
+        <documentelements left="160" top="0" width="21" height="6" align="R" fontsize="10" allborders="Y"
                           datasourcefield="polunitcost" dataformat="$%1.5f" type="TEXT" wrap="Y"></documentelements>
-        <documentelements left="181" top="0" width="24" height="6" align="R" fontsize="12" allborders="Y"
+
+        <!-- Amount -->
+        <documentelements left="181" top="0" width="24" height="6" align="R" fontsize="10" allborders="Y"
                           datasourcefield="amount" dataformat="$%1.2f" type="TEXT" wrap="Y"></documentelements>
 
     </body>

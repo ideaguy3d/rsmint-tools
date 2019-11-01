@@ -138,7 +138,9 @@ abstract class RsmSuppressAbstract
      *
      * @return string
      */
-    private function zipExtract(string $oZip): string {
+    private function zipExtract(?string $oZip): string {
+        // sometimes a record does not contain a zip
+        if(!$oZip) return '';
         $oZipLen = strlen($oZip);
         $coreFieldCombine = '';
         if($oZipLen >= 5) {
@@ -153,6 +155,7 @@ abstract class RsmSuppressAbstract
         else {
             $coreFieldCombine .= $oZip;
         }
+        
         return $coreFieldCombine;
     }
     

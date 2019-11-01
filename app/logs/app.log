@@ -642,3 +642,64 @@
 [2019-09-28 06:18:36] redstone-app.INFO: _| full path to suppressed = C:\xampp\htdocs\tools\uploads\suppressed_0d8c4f9e.csv |_ [] {"uid":"fe1c680"}
 [2019-09-28 06:18:36] redstone-app.INFO: _| full path to removed = C:\xampp\htdocs\tools\uploads\removed_0d8c4f9e.csv |_ [] {"uid":"fe1c680"}
 [2019-09-28 06:18:36] redstone-app.INFO: _| zip name = C:\xampp\htdocs\tools\uploads\suppressed_0d8c4f9e.zip |_ [] {"uid":"fe1c680"}
+
+-- "Thursday October 11th 2019 logs" --
+[2019-10-11 02:20:30] redstone-app.INFO:  | base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"2fd648c"}
+[2019-10-11 02:20:30] redstone-app.INFO:  | SUCCESSFULLY made base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"2fd648c"}
+[2019-10-11 02:20:30] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"2fd648c"}
+[2019-10-11 02:20:30] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"2fd648c"}
+[2019-10-11 02:20:30] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"2fd648c"}
+[2019-10-11 02:20:30] redstone-app.INFO: [ suppression files = Array ] [] {"uid":"2fd648c"}
+[2019-10-11 02:20:30] redstone-app.INFO:  | base file full path = C:\xampp\htdocs\tools\uploads |  [] {"uid":"2fd648c"}
+[2019-10-11 02:20:33] redstone-app.INFO: | export path =  C:\xampp\htdocs\tools\uploads| [] {"uid":"2fd648c"}
+[2019-10-11 02:22:41] redstone-app.INFO:  | base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"36b749e"}
+[2019-10-11 02:22:41] redstone-app.INFO:  | SUCCESSFULLY made base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"36b749e"}
+[2019-10-11 02:22:41] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"36b749e"}
+[2019-10-11 02:22:41] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"36b749e"}
+[2019-10-11 02:22:41] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"36b749e"}
+[2019-10-11 02:22:41] redstone-app.INFO: [ suppression files = Array ] [] {"uid":"36b749e"}
+[2019-10-11 02:22:41] redstone-app.INFO:  | base file full path = C:\xampp\htdocs\tools\uploads |  [] {"uid":"36b749e"}
+[2019-10-11 02:22:43] redstone-app.INFO: | export path =  C:\xampp\htdocs\tools\uploads| [] {"uid":"36b749e"}
+[2019-10-11 02:25:21] redstone-app.INFO:  | base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"f8b6180"}
+[2019-10-11 02:25:21] redstone-app.INFO:  | SUCCESSFULLY made base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"f8b6180"}
+[2019-10-11 02:25:21] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"f8b6180"}
+[2019-10-11 02:25:21] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"f8b6180"}
+[2019-10-11 02:25:21] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"f8b6180"}
+[2019-10-11 02:25:21] redstone-app.INFO: [ suppression files = Array ] [] {"uid":"f8b6180"}
+[2019-10-11 02:25:21] redstone-app.INFO:  | base file full path = C:\xampp\htdocs\tools\uploads |  [] {"uid":"f8b6180"}
+[2019-10-11 02:25:23] redstone-app.INFO: | export path =  C:\xampp\htdocs\tools\uploads| [] {"uid":"f8b6180"}
+[2019-10-11 02:38:09] redstone-app.INFO:  | base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:09] redstone-app.INFO:  | SUCCESSFULLY made base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:09] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:09] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:09] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:09] redstone-app.INFO: [ suppression files = Array ] [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:09] redstone-app.INFO:  | base file full path = C:\xampp\htdocs\tools\uploads |  [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:12] redstone-app.INFO: | export path =  C:\xampp\htdocs\tools\uploads| [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:12] redstone-app.INFO: _| suppression id = suppressed_d959826a |_ [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:12] redstone-app.INFO: _| full path to suppressed = C:\xampp\htdocs\tools\uploads\suppressed_d959826a.csv |_ [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:12] redstone-app.INFO: _| full path to removed = C:\xampp\htdocs\tools\uploads\removed_d959826a.csv |_ [] {"uid":"b4b6e6b"}
+[2019-10-11 02:38:12] redstone-app.INFO: _| zip name = C:\xampp\htdocs\tools\uploads\suppressed_d959826a.zip |_ [] {"uid":"b4b6e6b"}
+[2019-10-11 04:36:40] redstone-app.INFO:  | base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:40] redstone-app.INFO:  | SUCCESSFULLY made base dir = C:\xampp\htdocs\tools\uploads\79342\base |  [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:40] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:40] redstone-app.INFO:  | file type = Slim\Http\UploadedFile |  [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:40] redstone-app.INFO: __>> RsmUploader.php L102 - Successfully uploaded file [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:40] redstone-app.INFO: [ suppression files = Array ] [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:40] redstone-app.INFO:  | base file full path = C:\xampp\htdocs\tools\uploads |  [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:42] redstone-app.INFO: | export path =  C:\xampp\htdocs\tools\uploads| [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:42] redstone-app.INFO: _| suppression id = suppressed_ff76cc38 |_ [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:42] redstone-app.INFO: _| full path to suppressed = C:\xampp\htdocs\tools\uploads\suppressed_ff76cc38.csv |_ [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:42] redstone-app.INFO: _| full path to removed = C:\xampp\htdocs\tools\uploads\removed_ff76cc38.csv |_ [] {"uid":"cb1a5bd"}
+[2019-10-11 04:36:42] redstone-app.INFO: _| zip name = C:\xampp\htdocs\tools\uploads\suppressed_ff76cc38.zip |_ [] {"uid":"cb1a5bd"}
+[2019-10-28 22:57:46] redstone-app.INFO:   Redstone '/' route   [] {"uid":"fa32213"}
+[2019-10-28 23:07:45] redstone-app.INFO:  __>> ComAuto File extension = csv  [] {"uid":"a6b4e11"}
+[2019-10-28 23:07:45] redstone-app.INFO:  Moving ComAuto file to: C:\xampp\htdocs\ninja\app\commission-csv\accounting-php.csv  [] {"uid":"a6b4e11"}
+[2019-10-28 23:15:42] redstone-app.INFO:  __>> ComAuto File extension = csv  [] {"uid":"5972ac1"}
+[2019-10-28 23:15:42] redstone-app.INFO:  Moving ComAuto file to: C:\xampp\htdocs\ninja\app\commission-csv\accounting-php.csv  [] {"uid":"5972ac1"}
+[2019-10-28 23:17:36] redstone-app.INFO:  __>> ComAuto File extension = csv  [] {"uid":"d0f7a3e"}
+[2019-10-28 23:17:36] redstone-app.INFO:  Moving ComAuto file to: C:\xampp\htdocs\ninja\app\commission-csv\accounting-php.csv  [] {"uid":"d0f7a3e"}
+[2019-10-28 23:18:56] redstone-app.INFO:  __>> ComAuto File extension = csv  [] {"uid":"3db68be"}
+[2019-10-28 23:18:56] redstone-app.INFO:  Moving ComAuto file to: C:\xampp\htdocs\ninja\app\commission-csv\accounting-php.csv  [] {"uid":"3db68be"}
+[2019-10-28 23:19:32] redstone-app.INFO:  __>> ComAuto File extension = csv  [] {"uid":"5a9495a"}
+[2019-10-28 23:19:32] redstone-app.INFO:  Moving ComAuto file to: C:\xampp\htdocs\ninja\app\commission-csv\accounting-php.csv  [] {"uid":"5a9495a"}
