@@ -29,8 +29,13 @@ class AllocQuickBooks
     
     /**
      * Map Allocadence Purchase Orders to QuickBooks
+     *
+     * This function will get files that contain 'inboundexportbydate' in its' file name from the
+     * downloaded folder
+     *
+     * Then it will export the QB mapped po's to a csv relative to the index.php file
      */
-    public function qbPurchaseOrderMap() {
+    public function qbPurchaseOrderMap(): void {
         $poFileName = 'inboundexportbydate';
         $downloadedFiles = scandir($this->downloadsFolder);
         // each po file downloaded from Allocadence
@@ -89,13 +94,9 @@ class AllocQuickBooks
             }
         }
         
-        // all the po files have been UNION'ed
-        /*
+        CsvParseModel::export2csv($qbMap, './', 'qb_mapped_po');
         
-        */
-        $qbMap['Vendor'] = $field['PO Number'];
-        
-    }
+    } // END OF: qbPurchaseOrderMap()
     
     /**
      * Dynamically find the indexes for each of the wanted fields rather than
