@@ -42,6 +42,10 @@ class AppGlobals
             : 'C:\inetpub\wwwroot\ninja\app\commission-csv';
     }
     
+    public static function isLocalHost(): bool {
+        return (gethostname() === 'Julius1');
+    }
+    
     public static function LogComAutoInfo(string $info): void {
         // fopen(), fwrite(), fclose()
         $handle = null;

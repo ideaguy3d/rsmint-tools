@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-use Redstone\Tools\CsvParseModel;
-use Redstone\Tools\RsmSuppress;
+
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
+
 use Redstone\Tools\RsmUploader;
 use Redstone\Tools\EncodeRemove;
 use Redstone\Tools\EncodeRemoveSql;
 use Redstone\Tools\AppGlobals;
-
+use Redstone\Tools\RsmSuppress;
+use Redstone\Tools\AllocQuickBooks;
 
 return function(App $app) {
     
@@ -23,7 +24,7 @@ return function(App $app) {
             .17/.../comauto/start/a/run?precision=exact&comauto-sql-insert=2
         */
         
-        $_SERVER['REQUEST_URI'] = 'tools/suppress';
+        $_SERVER['REQUEST_URI'] = 'alloc/qb';
         $_SERVER['REQUEST_METHOD'] = 'GET';
     }
     
@@ -124,11 +125,20 @@ return function(App $app) {
     $app->get('/alloc/qb',
         function(Request $request, Response $response) use ($container, $app) {
             $qStr = $request->getQueryParams();
-            // the Purchase Order query value
-            $po = $qStr['po'] ?? null;
-            // the Receiving query value
-            $rec = $qStr['rec'] ?? null;
+            // the 'Purchase Order' query value
+            $po = $qStr['po'] ?? null; // yes or no
+            // the 'Receiving' query value
+            $rec = $qStr['rec'] ?? null; // // yes or no
+            $pos = ['yes', '1', 'true'];
+            $qbAlloc = new AllocQuickBooks();
             
+            if($po && array_search($po, $pos) !== false) {
+                $qbAlloc->qbPurchaseOrderMap();
+            }
+            
+            if($rec && array_search($po, $pos) !== false) {
+                $qbAlloc->qbReceivingMap();
+            }
         }
     );
     
