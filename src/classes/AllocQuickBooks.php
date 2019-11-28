@@ -35,7 +35,6 @@ class AllocQuickBooks
         $downloadedFiles = scandir($this->downloadsFolder);
         // each po file downloaded from Allocadence
         $poFilesArray = [];
-        $poUnion = [];
         $field = null;
         $c = 0;
         // qb maps
@@ -57,24 +56,37 @@ class AllocQuickBooks
             
             // get header row real quick
             if($c === 0) {
-                $poUnion [] = $poArray[0];
                 $field = $this->poFindKeys($poArray[0]);
                 $c++;
             }
             
-            // get rid of header row real quick for the UNION
+            // get rid of header row real quick
             array_shift($poArray);
             
+            // created the QB mapped 2D array
             foreach($poArray as $po) {
-                $poUnion [] = $po;
+                // Allocadence fields
+                $_supplier = $po[$field['Supplier']];
+                $_requiredBy = $po[$field['Required By']];
+                $_poNumber = $po[$field['PO Number']];
+                $_category = $po[$field['Category']];
+                $_orderedQty = (int)$po[$field['Ordered Qty']];
+                $_sku = $po[$field['SKU']];
+                $_description = $po[$field['Description']];
+                $value = $po[$field['Value']];
+                $value = str_replace(',', '', $value);
+                $_value = (float)$value;
+                
                 $qbMap[] = [
-                    'Vendor' => $this->mapVendor($field['Supplier']),
-                    'Transaction Date' => $field['Required By'],
-                    '',
+                    'Vendor' => $this->qbMapVendor($_supplier),
+                    'Transaction Date' => $_requiredBy,
+                    'PO Number' => $_poNumber,
+                    'Item' => ($_category === 'E' ? 'Envelopes' : 'Paper'),
+                    'Quantity' => $_orderedQty,
+                    'Description' => ('sku: ' . $_sku . ', ' . $_description),
+                    'Rate' => (round($_value /$_orderedQty, 3)),
                 ];
             }
-            
-            $break = 'point';
         }
         
         // all the po files have been UNION'ed
@@ -101,7 +113,7 @@ class AllocQuickBooks
         // the field indexes we want
         $poWantedFields = explode(',', $headerRow);
         $indexes = [];
-        foreach($poWantedFields as $i => $f) {
+        foreach($poWantedFields as $f) {
             $indexes[$f] = array_search($f, $rawHeaderRow);
         }
         
@@ -115,7 +127,7 @@ class AllocQuickBooks
      *
      * @return string
      */
-    private function mapVendor(string $allocSupplier): string {
+    private function qbMapVendor(string $allocSupplier): string {
         $qbVendors = [
             'Cathy Welsh Envelopes',
             'Ennis, Inc',
@@ -126,12 +138,13 @@ class AllocQuickBooks
             'Volume Press',
             'Wilmer',
         ];
+    
+        $supplier = strtolower($allocSupplier);
+        $supplier = substr($supplier, 0, strpos($supplier, ' '));
         
         foreach($qbVendors as $vendor) {
-            $vendor = strtolower($vendor);
-            $supplier = strtolower($allocSupplier);
-            $supplier = substr($supplier, 0, strpos($supplier, ' '));
-            $isVendor = (strpos($vendor, $supplier) !== false);
+            $vendorLower = strtolower($vendor);
+            $isVendor = (strpos($vendorLower, $supplier) !== false);
             if($isVendor) {
                 return $vendor;
             }

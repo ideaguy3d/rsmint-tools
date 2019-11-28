@@ -130,6 +130,11 @@ return function(App $app) {
             // 'Receiving' query value
             $rec = $qStr['rec'] ?? null; // // yes or no
             $qbAlloc = new AllocQuickBooks();
+    
+            function go($q) {
+                if($q === null) return false;
+                return (array_search($q, ['yes', '1', 'true']) !== false);
+            }
             
             if(go($po)) {
                 $qbAlloc->qbPurchaseOrderMap();
@@ -137,11 +142,6 @@ return function(App $app) {
             
             if(go($rec)) {
                 $qbAlloc->qbReceivingMap();
-            }
-    
-            function go($q) {
-                if($q === null) return false;
-                return (array_search($q, ['yes', '1', 'true']) !== false);
             }
         }
     );
