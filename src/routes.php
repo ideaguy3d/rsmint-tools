@@ -24,7 +24,7 @@ return function(App $app) {
             .17/.../comauto/start/a/run?precision=exact&comauto-sql-insert=2
         */
         
-        $_SERVER['REQUEST_URI'] = 'alloc/qb';
+        $_SERVER['REQUEST_URI'] = '/alloc/qb?po=yes&rec=yes';
         $_SERVER['REQUEST_METHOD'] = 'GET';
     }
     
