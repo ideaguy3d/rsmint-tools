@@ -1,0 +1,15 @@
+10-31-2019
+
+All the files for post cass jobs downloaded from the job board
+with the following selections:
+
+~ Due Date: 10/21/2019 - 10/25/2019
+~ Include Dont Jobs: true
+~ Project Status: Done
+
+211 jobs were manually downloaded
+
+
+
+
+//

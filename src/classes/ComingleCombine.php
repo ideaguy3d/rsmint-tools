@@ -8,8 +8,7 @@ use ParseCsv\Csv;
 class ComingleCombine
 {
     private $comingleCsv;
-    // if testing: 'test'
-    // if a real run: 'csv'
+    // if testing: 'test', if a real run: 'csv'
     private $csvDir = 'csv';
     
     public function startExtract() {

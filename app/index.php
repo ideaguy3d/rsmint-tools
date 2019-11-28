@@ -42,7 +42,5 @@ $routes($app);
 $cors_route = require __DIR__ . '/../src/cors_route.php';
 $cors_route($app);
 
-
-
 // Run app
 $app->run();

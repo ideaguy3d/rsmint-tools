@@ -34,8 +34,7 @@ return function(App $app) {
      * a POST to '/' will invoke the core portion of the "encode remove" program.
      * It'll look for the CSV the user just uploaded, removed encodes, and download it
      *
-     *  Q STRING:
-     *    angularjs-id=VALUE
+     *  ?angularjs-id=VALUE
      */
     $app->post('/',
         function(Request $request, Response $response) use ($container, $app) {
@@ -117,6 +116,22 @@ return function(App $app) {
         }
     );
     
+    /**
+     * This will be the route that does the Allocadence PO and Receiving to QuickBooks mapping
+     *
+     * ?po=<yes||no>&rec=<yes||no>
+     */
+    $app->get('/alloc/qb',
+        function(Request $request, Response $response) use ($container, $app) {
+            $qStr = $request->getQueryParams();
+            // the Purchase Order query value
+            $po = $qStr['po'] ?? null;
+            // the Receiving query value
+            $rec = $qStr['rec'] ?? null;
+            
+        }
+    );
+    
     /** .17/redstone/tools/comauto-upload2/upload
      *
      * The ComAuto self service iframe will post a file to this route
@@ -179,6 +194,10 @@ return function(App $app) {
         }
     );
     
+    /**
+     * When the user presses the submit button to upload the suppression list files this route
+     * will get those files then send the user to the path to download the results
+     */
     $app->post('/suppress/upload',
         function(Request $request, Response $response, array $args) use ($container, $app) {
             $directory = AppGlobals::PathToUploadDirectory();
@@ -204,6 +223,7 @@ return function(App $app) {
                 
                 $info = "__>> RSM DEBUG MODE - testing app logic, suppression file path = ";
                 $log->info("\n\r$info $sanitizedFilePath\n\r");
+                return $response->getBody()->write('In Debug Mode.');
             }
             
             //-- NOT in debug mode, it's go time --\\
@@ -321,6 +341,9 @@ return function(App $app) {
         }
     );
     
+    /**
+     * The future route to render the facility distribution app once it get's migrated away from ninja
+     */
     $app->get('/fac-dist',
         function(Request $request, Response $response, array $args) use ($container) {
             //TODO: render the facility distribution app from .phtml
