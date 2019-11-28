@@ -125,19 +125,23 @@ return function(App $app) {
     $app->get('/alloc/qb',
         function(Request $request, Response $response) use ($container, $app) {
             $qStr = $request->getQueryParams();
-            // the 'Purchase Order' query value
+            // 'Purchase Order' query value
             $po = $qStr['po'] ?? null; // yes or no
-            // the 'Receiving' query value
+            // 'Receiving' query value
             $rec = $qStr['rec'] ?? null; // // yes or no
-            $pos = ['yes', '1', 'true'];
             $qbAlloc = new AllocQuickBooks();
             
-            if($po && array_search($po, $pos) !== false) {
+            if(go($po)) {
                 $qbAlloc->qbPurchaseOrderMap();
             }
             
-            if($rec && array_search($po, $pos) !== false) {
+            if(go($rec)) {
                 $qbAlloc->qbReceivingMap();
+            }
+    
+            function go($q) {
+                if($q === null) return false;
+                return (array_search($q, ['yes', '1', 'true']) !== false);
             }
         }
     );
