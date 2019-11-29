@@ -31,17 +31,19 @@ class AllocQuickBooks
      * Map Allocadence Purchase Orders to QuickBooks
      *
      * This function will get files that contain 'inboundexportbydate' in its' file name from the
-     * downloaded folder
+     * downloads folder
      *
      * Then it will export the QB mapped po's to a csv relative to the index.php file
      */
     public function qbPurchaseOrderMap(): void {
         $poFileName = 'inboundexportbydate';
         $downloadedFiles = scandir($this->downloadsFolder);
+        
         // each po file downloaded from Allocadence
         $poFilesArray = [];
         $field = null;
         $c = 0;
+        
         // qb maps
         $qbHeaderRowStr = "Vendor,Transaction Date,PO Number,Item,Quantity,Description,Rate";
         $qbHeaderRow = explode(",", $qbHeaderRowStr);
@@ -55,6 +57,8 @@ class AllocQuickBooks
             }
         }
         
+        // O(4 * ~100) = O(~400)
+        // OUTER LOOP - worst case = 4 "because we only have 4 facilities"
         // convert each downloaded PO file to an array and UNION them
         foreach($poFilesArray as $poFile) {
             $poArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $poFile);
@@ -68,31 +72,39 @@ class AllocQuickBooks
             // get rid of header row real quick
             array_shift($poArray);
             
-            // created the QB mapped 2D array
+            // INNER LOOP worst case = < ~100 "depends on how many purchase orders we make in a week, probably < 100"
+            //- created the QB mapped 2D array
             foreach($poArray as $po) {
                 // Allocadence fields
-                $_supplier = $po[$field['Supplier']];
-                $_requiredBy = $po[$field['Required By']];
-                $_poNumber = $po[$field['PO Number']];
-                $_category = $po[$field['Category']];
-                $_orderedQty = (int)$po[$field['Ordered Qty']];
-                $_sku = $po[$field['SKU']];
-                $_description = $po[$field['Description']];
-                $value = $po[$field['Value']];
-                $value = str_replace(',', '', $value);
+                $_supplier = trim($po[$field['Supplier']]);
+                $_requiredBy = trim($po[$field['Required By']]);
+                $_poNumber = trim($po[$field['PO Number']]);
+                $_category = trim($po[$field['Category']]);
+                $_orderedQty = trim($po[$field['Ordered Qty']]);
+                $_orderedQty = (int)$_orderedQty;
+                $_sku = trim($po[$field['SKU']]);
+                $_description = trim($po[$field['Description']]);
+                $_warehouse = trim($po[$field['Warehouse Name']]);
+                
+                $value1 = $po[$field['Value']];
+                $value = str_replace(',', '', $value1);
                 $_value = (float)$value;
+                
+                $_qbDescription = "sku: $_sku, $_description, $_supplier, Category: $_category, Amount: $ {$value1}"
+                . " for $_warehouse";
                 
                 $qbMap[] = [
                     'Vendor' => $this->qbMapVendor($_supplier),
                     'Transaction Date' => $_requiredBy,
                     'PO Number' => $_poNumber,
                     'Item' => ($_category === 'E' ? 'Envelopes' : 'Paper'),
-                    'Quantity' => $_orderedQty,
-                    'Description' => ('sku: ' . $_sku . ', ' . $_description),
-                    'Rate' => (round($_value /$_orderedQty, 3)),
+                    'Quantity' => number_format($_orderedQty),
+                    'Description' => $_qbDescription,
+                    'Rate' => (round($_value /$_orderedQty, 7)),
                 ];
             }
-        }
+            
+        } // end of the main loop
         
         CsvParseModel::export2csv($qbMap, './', 'qb_mapped_po');
         
@@ -110,7 +122,7 @@ class AllocQuickBooks
      * @return array
      */
     private function poFindKeys(array $rawHeaderRow): array {
-        $headerRow = "PO Number,Required By,Value,Purchase Order Notes,SKU,Ordered Qty,Received Qty,Description,Category,Supplier";
+        $headerRow = "PO Number,Required By,Value,Warehouse Name,SKU,Ordered Qty,Received Qty,Description,Category,Supplier";
         // the field indexes we want
         $poWantedFields = explode(',', $headerRow);
         $indexes = [];
