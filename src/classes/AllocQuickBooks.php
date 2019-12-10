@@ -7,6 +7,9 @@ namespace Redstone\Tools;
 use stdClass;
 
 /**
+ * This way this works is by downloading the POs from Allocadence, then this class will
+ * scan the downloads folder load all the files with 'inboundexportbydate' into memory
+ *
  * Class AllocQuickBooks as of 11-27-2019 this class is SUPER HARDCODED and not meant to be
  * used by anyone other than me.
  *
@@ -15,28 +18,44 @@ use stdClass;
 class AllocQuickBooks
 {
     private $downloadsFolder;
+    
     /**
-     * The raw fields for received items. PHP adds recs to this array IF the
-     * `Received Qty` is greater than 0
+     * The raw fields for received items. PHP adds recs to this array IF the `Received Qty` is greater than 0
      * @var array
      */
     private $receivedItems;
+    
+    /**
+     * The downloaded CSVs from Allocadence Purchase Orders I select the date range & tick 'Show Received POs'
+     * @var array
+     */
+    private $allocPoExportFiles;
+    
+    /**
+     * All the purchase orders combined into 1 large array (increases computer memory)
+     * @var array
+     */
+    private $poCombined = [];
+    
     /**
      * This is the Alloc mapped purchase orders for QB
      * @var array (2D array, in.ar[as.ar])
      */
     private $qbPurchaseOrderMap;
+    
     /**
      * This as.ar is the field index for each of the fields from the raw file
      * @var array (assoc.)
      */
     private $field;
+    
     /**
      * The raw field titles from the downloaded csv file from Allocadence
      * I used var_export() while in debug mode to get them.
      * @var array
      */
     private $rawHeaderRow;
+    
     /**
      * This will be an enum for important fields from the raw file
      * @var stdClass
@@ -114,6 +133,20 @@ class AllocQuickBooks
         else {
             $this->downloadsFolder = $proDownloads;
         }
+        
+        $poFileName = 'inboundexportbydate';
+        $downloadedFiles = scandir($this->downloadsFolder);
+        // each po file downloaded from Allocadence
+        $poFilesArray = [];
+        // get each downloaded inboundexportbydate file from Allocadence
+        foreach($downloadedFiles as $file) {
+            $isPoFile = (strpos($file, $poFileName) !== false);
+            if($isPoFile) {
+                $poFilesArray [] = "$file";
+            }
+        }
+        
+        $this->allocPoExportFiles = $poFilesArray;
     }
     
     /**
@@ -125,11 +158,6 @@ class AllocQuickBooks
      * Then it will export the QB mapped po's to a csv relative to the index.php file
      */
     public function qbPurchaseOrderMap(): void {
-        $poFileName = 'inboundexportbydate';
-        $downloadedFiles = scandir($this->downloadsFolder);
-        
-        // each po file downloaded from Allocadence
-        $poFilesArray = [];
         $field = null;
         $c = 0;
         
@@ -138,23 +166,18 @@ class AllocQuickBooks
         $qbHeaderRow = explode(",", $qbHeaderRowStr);
         $qbPurchaseOrderMap = [$qbHeaderRow];
         
-        // get each downloaded inboundexportbydate file from Allocadence
-        foreach($downloadedFiles as $file) {
-            $isPoFile = (strpos($file, $poFileName) !== false);
-            if($isPoFile) {
-                $poFilesArray [] = "$file";
-            }
-        }
         
         // O(4 * ~100) = O(~400)
         // OUTER LOOP - worst case = 4 "because we only have 4 facilities", but really this is going to loop over each
         // file that contains "inboundexportbydate" in the downloads folder and convert each downloaded file to an array
         // and UNION them
-        foreach($poFilesArray as $poFile) {
+        foreach($this->allocPoExportFiles as $poFile) {
             $poArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $poFile);
             
             // get header row real quick
             if($c === 0) {
+                // add the qb mapped vendor to
+                $poArray[0] [] = 'qb_vendor';
                 $field = $this->poFindKeys($poArray[0]);
                 $this->field = $field;
                 $c++;
@@ -186,11 +209,13 @@ class AllocQuickBooks
                 $value = str_replace(',', '', $value1);
                 $_value = (float)$value;
                 
-                $_qbDescription = "sku: $_sku, $_description, $_supplier, Category: $_category, Amount: $ {$value1}"
-                    . " for $_warehouse";
+                $_qbDescription = "sku: $_sku, $_description, $_supplier, Category: $_category, "
+                    . "Amount: $ {$value1} for $_warehouse";
+                
+                $qbVendor = $this->qbMapVendor($_supplier);
                 
                 $qbPurchaseOrderMap [] = [
-                    'Vendor' => $this->qbMapVendor($_supplier),
+                    'Vendor' => $qbVendor,
                     'Transaction Date' => $_requiredBy,
                     'PO Number' => $_poNumber,
                     'Item' => ($_category === 'E' ? 'Envelopes' : 'Paper'),
@@ -198,7 +223,11 @@ class AllocQuickBooks
                     'Description' => $_qbDescription,
                     'Rate' => $_orderedQty !== 0 ? (round($_value / $_orderedQty, 7)) : 0,
                 ];
-            }
+                
+                $po [] = $qbVendor;
+                $this->poCombined [] = $po;
+                
+            } // end of the OUTER-LOOP
             
         } // end of the main loop
         
@@ -220,18 +249,12 @@ class AllocQuickBooks
         $grpByPo = [];
         $f = $this->field;
         $t = $this->fieldTitles;
-        $purchaseOrders = $this->qbPurchaseOrderMap;
+        $purchaseOrders = $this->poCombined;
         array_shift($purchaseOrders);
         
         foreach($purchaseOrders as $item) {
-            $_poNum = $item[$t->poNum];
+            $_poNum = $item[$f[$t->poNum]];
             $grpByPo[$_poNum] [] = $item;
-//            if(isset($grpByPo[$_poNum])) {
-//                $grpByPo[$_poNum] [] = $item;
-//            }
-//            else {
-//                $grpByPo[$_poNum];
-//            }
         }
         
         return $grpByPo;
