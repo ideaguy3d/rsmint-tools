@@ -67,6 +67,7 @@ class AllocQuickBooks
         $proDownloads = 'C:\Users\RSMADMIN\Downloads';
         $isLocal = AppGlobals::isLocalHost();
         
+        // var_export() of raw header row while debugging just to have as reference
         $this->rawHeaderRow = [
             0 => 'PO Number',
             1 => 'Required By',
@@ -160,12 +161,11 @@ class AllocQuickBooks
     public function qbPurchaseOrderMap(): void {
         $field = null;
         $c = 0;
-        
+        $t = $this->fieldTitles;
         // qb maps
         $qbHeaderRowStr = "Vendor,Transaction Date,PO Number,Item,Quantity,Description,Rate";
         $qbHeaderRow = explode(",", $qbHeaderRowStr);
         $qbPurchaseOrderMap = [$qbHeaderRow];
-        
         
         // O(4 * ~100) = O(~400)
         // OUTER LOOP - worst case = 4 "because we only have 4 facilities", but really this is going to loop over each
@@ -192,14 +192,14 @@ class AllocQuickBooks
                 // Allocadence fields
                 $_supplier = trim($po[$field['Supplier']]);
                 $_requiredBy = trim($po[$field['Required By']]);
-                $_poNumber = trim($po[$field['PO Number']]);
+                $_poNum = trim($po[$field['PO Number']]);
                 $_category = trim($po[$field['Category']]);
                 $_orderedQty = trim($po[$field['Ordered Qty']]);
                 $_orderedQty = (int)$_orderedQty;
                 $_sku = trim($po[$field['SKU']]);
                 $_description = trim($po[$field['Description']]);
                 $_warehouse = trim($po[$field['Warehouse Name']]);
-                $_received = (int)trim($po[$field['Received Qty']]);
+                $_received = (int)trim($po[$field[$t->receivedQty]]);
                 
                 if($_received > 0) {
                     $this->receivedItems [] = $po;
@@ -217,7 +217,7 @@ class AllocQuickBooks
                 $qbPurchaseOrderMap [] = [
                     'Vendor' => $qbVendor,
                     'Transaction Date' => $_requiredBy,
-                    'PO Number' => $_poNumber,
+                    'PO Number' => $_poNum,
                     'Item' => ($_category === 'E' ? 'Envelopes' : 'Paper'),
                     'Quantity' => number_format($_orderedQty),
                     'Description' => $_qbDescription,
@@ -342,17 +342,25 @@ class AllocQuickBooks
         
         $groupByPo = $this->groupByPoNumber();
         
+        // po A-00155 = E10WH-FULLW, E9WH-1W, E10BK-1W-FC-BOX, E10WH-HW-FC-BOX
         foreach($this->receivedItems as $receipt) {
-            $_receivedQty = $receipt[$f[$t->receivedQty]];
+            $_received = $receipt[$f[$t->receivedQty]];
             $_poNum = $receipt[$f[$t->poNum]];
             
-            if(isset($items[$_poNum])) {
-                $items[$_poNum]['Amount'] += $_receivedQty;
-            }
-            else {
-                $items[$_poNum] = [
-                    'Vendor',
-                ];
+            // W/the current data set there will only be 26 joins because only 26 items have
+            // been received according to Allocadence (12-9-19@8:19pm)
+            $joinOnPoGroup = $groupByPo[$_poNum] ?? null;
+            if($joinOnPoGroup) {
+                // each $poGroup is the raw rec exported from Alloc with the qb_vendor field appended
+                //... now what? These are the received items with all the data Alloc gives
+                // $receipt is the the received item / raw record whose "qty received > 0"
+                foreach($joinOnPoGroup as $i => $poGroup) {
+                    $qbVendor = $joinOnPoGroup[0][$f['qb_vendor']];
+                    $items[$_poNum] = [
+                        'Vendor' => $qbVendor
+                    ];
+                }
+                $items[$_poNum]['Amount'] += $_received;
             }
         }
     }
