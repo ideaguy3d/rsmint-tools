@@ -15,13 +15,30 @@ use stdClass;
 class AllocQuickBooks
 {
     private $downloadsFolder;
+    /**
+     * The raw fields for received items. PHP adds recs to this array IF the
+     * `Received Qty` is greater than 0
+     * @var array
+     */
     private $receivedItems;
+    /**
+     * This is the Alloc mapped purchase orders for QB
+     * @var array (2D array, in.ar[as.ar])
+     */
     private $qbPurchaseOrderMap;
+    /**
+     * This as.ar is the field index for each of the fields from the raw file
+     * @var array (assoc.)
+     */
     private $field;
+    /**
+     * The raw field titles from the downloaded csv file from Allocadence
+     * I used var_export() while in debug mode to get them.
+     * @var array
+     */
     private $rawHeaderRow;
     /**
      * This will be an enum for important fields from the raw file
-     *
      * @var stdClass
      */
     private $fieldTitles;
@@ -30,6 +47,7 @@ class AllocQuickBooks
         $localDownloads = 'C:\Users\julius\Downloads';
         $proDownloads = 'C:\Users\RSMADMIN\Downloads';
         $isLocal = AppGlobals::isLocalHost();
+        
         $this->rawHeaderRow = [
             0 => 'PO Number',
             1 => 'Required By',
@@ -129,8 +147,9 @@ class AllocQuickBooks
         }
         
         // O(4 * ~100) = O(~400)
-        // OUTER LOOP - worst case = 4 "because we only have 4 facilities"
-        // convert each downloaded PO file to an array and UNION them
+        // OUTER LOOP - worst case = 4 "because we only have 4 facilities", but really this is going to loop over each
+        // file that contains "inboundexportbydate" in the downloads folder and convert each downloaded file to an array
+        // and UNION them
         foreach($poFilesArray as $poFile) {
             $poArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $poFile);
             
@@ -188,6 +207,35 @@ class AllocQuickBooks
         CsvParseModel::export2csv($qbPurchaseOrderMap, './', 'qb_mapped_po');
         
     } // END OF: qbPurchaseOrderMap()
+    
+    /**
+     * This function will operate on the Alloc Mapped QB orders and group them,
+     *
+     * DEPENDS ON: class field qbPurchaseOrdersMap in order for this to work the
+     *      function qbPurchaseOrderMap has to be ran
+     *
+     * @return array = the
+     */
+    private function groupByPoNumber(): array {
+        $grpByPo = [];
+        $f = $this->field;
+        $t = $this->fieldTitles;
+        $purchaseOrders = $this->qbPurchaseOrderMap;
+        array_shift($purchaseOrders);
+        
+        foreach($purchaseOrders as $item) {
+            $_poNum = $item[$t->poNum];
+            $grpByPo[$_poNum] [] = $item;
+//            if(isset($grpByPo[$_poNum])) {
+//                $grpByPo[$_poNum] [] = $item;
+//            }
+//            else {
+//                $grpByPo[$_poNum];
+//            }
+        }
+        
+        return $grpByPo;
+    }
     
     /**
      * Dynamically find the indexes for each of the wanted fields rather than
@@ -261,7 +309,6 @@ class AllocQuickBooks
      * class field $receivedItems
      */
     public function qbReceivingMap(): void {
-        $break = 'point';
         $items = [];
         $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
         $qbItemReceiptHeaderRow = explode(",", $qbItemReceiptStr);
@@ -270,16 +317,18 @@ class AllocQuickBooks
         $f = $this->field;
         $t = $this->fieldTitles;
         
+        $groupByPo = $this->groupByPoNumber();
+        
         foreach($this->receivedItems as $receipt) {
             $_receivedQty = $receipt[$f[$t->receivedQty]];
             $_poNum = $receipt[$f[$t->poNum]];
             
             if(isset($items[$_poNum])) {
-                $items[$_poNum]['Amount'] += $_receivedQty; 
+                $items[$_poNum]['Amount'] += $_receivedQty;
             }
             else {
                 $items[$_poNum] = [
-                    'Vendor'
+                    'Vendor',
                 ];
             }
         }
