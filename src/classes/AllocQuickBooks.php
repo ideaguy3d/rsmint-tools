@@ -62,6 +62,8 @@ class AllocQuickBooks
      */
     private $fieldTitles;
     
+    public $itemReceipt;
+    
     public function __construct() {
         $localDownloads = 'C:\Users\julius\Downloads';
         $proDownloads = 'C:\Users\RSMADMIN\Downloads';
@@ -126,6 +128,7 @@ class AllocQuickBooks
         $this->fieldTitles = new class() {
             public $receivedQty = 'Received Qty';
             public $poNum = 'PO Number';
+            public $category = 'Category';
         };
         
         if($isLocal) {
@@ -137,8 +140,10 @@ class AllocQuickBooks
         
         $poFileName = 'inboundexportbydate';
         $downloadedFiles = scandir($this->downloadsFolder);
+        
         // each po file downloaded from Allocadence
         $poFilesArray = [];
+        
         // get each downloaded inboundexportbydate file from Allocadence
         foreach($downloadedFiles as $file) {
             $isPoFile = (strpos($file, $poFileName) !== false);
@@ -351,14 +356,29 @@ class AllocQuickBooks
             // been received according to Allocadence (12-9-19@8:19pm)
             $joinOnPoGroup = $groupByPo[$_poNum] ?? null;
             if($joinOnPoGroup) {
+                // each PO can only have 2 types of items E or P
+                $poPaper = [
+                    'Description' => '',
+                    'Amount' => 0
+                ];
+                $poEnvelopes = [
+                    'Description' => '',
+                    'Amount' => 0
+                ];
+                
                 // each $poGroup is the raw rec exported from Alloc with the qb_vendor field appended
                 //... now what? These are the received items with all the data Alloc gives
                 // $receipt is the the received item / raw record whose "qty received > 0"
                 foreach($joinOnPoGroup as $i => $poGroup) {
                     $qbVendor = $joinOnPoGroup[0][$f['qb_vendor']];
-                    $items[$_poNum] = [
-                        'Vendor' => $qbVendor
-                    ];
+                    $items[$_poNum] = ['Vendor' => $qbVendor];
+                    $_receivedQty = (int)$poGroup[$f[$t->receivedQty]];
+                    $_itemType = $poGroup[$f[$t->category]];
+                    $_sku = $poGroup[0];
+                    if($_itemType === 'E') {
+                        $poEnvelopes['Description'] .= " | $_sku";
+                        $poEnvelopes['Amount'] += $_receivedQty;
+                    }
                 }
                 $items[$_poNum]['Amount'] += $_received;
             }
