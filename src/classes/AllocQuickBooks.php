@@ -62,7 +62,30 @@ class AllocQuickBooks
      */
     private $fieldTitles;
     
-    public $itemReceipt;
+    /**
+     * The QuickBooks Item Receipt fields that Allocadence Received Items
+     * need to be mapped to
+     * @var array
+     */
+    public $itemReceiptFields = [
+        // [Name]
+        'Vendor' => '',
+        // [Received Data]
+        'Transaction Date' => '',
+        // [Receipt]
+        'RefNumber' => '',
+        // [SKU]
+        'Item' => '',
+        // [Description]
+        // [Quantity]
+        'Qty' => '',
+        // [Unit Cost]
+        'Cost' => '',
+        // [Quantity] * [Unit Cost]
+        'Amount' => 0,
+        // [PO # / Receipt #]
+        'PO No.' => '',
+    ];
     
     public function __construct() {
         $localDownloads = 'C:\Users\julius\Downloads';
@@ -330,7 +353,8 @@ class AllocQuickBooks
         }
         
         return 'not found';
-    }
+        
+    } // END OF: qbMapVendor()
     
     /**
      * Map Allocadence Receiving to QuickBooks, the function will mutate the
@@ -341,6 +365,18 @@ class AllocQuickBooks
         $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
         $qbItemReceiptHeaderRow = explode(",", $qbItemReceiptStr);
         $qbItemReceiptMap = ['header_row' => $qbItemReceiptHeaderRow];
+        $itemReceiptFields = [
+            'Vendor' => '',
+            'Transaction Date' => '',
+            // item receipt
+            'RefNumber' => '',
+            '' => '',
+            'Description' => '',
+            '' => '',
+            '' => '',
+            'Amount' => 0,
+            '' => '',
+        ];
         
         $f = $this->field;
         $t = $this->fieldTitles;
@@ -357,18 +393,12 @@ class AllocQuickBooks
             $joinOnPoGroup = $groupByPo[$_poNum] ?? null;
             if($joinOnPoGroup) {
                 // each PO can only have 2 types of items E or P
-                $poPaper = [
-                    'Description' => '',
-                    'Amount' => 0
-                ];
-                $poEnvelopes = [
-                    'Description' => '',
-                    'Amount' => 0
-                ];
+                $poPaper = ['Description' => '', 'Amount' => 0];
+                $poEnvelopes = $itemReceiptFields;
                 
                 // each $poGroup is the raw rec exported from Alloc with the qb_vendor field appended
                 //... now what? These are the received items with all the data Alloc gives
-                // $receipt is the the received item / raw record whose "qty received > 0"
+                // $receipt is the the received item raw record whose "qty received > 0"
                 foreach($joinOnPoGroup as $i => $poGroup) {
                     $qbVendor = $joinOnPoGroup[0][$f['qb_vendor']];
                     $items[$_poNum] = ['Vendor' => $qbVendor];
