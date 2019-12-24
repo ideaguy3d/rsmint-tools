@@ -71,11 +71,18 @@ class AllocQuickBooks
     private $irField;
     
     /**
-     * The raw field titles from the downloaded csv file from Allocadence
-     * I used var_export() while in debug mode to get them.
+     * The raw field titles from the downloaded PO export CSV file from Allocadence
+     *  I used var_export() while in debug mode to get them.
      * @var array
      */
-    private $rawHeaderRow;
+    private $poRawHeader;
+    
+    /**
+     * The raw header row from the received items just to have as reference using the
+     *  var_export() while in debug mode.
+     * @var array
+     */
+    private $irRawHeader;
     
     /**
      * This will be an enum for important fields from the raw file
@@ -119,7 +126,7 @@ class AllocQuickBooks
         $isLocal = AppGlobals::isLocalHost();
         
         // var_export() of PO export raw header row while debugging just to have as reference
-        $this->rawHeaderRow = [
+        $this->poRawHeader = [
             0 => 'PO Number',
             1 => 'Required By',
             2 => 'Ship Method',
@@ -174,6 +181,10 @@ class AllocQuickBooks
             51 => 'Supplier Terms',
         ];
         
+        $this->irRawHeader = [];
+        
+        // ULTRA important field names cached into an anonymous class for better code completion
+        // this is essentially an ENUM
         $this->fieldTitles = new class() {
             public $receivedQty = 'Received Qty';
             public $poNum = 'PO Number';
@@ -190,13 +201,14 @@ class AllocQuickBooks
         $poFileName = 'inboundexportbydate';
         $irFileName = 'inventoryreceived';
         
+        // scan all the files in the windows download folder
         $downloadedFiles = scandir($this->downloadsFolder);
         
-        // each po file downloaded from Allocadence
+        // each po & ir CSV downloaded from Allocadence
         $poFilesArray = [];
         $irFilesArray = [];
         
-        // get each downloaded inboundexportbydate file from Allocadence
+        // get each downloaded inboundexportbydate & inventoryreceived file from Allocadence
         foreach($downloadedFiles as $file) {
             $isPoFile = (strpos($file, $poFileName) !== false);
             $isIrFile = (strpos($file, $irFileName) !== false);
@@ -212,7 +224,7 @@ class AllocQuickBooks
         
         $this->allocPoExportFiles = $poFilesArray;
         $this->allocIrExportFiles = $irFilesArray;
-    
+        
     } // END OF: __construct()
     
     /**
@@ -224,7 +236,7 @@ class AllocQuickBooks
      * Then it will export the QB mapped po's to a csv relative to the index.php file
      */
     public function qbPurchaseOrderMap(): void {
-        $field = null;
+        $f = null; // field index's from raw file
         $c = 0;
         $t = $this->fieldTitles;
         // qb maps
@@ -232,7 +244,7 @@ class AllocQuickBooks
         $qbHeaderRow = explode(",", $qbHeaderRowStr);
         $qbPurchaseOrderMap = [$qbHeaderRow];
         
-        // O(4 * ~100) = O(~400)
+        // O(4 * ~100) = O(~400) "4 CSVs with roughly a worst case of 100 recs each"
         // OUTER LOOP - worst case = 4 "because we only have 4 facilities", but really this is going to loop over each
         // file that contains "inboundexportbydate" in the downloads folder and convert each downloaded file to an array
         // and UNION them
@@ -241,36 +253,37 @@ class AllocQuickBooks
             
             // get header row real quick
             if($c === 0) {
-                // add the qb mapped vendor to
+                // add the qb mapped vendor to the output QB mapped array
                 $poArray[0] [] = 'qb_vendor';
-                $field = $this->indexKeys($poArray[0]);
-                $this->poField = $field;
+                $f = $this->indexKeys($poArray[0]);
+                $this->poField = $f;
                 $c++;
             }
             
             // get rid of header row real quick
             array_shift($poArray);
             
-            // INNER LOOP worst case = < ~100 "depends on how many purchase orders we make in a week, probably < 100"
+            // INNER LOOP worst case = < ~100 "depends on how many purchase orders we make in a week, probably < 50"
             //- created the QB mapped 2D array
             foreach($poArray as $po) {
                 // Allocadence fields
-                $_supplier = trim($po[$field['Supplier']]);
-                $_requiredBy = trim($po[$field['Required By']]);
-                $_poNum = trim($po[$field['PO Number']]);
-                $_category = trim($po[$field['Category']]);
-                $_orderedQty = trim($po[$field['Ordered Qty']]);
+                $_supplier = trim($po[$f['Supplier']]);
+                $_requiredBy = trim($po[$f['Required By']]);
+                $_poNum = trim($po[$f['PO Number']]);
+                $_category = trim($po[$f['Category']]);
+                $_orderedQty = trim($po[$f['Ordered Qty']]);
                 $_orderedQty = (int)$_orderedQty;
-                $_sku = trim($po[$field['SKU']]);
-                $_description = trim($po[$field['Description']]);
-                $_warehouse = trim($po[$field['Warehouse Name']]);
-                $_received = (int)trim($po[$field[$t->receivedQty]]);
+                $_sku = trim($po[$f['SKU']]);
+                $_description = trim($po[$f['Description']]);
+                $_warehouse = trim($po[$f['Warehouse Name']]);
+                $_received = (int)trim($po[$f[$t->receivedQty]]);
                 
+                // old way the "received items" we created, this is using the PO export CSV
                 if($_received > 0) {
                     $this->receivedItems [] = $po;
                 }
                 
-                $value1 = $po[$field['Value']];
+                $value1 = $po[$f['Value']];
                 $value = str_replace(',', '', $value1);
                 $_value = (float)$value;
                 
@@ -304,13 +317,12 @@ class AllocQuickBooks
     
     /**
      * Map Allocadence Received Items to QuickBooks.
+     *
+     * This functions scans data from the PO export CSV, not the received inventory CSV
      * The function will mutate the class field $receivedItems.
      */
     public function qbReceivingMap(): void {
         $items = [];
-        $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
-        $qbItemReceiptHeaderRow = explode(",", $qbItemReceiptStr);
-        $qbItemReceiptMap = ['header_row' => $qbItemReceiptHeaderRow];
         $itemReceiptFields = $this->itemReceiptFields;
         
         $f = $this->poField;
@@ -352,6 +364,35 @@ class AllocQuickBooks
     } // END OF: qbReceivingMap()
     
     /**
+     * Map Allocadence Received Items to QuickBooks.
+     *
+     * This function will use the received inventory CSV
+     */
+    public function qbItemReceiptMap(): void {
+        $f = null; // field index's from raw file
+        $c = 0;
+        $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
+        $qbItemReceiptHeaderRow = explode(",", $qbItemReceiptStr);
+        $qbItemReceiptMap = ['header_row' => $qbItemReceiptHeaderRow];
+        $itemReceiptFields = $this->itemReceiptFields;
+    
+        foreach($this->allocIrExportFiles as $irFile) {
+            $irArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $irFile);
+            
+            if($c === 0) {
+                $f = $this->indexKeys($irArray[0]);
+                $this->irField = $f;
+                $c++;
+            }
+            
+            // get rid of header row
+            array_shift($irArray);
+            
+        }
+        
+    } // END OF: qbReceivingMap()
+    
+    /**
      * This function will operate on the Alloc Mapped QB orders and group them,
      *
      * DEPENDS ON: class field qbPurchaseOrdersMap in order for this to work the
@@ -383,7 +424,7 @@ class AllocQuickBooks
      */
     private function indexKeys(array $rawHeaderRow): array {
         $indexes = [];
-    
+        
         // get the field index for all the fields
         foreach($rawHeaderRow as $field) {
             $indexes[$field] = array_search($field, $rawHeaderRow);

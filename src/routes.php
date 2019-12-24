@@ -129,10 +129,12 @@ return function(App $app) {
             }
             
             if(go($po)) {
+                // map the purchase orders
                 $qbAlloc->qbPurchaseOrderMap();
             }
             
             if(go($rec)) {
+                // map the item receipts
                 $qbAlloc->qbReceivingMap();
             }
         }
