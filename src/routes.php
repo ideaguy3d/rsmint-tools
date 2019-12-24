@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -16,15 +15,7 @@ use Redstone\Tools\AllocQuickBooks;
 return function(App $app) {
     
     if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
-        /*
-            .17/.../street-view/user/mhetauser!@/lindsey@rsmail.com
-            .17/.../comauto/start/a/{action}
-
-            //-- To do a "job board data mash" sql server insert:
-            .17/.../comauto/start/a/run?precision=exact&comauto-sql-insert=2
-        */
-        
-        $_SERVER['REQUEST_URI'] = '/alloc/qb?po=yes&rec=yes';
+        $_SERVER['REQUEST_URI'] = '/alloc/qb?po=no&rec=yes';
         $_SERVER['REQUEST_METHOD'] = 'GET';
     }
     
@@ -131,6 +122,7 @@ return function(App $app) {
             $rec = $qStr['rec'] ?? null; // // yes or no
             $qbAlloc = new AllocQuickBooks();
     
+            // route helper functions
             function go($q) {
                 if($q === null) return false;
                 return (array_search($q, ['yes', '1', 'true']) !== false);

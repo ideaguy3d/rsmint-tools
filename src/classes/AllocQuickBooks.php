@@ -17,19 +17,32 @@ use stdClass;
  */
 class AllocQuickBooks
 {
+    /**
+     * The windows downloads folder path
+     * @var string
+     */
     private $downloadsFolder;
     
     /**
      * The raw fields for received items. PHP adds recs to this array IF the `Received Qty` is greater than 0
+     * This uses the PO export CSV
      * @var array
      */
     private $receivedItems;
     
     /**
-     * The downloaded CSVs from Allocadence Purchase Orders I select the date range & tick 'Show Received POs'
+     * The downloaded CSVs from Allocadence Purchase Orders. I select the date range & tick 'Show Received POs'
+     * I have to click download while in West Sacramento, Denver, and Atlanta mode
      * @var array
      */
     private $allocPoExportFiles;
+    
+    /**
+     * The CSV downloaded from Allocadence Reports > Inventory Reports > Received Inventory
+     * I have to click download while in West Sacramento, Denver, and Atlanta mode
+     * @var array
+     */
+    private $allocIrExportFiles;
     
     /**
      * All the purchase orders combined into 1 large array (increases computer memory)
@@ -38,16 +51,24 @@ class AllocQuickBooks
     private $poCombined = [];
     
     /**
+     * All of the received items combined into 1 large array
+     * @var array
+     */
+    private $irCombined = [];
+    
+    /**
      * This is the Alloc mapped purchase orders for QB
      * @var array (2D array, in.ar[as.ar])
      */
-    private $qbPurchaseOrderMap;
+    private $qbPurchaseOrderMap; // <3
+    private $qbItemReceiptMap;
     
     /**
      * This as.ar is the field index for each of the fields from the raw file
      * @var array (assoc.)
      */
-    private $field;
+    private $poField;
+    private $irField;
     
     /**
      * The raw field titles from the downloaded csv file from Allocadence
@@ -65,6 +86,7 @@ class AllocQuickBooks
     /**
      * The QuickBooks Item Receipt fields that Allocadence Received Items
      * need to be mapped to
+     *
      * @var array
      */
     public $itemReceiptFields = [
@@ -77,6 +99,7 @@ class AllocQuickBooks
         // [SKU]
         'Item' => '',
         // [Description]
+        'Description' => '',
         // [Quantity]
         'Qty' => '',
         // [Unit Cost]
@@ -87,12 +110,15 @@ class AllocQuickBooks
         'PO No.' => '',
     ];
     
+    /**
+     * AllocQuickBooks constructor.
+     */
     public function __construct() {
         $localDownloads = 'C:\Users\julius\Downloads';
         $proDownloads = 'C:\Users\RSMADMIN\Downloads';
         $isLocal = AppGlobals::isLocalHost();
         
-        // var_export() of raw header row while debugging just to have as reference
+        // var_export() of PO export raw header row while debugging just to have as reference
         $this->rawHeaderRow = [
             0 => 'PO Number',
             1 => 'Required By',
@@ -162,24 +188,35 @@ class AllocQuickBooks
         }
         
         $poFileName = 'inboundexportbydate';
+        $irFileName = 'inventoryreceived';
+        
         $downloadedFiles = scandir($this->downloadsFolder);
         
         // each po file downloaded from Allocadence
         $poFilesArray = [];
+        $irFilesArray = [];
         
         // get each downloaded inboundexportbydate file from Allocadence
         foreach($downloadedFiles as $file) {
             $isPoFile = (strpos($file, $poFileName) !== false);
+            $isIrFile = (strpos($file, $irFileName) !== false);
+            
             if($isPoFile) {
                 $poFilesArray [] = "$file";
+            }
+            
+            if($isIrFile) {
+                $irFilesArray [] = "$file";
             }
         }
         
         $this->allocPoExportFiles = $poFilesArray;
-    }
+        $this->allocIrExportFiles = $irFilesArray;
+    
+    } // END OF: __construct()
     
     /**
-     * Map Allocadence Purchase Orders to QuickBooks
+     * Map Allocadence Purchase Orders to QuickBooks.
      *
      * This function will get files that contain 'inboundexportbydate' in its' file name from the
      * downloads folder
@@ -206,8 +243,8 @@ class AllocQuickBooks
             if($c === 0) {
                 // add the qb mapped vendor to
                 $poArray[0] [] = 'qb_vendor';
-                $field = $this->poFindKeys($poArray[0]);
-                $this->field = $field;
+                $field = $this->indexKeys($poArray[0]);
+                $this->poField = $field;
                 $c++;
             }
             
@@ -266,6 +303,55 @@ class AllocQuickBooks
     } // END OF: qbPurchaseOrderMap()
     
     /**
+     * Map Allocadence Received Items to QuickBooks.
+     * The function will mutate the class field $receivedItems.
+     */
+    public function qbReceivingMap(): void {
+        $items = [];
+        $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
+        $qbItemReceiptHeaderRow = explode(",", $qbItemReceiptStr);
+        $qbItemReceiptMap = ['header_row' => $qbItemReceiptHeaderRow];
+        $itemReceiptFields = $this->itemReceiptFields;
+        
+        $f = $this->poField;
+        $t = $this->fieldTitles;
+        
+        $groupByPo = $this->groupByPoNumber();
+        
+        // po A-00155 = E10WH-FULLW, E9WH-1W, E10BK-1W-FC-BOX, E10WH-HW-FC-BOX
+        foreach($this->receivedItems as $receipt) {
+            $_received = $receipt[$f[$t->receivedQty]];
+            $_poNum = $receipt[$f[$t->poNum]];
+            
+            // W/the current data set there will only be 26 joins because only 26 items have
+            // been received according to Allocadence (12-9-19@8:19pm)
+            $joinOnPoGroup = $groupByPo[$_poNum] ?? null;
+            if($joinOnPoGroup) {
+                // each PO can only have 2 types of items E or P
+                $poPaper = ['Description' => '', 'Amount' => 0];
+                $poEnvelopes = $itemReceiptFields;
+                
+                // each $poGroup is the raw rec exported from Alloc with the qb_vendor field appended
+                //... now what? These are the received items with all the data Alloc gives
+                // $receipt is the the received item raw record whose "qty received > 0"
+                foreach($joinOnPoGroup as $i => $poGroup) {
+                    $qbVendor = $joinOnPoGroup[0][$f['qb_vendor']];
+                    $items[$_poNum] = ['Vendor' => $qbVendor];
+                    $_receivedQty = (int)$poGroup[$f[$t->receivedQty]];
+                    $_itemType = $poGroup[$f[$t->category]];
+                    $_sku = $poGroup[0];
+                    if($_itemType === 'E') {
+                        $poEnvelopes['Description'] .= " | $_sku";
+                        $poEnvelopes['Amount'] += $_receivedQty;
+                    }
+                }
+                $items[$_poNum]['Amount'] += $_received;
+            }
+        }
+        
+    } // END OF: qbReceivingMap()
+    
+    /**
      * This function will operate on the Alloc Mapped QB orders and group them,
      *
      * DEPENDS ON: class field qbPurchaseOrdersMap in order for this to work the
@@ -275,7 +361,7 @@ class AllocQuickBooks
      */
     private function groupByPoNumber(): array {
         $grpByPo = [];
-        $f = $this->field;
+        $f = $this->poField;
         $t = $this->fieldTitles;
         $purchaseOrders = $this->poCombined;
         array_shift($purchaseOrders);
@@ -289,34 +375,18 @@ class AllocQuickBooks
     }
     
     /**
-     * Dynamically find the indexes for each of the wanted fields rather than
-     * hard coding each index
-     *
-     * Find indexes for:
-     * PO Number,Required By,Value,Purchase Order Notes,SKU,Ordered Qty,Received Qty,Description,Category,Supplier
+     * Dynamically find the indexes rather than hard coding each index
      *
      * @param $rawHeaderRow
      *
      * @return array
      */
-    private function poFindKeys(array $rawHeaderRow): array {
-        $headerRow = "PO Number,Required By,Value,Warehouse Name,SKU,Ordered Qty,Received Qty,Description,Category,Supplier,";
-        // the field indexes we want
-        $poWantedFields = explode(',', $headerRow);
+    private function indexKeys(array $rawHeaderRow): array {
         $indexes = [];
-        $findAllFieldIndexes = true;
-        
-        if($findAllFieldIndexes) {
-            // get the field index for all the fields
-            foreach($rawHeaderRow as $field) {
-                $indexes[$field] = array_search($field, $rawHeaderRow);
-            }
-        }
-        else {
-            // just get indexes for the wanted fields
-            foreach($poWantedFields as $f) {
-                $indexes[$f] = array_search($f, $rawHeaderRow);
-            }
+    
+        // get the field index for all the fields
+        foreach($rawHeaderRow as $field) {
+            $indexes[$field] = array_search($field, $rawHeaderRow);
         }
         
         return $indexes;
@@ -356,62 +426,4 @@ class AllocQuickBooks
         
     } // END OF: qbMapVendor()
     
-    /**
-     * Map Allocadence Receiving to QuickBooks, the function will mutate the
-     * class field $receivedItems
-     */
-    public function qbReceivingMap(): void {
-        $items = [];
-        $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
-        $qbItemReceiptHeaderRow = explode(",", $qbItemReceiptStr);
-        $qbItemReceiptMap = ['header_row' => $qbItemReceiptHeaderRow];
-        $itemReceiptFields = [
-            'Vendor' => '',
-            'Transaction Date' => '',
-            // item receipt
-            'RefNumber' => '',
-            '' => '',
-            'Description' => '',
-            '' => '',
-            '' => '',
-            'Amount' => 0,
-            '' => '',
-        ];
-        
-        $f = $this->field;
-        $t = $this->fieldTitles;
-        
-        $groupByPo = $this->groupByPoNumber();
-        
-        // po A-00155 = E10WH-FULLW, E9WH-1W, E10BK-1W-FC-BOX, E10WH-HW-FC-BOX
-        foreach($this->receivedItems as $receipt) {
-            $_received = $receipt[$f[$t->receivedQty]];
-            $_poNum = $receipt[$f[$t->poNum]];
-            
-            // W/the current data set there will only be 26 joins because only 26 items have
-            // been received according to Allocadence (12-9-19@8:19pm)
-            $joinOnPoGroup = $groupByPo[$_poNum] ?? null;
-            if($joinOnPoGroup) {
-                // each PO can only have 2 types of items E or P
-                $poPaper = ['Description' => '', 'Amount' => 0];
-                $poEnvelopes = $itemReceiptFields;
-                
-                // each $poGroup is the raw rec exported from Alloc with the qb_vendor field appended
-                //... now what? These are the received items with all the data Alloc gives
-                // $receipt is the the received item raw record whose "qty received > 0"
-                foreach($joinOnPoGroup as $i => $poGroup) {
-                    $qbVendor = $joinOnPoGroup[0][$f['qb_vendor']];
-                    $items[$_poNum] = ['Vendor' => $qbVendor];
-                    $_receivedQty = (int)$poGroup[$f[$t->receivedQty]];
-                    $_itemType = $poGroup[$f[$t->category]];
-                    $_sku = $poGroup[0];
-                    if($_itemType === 'E') {
-                        $poEnvelopes['Description'] .= " | $_sku";
-                        $poEnvelopes['Amount'] += $_receivedQty;
-                    }
-                }
-                $items[$_poNum]['Amount'] += $_received;
-            }
-        }
-    }
-}
+} // end of class
