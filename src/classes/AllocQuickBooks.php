@@ -395,6 +395,19 @@ class AllocQuickBooks
         $qbItemReceiptMap = ['header_row' => $qbItemReceiptHeaderRow];
         $itemReceiptFields = $this->itemReceiptFields;
         
+        // enum for QB Item Receipts fields
+        $qb = new class() {
+            public $vendor = 'Vendor';
+            public $transactionDate = 'Transaction Date';
+            public $refNumber = 'RefNumber';
+            public $item = 'Item';
+            public $description = 'Description';
+            public $qty = 'Qty';
+            public $cost = 'Cost';
+            public $amount = 'Amount';
+            public $poNum = 'PO No.';
+        };
+        
         // OUTER LOOP
         // 1st create the irCombined array, create the indexed keys for the received items array
         foreach($this->allocIrExportFiles as $irFile) {
@@ -460,16 +473,16 @@ class AllocQuickBooks
                     // multiple item receipts possible
                     'RefNumber' => '',
                     // DONE - item map
-                    'Item' => $itemReceiptGroup[0][$f['Category']],
+                    'Item' => $itemReceiptGroup[0][$f['Category']] === 'E' ? 'Envelopes' : 'unknown',
                     // calculated field
-                    'Description' => '',
+                    'Description' => "sku: $sku",
                     // calculated field "sum of all Quantities from alloc csv"
                     'Qty' => 0,
                     // multiple costs possible, BUT UNLIKELY
                     'Cost' => 0.0,
                     // calculated field, qty * cost
                     'Amount' => 0.0,
-                    // simple map
+                    // DONE - simple map
                     'PO No.' => $itemReceiptGroup[0][$f[$t->poNum]],
                 ];
                 
@@ -478,6 +491,7 @@ class AllocQuickBooks
                     // INNER LOOP 3
                     // loop over each SKU in the Purchase Order
                     foreach($itemReceiptGroup as $key => $receivedItem) {
+                        // cache relevant Allocadence fields values
                         $_receipt = trim($receivedItem[$f[$t->receipt]]);
                         $_sku = trim($receivedItem[$f[$t->sku]]);
                         $_quantity = trim($receivedItem[$f[$t->quantity]]);
@@ -486,20 +500,41 @@ class AllocQuickBooks
                         $_poNum = trim($receivedItem[$f[$t->poNum]]);
                         $_name = trim($receivedItem[$f[$t->name]]);
                         
-                        // sum quantity
-                        $itemReceipt[$f[$t->quantity]] += $_quantity;
+                        // cache relevant QB item receipt values
+                        //$qbTransactionDate = &$itemReceipt[$qb->transactionDate];
+                        //$qbRefNum = &$itemReceipt[$qb->refNumber];
+                        $qbTransactionDate = &$itemReceipt[$qb->transactionDate];
+                        $qbRefNum = &$itemReceipt[$qb->refNumber];
+                        $qbDescription = &$itemReceipt[$qb->description];
+                        $qbQty = &$itemReceipt[$qb->refNumber];
+                        $qbCost = &$itemReceipt[$qb->cost];
+                        $qbAmount = &$itemReceipt[$qb->amount];
                         
                         // `TRANSACTION DATE`
                         // check if there are multiple values for received date
-                        if(empty($itemReceipt[$f[$t->receivedDate]])) {
-                            $itemReceipt[$f[$t->receivedDate]] = $_receivedDate;
+                        if(empty($qbTransactionDate)) {
+                            $qbTransactionDate = $_receivedDate;
                         }
                         else {
-                            $tDate = $itemReceipt[$f[$t->receivedDate]];
-                            $itemReceipt[$t->receivedDate] = "$tDate, $_receivedDate";
+                            $qbTransactionDate .= ", $_receivedDate";
                         }
-                      
                         
+                        // `REF NUMBER`
+                        if(empty($qbRefNum)) {
+                            $qbRefNum = $_receipt;
+                        }
+                        else {
+                            $qbRefNum .= ", $_receipt";
+                        }
+                        
+                        // `DESCRIPTION`
+                        
+                        // `QUANTITY`
+                        $qbQty += $_quantity;
+                        
+                        // `COST`
+                        
+                        // `AMOUNT`
                     } // end of inner loop
                 }
             }
