@@ -395,6 +395,7 @@ class AllocQuickBooks
         $qbItemReceiptMap = ['header_row' => $qbItemReceiptHeaderRow];
         $itemReceiptFields = $this->itemReceiptFields;
         
+        // OUTER LOOP
         // 1st create the irCombined array, create the indexed keys for the received items array
         foreach($this->allocIrExportFiles as $irFile) {
             $irArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $irFile);
@@ -422,6 +423,7 @@ class AllocQuickBooks
         $c = 0;
         $groupByPo = [];
         
+        // OUTER LOOP
         // loop over all the combined received items to group by PO Number
         foreach($this->irCombined as $receivedItem) {
             // skip header row
@@ -431,23 +433,75 @@ class AllocQuickBooks
             }
             
             // some POs have a blank PO val
-            $_poNum = ($receivedItem[$f[$t->poNum]]);
+            $_poNum = trim($receivedItem[$f[$t->poNum]]);
             $groupByPo[$_poNum] [] = $receivedItem;
         }
-    
+        
+        // OUTER LOOP
         // loop over each group to create an Item Receipt
-        foreach($groupByPo as $po) {
-            foreach($po as $ir) {
-                // Allocadence fields
-                $_receipt = trim($ir[$f[$t->receipt]]);
-                $_sku = trim($ir[$f[$t->sku]]);
-                $_quantity = trim($ir[$f[$t->quantity]]);
-                $_unitCost = trim($ir[$f[$t->unitCost]]);
-                $_receivedDate = trim($ir[$f[$t->receivedDate]]);
-                $_poNum = trim($ir[$f[$t->poNum]]);
-                $name = trim($ir[$f[$t->name]]);
+        foreach($groupByPo as $poGroup) {
+            $skuGroup = [];
+            
+            // INNER LOOP 1
+            // loop over each element in the po group to group by sku
+            foreach($poGroup as $poNum => $receivedItem) {
+                $_sku = trim($receivedItem[$f[$t->sku]]);
+                $skuGroup[$_sku] [] = $receivedItem;
+            }
+            
+            // INNER LOOP 2
+            // loop over each item in the sku group
+            foreach($skuGroup as $sku => $itemReceiptGroup) {
+                $itemReceipt = [
+                    // DONE - vendor map
+                    'Vendor' => $this->qbMapVendor($itemReceiptGroup[0][$f[$t->name]]),
+                    // multiple vals possible
+                    'Transaction Date' => '',
+                    // multiple item receipts possible
+                    'RefNumber' => '',
+                    // DONE - item map
+                    'Item' => $itemReceiptGroup[0][$f['Category']],
+                    // calculated field
+                    'Description' => '',
+                    // calculated field "sum of all Quantities from alloc csv"
+                    'Qty' => 0,
+                    // multiple costs possible, BUT UNLIKELY
+                    'Cost' => 0.0,
+                    // calculated field, qty * cost
+                    'Amount' => 0.0,
+                    // simple map
+                    'PO No.' => $itemReceiptGroup[0][$f[$t->poNum]],
+                ];
                 
-                //TODO: implement the app logic
+                // if there is more than 1 SKU in the PO
+                if(count($itemReceiptGroup) > 1) {
+                    // INNER LOOP 3
+                    // loop over each SKU in the Purchase Order
+                    foreach($itemReceiptGroup as $key => $receivedItem) {
+                        $_receipt = trim($receivedItem[$f[$t->receipt]]);
+                        $_sku = trim($receivedItem[$f[$t->sku]]);
+                        $_quantity = trim($receivedItem[$f[$t->quantity]]);
+                        $_unitCost = trim($receivedItem[$f[$t->unitCost]]);
+                        $_receivedDate = trim($receivedItem[$f[$t->receivedDate]]);
+                        $_poNum = trim($receivedItem[$f[$t->poNum]]);
+                        $_name = trim($receivedItem[$f[$t->name]]);
+                        
+                        // sum quantity
+                        $itemReceipt[$f[$t->quantity]] += $_quantity;
+                        
+                        // `TRANSACTION DATE`
+                        // check if there are multiple values for received date
+                        if(empty($itemReceipt[$f[$t->receivedDate]])) {
+                            $itemReceipt[$f[$t->receivedDate]] = $_receivedDate;
+                        }
+                        else {
+                            $tDate = $itemReceipt[$f[$t->receivedDate]];
+                            $itemReceipt[$t->receivedDate] = "$tDate, $_receivedDate";
+                        }
+                      
+                        
+                    } // end of inner loop
+                }
             }
         }
         
