@@ -135,7 +135,7 @@ return function(App $app) {
             
             if(go($rec)) {
                 // map the item receipts
-                $qbAlloc->qbReceivingMap();
+                $qbAlloc->qbItemReceiptMap();
             }
         }
     );

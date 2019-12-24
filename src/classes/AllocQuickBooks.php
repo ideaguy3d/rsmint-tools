@@ -85,10 +85,16 @@ class AllocQuickBooks
     private $irRawHeader;
     
     /**
-     * This will be an enum for important fields from the raw file
+     * ENUM for important fields from the raw PO CSV
      * @var stdClass
      */
-    private $fieldTitles;
+    private $poFieldTitles;
+    
+    /**
+     * ENUM for important fields from raw IR csv
+     * @var stdClass
+     */
+    private $irFieldTitles;
     
     /**
      * The QuickBooks Item Receipt fields that Allocadence Received Items
@@ -185,10 +191,22 @@ class AllocQuickBooks
         
         // ULTRA important field names cached into an anonymous class for better code completion
         // this is essentially an ENUM
-        $this->fieldTitles = new class() {
+        $this->poFieldTitles = new class() {
             public $receivedQty = 'Received Qty';
             public $poNum = 'PO Number';
             public $category = 'Category';
+        };
+        
+        // the fields are spelled are they are in the CSV file
+        $this->irFieldTitles = new class() {
+            public $receipt = 'Receipt';
+            public $sku = 'SKU';
+            public $quantity = 'Quantity';
+            public $unitCost = 'Unit Cost';
+            public $receivedDate = 'Received Date';
+            // PO# / Receipt#
+            public $poNum = 'PO# / Receipt#';
+            public $name = 'Name'; // vendor
         };
         
         if($isLocal) {
@@ -238,7 +256,7 @@ class AllocQuickBooks
     public function qbPurchaseOrderMap(): void {
         $f = null; // field index's from raw file
         $c = 0;
-        $t = $this->fieldTitles;
+        $t = $this->poFieldTitles;
         // qb maps
         $qbHeaderRowStr = "Vendor,Transaction Date,PO Number,Item,Quantity,Description,Rate";
         $qbHeaderRow = explode(",", $qbHeaderRowStr);
@@ -278,7 +296,7 @@ class AllocQuickBooks
                 $_warehouse = trim($po[$f['Warehouse Name']]);
                 $_received = (int)trim($po[$f[$t->receivedQty]]);
                 
-                // old way the "received items" we created, this is using the PO export CSV
+                // old way the "received items" were created, this is using the PO export CSV
                 if($_received > 0) {
                     $this->receivedItems [] = $po;
                 }
@@ -305,7 +323,7 @@ class AllocQuickBooks
                 $po [] = $qbVendor;
                 $this->poCombined [] = $po;
                 
-            } // end of the OUTER-LOOP
+            } // end of the inner loop
             
         } // end of the main loop
         
@@ -326,7 +344,7 @@ class AllocQuickBooks
         $itemReceiptFields = $this->itemReceiptFields;
         
         $f = $this->poField;
-        $t = $this->fieldTitles;
+        $t = $this->poFieldTitles;
         
         $groupByPo = $this->groupByPoNumber();
         
@@ -371,24 +389,69 @@ class AllocQuickBooks
     public function qbItemReceiptMap(): void {
         $f = null; // field index's from raw file
         $c = 0;
+        $t = $this->irFieldTitles;
         $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
         $qbItemReceiptHeaderRow = explode(",", $qbItemReceiptStr);
         $qbItemReceiptMap = ['header_row' => $qbItemReceiptHeaderRow];
         $itemReceiptFields = $this->itemReceiptFields;
-    
+        
+        // 1st create the irCombined array, create the indexed keys for the received items array
         foreach($this->allocIrExportFiles as $irFile) {
             $irArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $irFile);
             
             if($c === 0) {
+                $this->irCombined [] = $irArray[0];
                 $f = $this->indexKeys($irArray[0]);
+                // not sure adding as class field is needed or useful
                 $this->irField = $f;
                 $c++;
             }
             
-            // get rid of header row
+            // get rid of header row, it's already been added
             array_shift($irArray);
             
+            // make irCombined a 2D array
+            foreach($irArray as $item) {
+                $this->irCombined [] = $item;
+            }
+            
+            unset($irArray);
         }
+        
+        // reset counter
+        $c = 0;
+        $groupByPo = [];
+        
+        // loop over all the combined received items to group by PO Number
+        foreach($this->irCombined as $receivedItem) {
+            // skip header row
+            if($c === 0) {
+                $c++;
+                continue;
+            }
+            
+            // some POs have a blank PO val
+            $_poNum = ($receivedItem[$f[$t->poNum]]);
+            $groupByPo[$_poNum] [] = $receivedItem;
+        }
+    
+        // loop over each group to create an Item Receipt
+        foreach($groupByPo as $po) {
+            foreach($po as $ir) {
+                // Allocadence fields
+                $_receipt = trim($ir[$f[$t->receipt]]);
+                $_sku = trim($ir[$f[$t->sku]]);
+                $_quantity = trim($ir[$f[$t->quantity]]);
+                $_unitCost = trim($ir[$f[$t->unitCost]]);
+                $_receivedDate = trim($ir[$f[$t->receivedDate]]);
+                $_poNum = trim($ir[$f[$t->poNum]]);
+                $name = trim($ir[$f[$t->name]]);
+                
+                //TODO: implement the app logic
+            }
+        }
+        
+        // create each item receipt
         
     } // END OF: qbReceivingMap()
     
@@ -403,7 +466,7 @@ class AllocQuickBooks
     private function groupByPoNumber(): array {
         $grpByPo = [];
         $f = $this->poField;
-        $t = $this->fieldTitles;
+        $t = $this->poFieldTitles;
         $purchaseOrders = $this->poCombined;
         array_shift($purchaseOrders);
         
