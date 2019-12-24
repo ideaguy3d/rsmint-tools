@@ -464,18 +464,18 @@ class AllocQuickBooks
             
             // INNER LOOP 2
             // loop over each item in the sku group
-            foreach($skuGroup as $sku => $itemReceiptGroup) {
+            foreach($skuGroup as $sku => $groupByItemReceipt) {
                 $itemReceipt = [
                     // DONE - vendor map
-                    'Vendor' => $this->qbMapVendor($itemReceiptGroup[0][$f[$t->name]]),
+                    'Vendor' => $this->qbMapVendor($groupByItemReceipt[0][$f[$t->name]]),
                     // multiple vals possible
                     'Transaction Date' => '',
                     // multiple item receipts possible
                     'RefNumber' => '',
                     // DONE - item map
-                    'Item' => $itemReceiptGroup[0][$f['Category']] === 'E' ? 'Envelopes' : 'unknown',
+                    'Item' => $groupByItemReceipt[0][$f['Category']] === 'E' ? 'Envelopes' : 'unknown',
                     // calculated field
-                    'Description' => "sku: $sku",
+                    'Description' => "sku: $sku - ",
                     // calculated field "sum of all Quantities from alloc csv"
                     'Qty' => 0,
                     // multiple costs possible, BUT UNLIKELY
@@ -483,60 +483,94 @@ class AllocQuickBooks
                     // calculated field, qty * cost
                     'Amount' => 0.0,
                     // DONE - simple map
-                    'PO No.' => $itemReceiptGroup[0][$f[$t->poNum]],
+                    'PO No.' => $groupByItemReceipt[0][$f[$t->poNum]],
                 ];
                 
-                // if there is more than 1 SKU in the PO
-                if(count($itemReceiptGroup) > 1) {
-                    // INNER LOOP 3
-                    // loop over each SKU in the Purchase Order
-                    foreach($itemReceiptGroup as $key => $receivedItem) {
-                        // cache relevant Allocadence fields values
-                        $_receipt = trim($receivedItem[$f[$t->receipt]]);
-                        $_sku = trim($receivedItem[$f[$t->sku]]);
-                        $_quantity = trim($receivedItem[$f[$t->quantity]]);
-                        $_unitCost = trim($receivedItem[$f[$t->unitCost]]);
-                        $_receivedDate = trim($receivedItem[$f[$t->receivedDate]]);
-                        $_poNum = trim($receivedItem[$f[$t->poNum]]);
-                        $_name = trim($receivedItem[$f[$t->name]]);
-                        
-                        // cache relevant QB item receipt values
-                        //$qbTransactionDate = &$itemReceipt[$qb->transactionDate];
-                        //$qbRefNum = &$itemReceipt[$qb->refNumber];
-                        $qbTransactionDate = &$itemReceipt[$qb->transactionDate];
-                        $qbRefNum = &$itemReceipt[$qb->refNumber];
-                        $qbDescription = &$itemReceipt[$qb->description];
-                        $qbQty = &$itemReceipt[$qb->refNumber];
-                        $qbCost = &$itemReceipt[$qb->cost];
-                        $qbAmount = &$itemReceipt[$qb->amount];
-                        
-                        // `TRANSACTION DATE`
-                        // check if there are multiple values for received date
-                        if(empty($qbTransactionDate)) {
-                            $qbTransactionDate = $_receivedDate;
+                $qtyStr = '';
+                
+                // INNER LOOP 3
+                // loop over each SKU in the Purchase Order group
+                foreach($groupByItemReceipt as $key => $receivedItem) {
+                    // cache relevant Allocadence fields values
+                    $_receipt = trim($receivedItem[$f[$t->receipt]]);
+                    $_sku = trim($receivedItem[$f[$t->sku]]);
+                    $_quantity = trim($receivedItem[$f[$t->quantity]]);
+                    $_quantityInt = (int)$_quantity;
+                    $_unitCost = trim($receivedItem[$f[$t->unitCost]]);
+                    $_unitCostFloat = (float)trim($_unitCost);
+                    $_receivedDate = trim($receivedItem[$f[$t->receivedDate]]);
+                    $_poNum = trim($receivedItem[$f[$t->poNum]]);
+                    $_name = trim($receivedItem[$f[$t->name]]);
+                    
+                    // cache relevant QB item receipt values
+                    //$qbTransactionDate = &$itemReceipt[$qb->transactionDate];
+                    //$qbRefNum = &$itemReceipt[$qb->refNumber];
+                    $qbTransactionDate = &$itemReceipt[$qb->transactionDate];
+                    $qbRefNum = &$itemReceipt[$qb->refNumber];
+                    $qbDescription = &$itemReceipt[$qb->description];
+                    $qbQty = &$itemReceipt[$qb->qty];
+                    $qbCost = &$itemReceipt[$qb->cost];
+                    $qbAmount = &$itemReceipt[$qb->amount];
+                    
+                    // `TRANSACTION DATE`
+                    // check if there are multiple values for received date
+                    if(empty($qbTransactionDate)) {
+                        $qbTransactionDate = $_receivedDate;
+                    }
+                    else {
+                        $qbTransactionDate .= ", $_receivedDate";
+                    }
+    
+                    // date
+                    $datePattern = '~(\d+/\d+/\d+)~m';
+                    preg_match($datePattern, $_receivedDate, $dateMatch);
+                    // time
+                    $timePattern = '~(\d+:\d+.+)~';
+                    preg_match($timePattern, $_receivedDate, $timeMatch);
+                    
+                    // `REF NUMBER` & `DESCRIPTION`
+                    if(empty($qbRefNum)) {
+                        $qbRefNum = $_receipt;
+                        $d = "Receipt $_receipt received _rr_ on {$dateMatch[0]} at {$timeMatch[0]}";
+                        $qbDescription .= $d;
+                    }
+                    else {
+                        $qbRefNum .= ", $_receipt";
+                    }
+                    
+                    // `QUANTITY`
+                    $qtyFormatted = number_format($_quantityInt);
+                    $qtyStr .= "$qtyFormatted+";
+                    $qbQty += $_quantityInt;
+                    
+                    // `COST` &  `AMOUNT`
+                    if($qbCost == 0.0 || $qbCost == $_unitCost) {
+                        $qbCost = $_unitCostFloat;
+                        $qbAmount = ($qbQty * $qbCost);
+                    }
+                    else {
+                        // if there are multiple costs
+                        if($_unitCost !== $qbCost) {
+                            $qbCost .= "ERROR, unit costs: $_unitCost, $qbCost";
                         }
                         else {
-                            $qbTransactionDate .= ", $_receivedDate";
+                            $qbAmount = ($qbAmount + ($_unitCostFloat * $_quantity));
                         }
-                        
-                        // `REF NUMBER`
-                        if(empty($qbRefNum)) {
-                            $qbRefNum = $_receipt;
-                        }
-                        else {
-                            $qbRefNum .= ", $_receipt";
-                        }
-                        
-                        // `DESCRIPTION`
-                        
-                        // `QUANTITY`
-                        $qbQty += $_quantity;
-                        
-                        // `COST`
-                        
-                        // `AMOUNT`
-                    } // end of inner loop
+                    }
+                    
+                } // end of inner loop
+                
+                if(isset($qbDescription)) {
+                    $qtyStr = substr($qtyStr, 0, -1);
+                    $qbDescription = str_replace('_rr_', $qtyStr, $qbDescription);
                 }
+                
+                $itemReceipt = [
+                    array_keys($itemReceipt),
+                    array_values($itemReceipt)
+                ];
+                
+                CsvParseModel::export2csv($itemReceipt, '.\_item_receipts', "item_receipt-$sku");
             }
         }
         
