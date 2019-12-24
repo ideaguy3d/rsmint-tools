@@ -452,7 +452,7 @@ class AllocQuickBooks
         
         // OUTER LOOP
         // loop over each group to create an Item Receipt
-        foreach($groupByPo as $poGroup) {
+        foreach($groupByPo as $po => $poGroup) {
             $skuGroup = [];
             
             // INNER LOOP 1
@@ -465,6 +465,7 @@ class AllocQuickBooks
             // INNER LOOP 2
             // loop over each item in the sku group
             foreach($skuGroup as $sku => $groupByItemReceipt) {
+                $category = $groupByItemReceipt[0][$f['Category']];
                 $itemReceipt = [
                     // DONE - vendor map
                     'Vendor' => $this->qbMapVendor($groupByItemReceipt[0][$f[$t->name]]),
@@ -473,7 +474,7 @@ class AllocQuickBooks
                     // multiple item receipts possible
                     'RefNumber' => '',
                     // DONE - item map
-                    'Item' => $groupByItemReceipt[0][$f['Category']] === 'E' ? 'Envelopes' : 'unknown',
+                    'Item' => $category === 'E' ? 'Envelopes' : strpos($category, 'P') !== false ? 'Paper' : 'unknown',
                     // calculated field
                     'Description' => "sku: $sku - ",
                     // calculated field "sum of all Quantities from alloc csv"
@@ -570,7 +571,7 @@ class AllocQuickBooks
                     array_values($itemReceipt)
                 ];
                 
-                CsvParseModel::export2csv($itemReceipt, '.\_item_receipts', "item_receipt-$sku");
+                CsvParseModel::export2csv($itemReceipt, '.\_item_receipts', "item-receipt_{$po}_$sku");
             }
         }
         
