@@ -336,54 +336,6 @@ class AllocQuickBooks
     /**
      * Map Allocadence Received Items to QuickBooks.
      *
-     * This functions scans data from the PO export CSV, not the received inventory CSV
-     * The function will mutate the class field $receivedItems.
-     */
-    public function qbReceivingMap(): void {
-        $items = [];
-        $itemReceiptFields = $this->itemReceiptFields;
-        
-        $f = $this->poField;
-        $t = $this->poFieldTitles;
-        
-        $groupByPo = $this->groupByPoNumber();
-        
-        // po A-00155 = E10WH-FULLW, E9WH-1W, E10BK-1W-FC-BOX, E10WH-HW-FC-BOX
-        foreach($this->receivedItems as $receipt) {
-            $_received = $receipt[$f[$t->receivedQty]];
-            $_poNum = $receipt[$f[$t->poNum]];
-            
-            // W/the current data set there will only be 26 joins because only 26 items have
-            // been received according to Allocadence (12-9-19@8:19pm)
-            $joinOnPoGroup = $groupByPo[$_poNum] ?? null;
-            if($joinOnPoGroup) {
-                // each PO can only have 2 types of items E or P
-                $poPaper = ['Description' => '', 'Amount' => 0];
-                $poEnvelopes = $itemReceiptFields;
-                
-                // each $poGroup is the raw rec exported from Alloc with the qb_vendor field appended
-                //... now what? These are the received items with all the data Alloc gives
-                // $receipt is the the received item raw record whose "qty received > 0"
-                foreach($joinOnPoGroup as $i => $poGroup) {
-                    $qbVendor = $joinOnPoGroup[0][$f['qb_vendor']];
-                    $items[$_poNum] = ['Vendor' => $qbVendor];
-                    $_receivedQty = (int)$poGroup[$f[$t->receivedQty]];
-                    $_itemType = $poGroup[$f[$t->category]];
-                    $_sku = $poGroup[0];
-                    if($_itemType === 'E') {
-                        $poEnvelopes['Description'] .= " | $_sku";
-                        $poEnvelopes['Amount'] += $_receivedQty;
-                    }
-                }
-                $items[$_poNum]['Amount'] += $_received;
-            }
-        }
-        
-    } // END OF: qbReceivingMap()
-    
-    /**
-     * Map Allocadence Received Items to QuickBooks.
-     *
      * This function will use the received inventory CSV
      */
     public function qbItemReceiptMap(): void {
@@ -416,6 +368,7 @@ class AllocQuickBooks
             if($c === 0) {
                 $this->irCombined [] = $irArray[0];
                 $f = $this->indexKeys($irArray[0]);
+                
                 // not sure adding as class field is needed or useful
                 $this->irField = $f;
                 $c++;
@@ -575,9 +528,7 @@ class AllocQuickBooks
             }
         }
         
-        // create each item receipt
-        
-    } // END OF: qbReceivingMap()
+    } // END OF: qbItemReceiptsMap()
     
     /**
      * This function will operate on the Alloc Mapped QB orders and group them,
