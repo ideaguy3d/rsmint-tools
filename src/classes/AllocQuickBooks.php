@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 namespace Redstone\Tools;
 
 use stdClass;
@@ -24,8 +23,8 @@ class AllocQuickBooks
     private $downloadsFolder;
     
     /**
-     * The raw fields for received items. PHP adds recs to this array IF the `Received Qty` is greater than 0
-     * This uses the PO export CSV
+     * The raw fields for received items. PHP adds recs to this array IF the
+     * `Received Qty` is greater than 0. This uses the Alloc PO export CSV.
      * @var array
      */
     private $receivedItems;
@@ -189,15 +188,15 @@ class AllocQuickBooks
         
         $this->irRawHeader = [];
         
-        // ULTRA important field names cached into an anonymous class for better code completion
-        // this is essentially an ENUM
+        // ULTRA important field names cached into an anonymous class for better
+        // code completion this is essentially an ENUM
         $this->poFieldTitles = new class() {
             public $receivedQty = 'Received Qty';
             public $poNum = 'PO Number';
             public $category = 'Category';
         };
         
-        // the fields are spelled are they are in the CSV file
+        // the fields are spelled as they are in the Alloc CSV file
         $this->irFieldTitles = new class() {
             public $receipt = 'Receipt';
             public $sku = 'SKU';
@@ -335,8 +334,7 @@ class AllocQuickBooks
     
     /**
      * Map Allocadence Received Items to QuickBooks.
-     *
-     * This function will use the received inventory CSV
+     * This function will use the received inventory CSV.
      */
     public function qbItemReceiptMap(): void {
         $f = null; // field index's from raw file
@@ -398,9 +396,15 @@ class AllocQuickBooks
                 continue;
             }
             
-            // some POs have a blank PO val
+            // some POs have a blank PO value
             $_poNum = trim($receivedItem[$f[$t->poNum]]);
             $groupByPo[$_poNum] [] = $receivedItem;
+        }
+        
+        function map_item($category) {
+            if($category === 'E') return 'Envelopes';
+            else if (strpos($category, 'P') !== false) return 'Paper';
+            else return 'unknown';
         }
         
         // OUTER LOOP
@@ -418,7 +422,7 @@ class AllocQuickBooks
             // INNER LOOP 2
             // loop over each item in the sku group
             foreach($skuGroup as $sku => $groupByItemReceipt) {
-                $category = $groupByItemReceipt[0][$f['Category']];
+                $ir_category = $groupByItemReceipt[0][$f['Category']];
                 $itemReceipt = [
                     // DONE - vendor map
                     'Vendor' => $this->qbMapVendor($groupByItemReceipt[0][$f[$t->name]]),
@@ -427,7 +431,7 @@ class AllocQuickBooks
                     // multiple item receipts possible
                     'RefNumber' => '',
                     // DONE - item map
-                    'Item' => $category === 'E' ? 'Envelopes' : strpos($category, 'P') !== false ? 'Paper' : 'unknown',
+                    'Item' => map_item($ir_category),
                     // calculated field
                     'Description' => "sku: $sku - ",
                     // calculated field "sum of all Quantities from alloc csv"
@@ -519,14 +523,14 @@ class AllocQuickBooks
                     $qbDescription = str_replace('_rr_', $qtyStr, $qbDescription);
                 }
                 
-                $itemReceipt = [
-                    array_keys($itemReceipt),
-                    array_values($itemReceipt)
-                ];
+                $itemReceipt = [array_keys($itemReceipt), array_values($itemReceipt)];
                 
-                CsvParseModel::export2csv($itemReceipt, '.\_item_receipts', "item-receipt_{$po}_$sku");
+                CsvParseModel::export2csv(
+                    $itemReceipt, '.\_item_receipts', "item-receipt_{$po}_$sku"
+                );
             }
-        }
+            
+        } // end of outer loop
         
     } // END OF: qbItemReceiptsMap()
     
