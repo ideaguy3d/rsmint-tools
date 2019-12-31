@@ -401,10 +401,15 @@ class AllocQuickBooks
             $groupByPo[$_poNum] [] = $receivedItem;
         }
         
-        function map_item($category) {
+        function map_item($category, $sku) {
             if($category === 'E') return 'Envelopes';
-            else if (strpos($category, 'P') !== false) return 'Paper';
-            else return 'unknown';
+            else if(strpos($category, 'P') !== false) return 'Paper';
+            else if(strpos(strtolower($sku), 'freight') !== false) {
+                return 'Freight In (Non Mail)';
+            }
+            else {
+                return 'unknown';
+            }
         }
         
         // OUTER LOOP
@@ -422,18 +427,19 @@ class AllocQuickBooks
             // INNER LOOP 2
             // loop over each item in the sku group
             foreach($skuGroup as $sku => $groupByItemReceipt) {
-                $ir_category = $groupByItemReceipt[0][$f['Category']];
+                $category = $groupByItemReceipt[0][$f['Category']];
+                $item = $groupByItemReceipt[0][$f['SKU']];
                 $itemReceipt = [
                     // DONE - vendor map
                     'Vendor' => $this->qbMapVendor($groupByItemReceipt[0][$f[$t->name]]),
-                    // multiple vals possible
+                    // multiple values possible
                     'Transaction Date' => '',
                     // multiple item receipts possible
                     'RefNumber' => '',
                     // DONE - item map
-                    'Item' => map_item($ir_category),
+                    'Item' => map_item($category, $item),
                     // calculated field
-                    'Description' => "sku: $sku - ",
+                    'Description' => "sku: $sku ",
                     // calculated field "sum of all Quantities from alloc csv"
                     'Qty' => 0,
                     // multiple costs possible, BUT UNLIKELY
@@ -445,6 +451,7 @@ class AllocQuickBooks
                 ];
                 
                 $qtyStr = '';
+                $qtyAr = [];
                 
                 // INNER LOOP 3
                 // loop over each SKU in the Purchase Order group
@@ -478,27 +485,34 @@ class AllocQuickBooks
                     else {
                         $qbTransactionDate .= ", $_receivedDate";
                     }
-    
+                    
                     // date
-                    $datePattern = '~(\d+/\d+/\d+)~m';
+                    $datePattern = '~(\d+/\d+/\d+)~';
                     preg_match($datePattern, $_receivedDate, $dateMatch);
                     // time
                     $timePattern = '~(\d+:\d+.+)~';
                     preg_match($timePattern, $_receivedDate, $timeMatch);
                     
+                    // format the quantity
+                    $qtyFormatted = number_format($_quantityInt);
+                    $qtyStr = "$qtyFormatted+";
+                    
                     // `REF NUMBER` & `DESCRIPTION`
                     if(empty($qbRefNum)) {
                         $qbRefNum = $_receipt;
+                        $qtyAr[] = $qtyStr;
                         $d = "Receipt $_receipt received _rr_ on {$dateMatch[0]} at {$timeMatch[0]}";
                         $qbDescription .= $d;
                     }
                     else {
+                        $qtyAr[] = $qtyStr;
                         $qbRefNum .= ", $_receipt";
+                        $d = " & Receipt $_receipt received _rr_ on {$dateMatch[0]} at {$timeMatch[0]}";
+                        $qbDescription .= $d;
                     }
                     
                     // `QUANTITY`
-                    $qtyFormatted = number_format($_quantityInt);
-                    $qtyStr .= "$qtyFormatted+";
+                    
                     $qbQty += $_quantityInt;
                     
                     // `COST` &  `AMOUNT`
@@ -509,18 +523,27 @@ class AllocQuickBooks
                     else {
                         // if there are multiple costs
                         if($_unitCost !== $qbCost) {
-                            $qbCost .= "ERROR, unit costs: $_unitCost, $qbCost";
+                            $qbCost .= "ERROR - multiple unit costs: $_unitCost, $qbCost.";
                         }
                         else {
                             $qbAmount = ($qbAmount + ($_unitCostFloat * $_quantity));
                         }
                     }
-                    
                 } // end of inner loop
                 
+                // add the formatted quantity string
                 if(isset($qbDescription)) {
-                    $qtyStr = substr($qtyStr, 0, -1);
-                    $qbDescription = str_replace('_rr_', $qtyStr, $qbDescription);
+                    if(count($qtyAr) === 1) {
+                        $qtyStr = substr($qtyStr, 0, -1);
+                        $qbDescription = str_replace('_rr_', $qtyStr, $qbDescription);
+                    }
+                    else {
+                        foreach($qtyAr as $qty) {
+                            $qty = substr($qty, 0, -1);
+                            $pos = strpos($qbDescription, '_rr_');
+                            $qbDescription = substr_replace($qbDescription, $qty, $pos, 4);
+                        }
+                    }
                 }
                 
                 $itemReceipt = [array_keys($itemReceipt), array_values($itemReceipt)];

@@ -15,7 +15,7 @@ use Redstone\Tools\AllocQuickBooks;
 return function(App $app) {
     
     if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
-        $_SERVER['REQUEST_URI'] = '/alloc/qb?po=no&rec=yes';
+        $_SERVER['REQUEST_URI'] = '/alloc/qb?po=yes&rec=yes';
         $_SERVER['REQUEST_METHOD'] = 'GET';
     }
     
