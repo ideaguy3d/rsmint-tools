@@ -82,6 +82,13 @@
         <documentelements left="20" top="70" width="85" height="6" align="L" fontsize="12"
                           datasourcefield="suppliercountry" type="TEXT"></documentelements>
 
+        <!-- NEW SHIP METHOD dsf = pohshipmethod OR mylist1
+        <documentelements left="100" top="30" width="85" height="8" align="L" fontsize="12" fontbold="B"
+                          value="Ship Method" type="TEXT"></documentelements>
+        -->
+        <documentelements left="120" top="30" width="90" height="10" align="L" fontsize="14" textcolor="#cd5c5c"
+                          datasourcefield="mylist1" type="TEXT"></documentelements>
+
         <!-- STYLE: background rs1red#E6897f, whitesmoke#F5F5F5-->
         <documentelements left="120" top="40" width="85" height="6" type="TEXT" allborders="Y" align="C" backcolor="#F5F5F5"></documentelements>
         <!-- KEY: SHIP TO -->
@@ -142,7 +149,7 @@
         <documentelements left="20" top="0" width="35" height="6" align="C" fontsize="12" allborders="Y"
                           datasourcefield="polqty" type="TEXT" wrap="Y"></documentelements>
 
-        <!--  
+        <!-- Unit of Measure
         <documentelements left="35" top="0" width="20" height="6" align="L" fontsize="12" allborders="Y"
                           datasourcefield="poluom" type="TEXT" wrap="Y"></documentelements>
         -->
