@@ -15,7 +15,7 @@ class AppGlobals
 {
     //-------------------------------------------------------------
     // TURN DEBUG MODE on OR off, then set the route in routes.php
-    public static $NINJA_AUTO_DEBUG = true;
+    public static $NINJA_AUTO_DEBUG = false;
     //-------------------------------------------------------------
     
     //-------------------------------------------------------------
@@ -35,22 +35,14 @@ class AppGlobals
             : 'C:\inetpub\wwwroot\tools\uploads';
     }
     
-    public static function PathToNinjaCommissionCsvDirectory() {
-        //TODO: try to figure out how to cache whether current env is local or production
-        return (gethostname() === 'Julius1')
-            ? 'C:\xampp\htdocs\ninja\app\commission-csv'
-            : 'C:\inetpub\wwwroot\ninja\app\commission-csv';
-    }
-    
     public static function isLocalHost(): bool {
         return (gethostname() === 'Julius1');
     }
     
-    public static function LogComAutoInfo(string $info): void {
+    public static function rsLogInfo(string $info): void {
         // fopen(), fwrite(), fclose()
         $handle = null;
         $newLines = "\n\r\n\r";
-        $info = "The accounting and coordinator data are different sizes ~routes.php line 333 ish";
         $info = substr_replace($info, $newLines, 0, 0);
         $info = substr_replace($info, $newLines, strlen($info), 0);
         

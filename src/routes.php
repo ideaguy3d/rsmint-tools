@@ -10,7 +10,7 @@ use Redstone\Tools\EncodeRemove;
 use Redstone\Tools\EncodeRemoveSql;
 use Redstone\Tools\AppGlobals;
 use Redstone\Tools\RsmSuppress;
-use Redstone\Tools\AllocQuickBooks;
+use Redstone\Tools\AllocadenceQuickBooks;
 
 return function(App $app) {
     
@@ -120,7 +120,7 @@ return function(App $app) {
             $po = $qStr['po'] ?? null; // yes or no
             // 'Receiving' query value
             $rec = $qStr['rec'] ?? null; // // yes or no
-            $qbAlloc = new AllocQuickBooks();
+            $qbAlloc = new AllocadenceQuickBooks();
     
             // route helper functions
             function go($q) {
@@ -320,7 +320,7 @@ return function(App $app) {
         }
     );
     
-    /**  .17/redstone/tools/comauto
+    /** .17/redstone/tools/comauto
      *
      * this will render the file upload tool to allow comauto to become self service
      * it is intended to be iframe'd from the UI being built with the grunt build system
@@ -332,7 +332,7 @@ return function(App $app) {
      */
     $app->get('/comauto-upload2',
         function(Request $request, Response $response, array $args) use ($container) {
-            $container->get('renderer')->render($response, 'temp.comauto-upload.phtml', $args);
+            return $container->get('renderer')->render($response, 'temp.comauto-upload.phtml', $args);
         }
     );
     

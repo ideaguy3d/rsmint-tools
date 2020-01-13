@@ -14,13 +14,16 @@ use stdClass;
  *
  * @package Redstone\Tools
  */
-class AllocQuickBooks
+class AllocadenceQuickBooks
 {
     /**
      * The windows downloads folder path
      * @var string
      */
     private $downloadsFolder;
+    
+    private $poExportPath = '_purchase_orders';
+    private $poFileName;
     
     /**
      * The raw fields for received items. PHP adds recs to this array IF the
@@ -203,7 +206,8 @@ class AllocQuickBooks
             public $quantity = 'Quantity';
             public $unitCost = 'Unit Cost';
             public $receivedDate = 'Received Date';
-            // PO# / Receipt#
+            
+            // PO# and Receipt#
             public $poNum = 'PO# / Receipt#';
             public $name = 'Name'; // vendor
         };
@@ -256,6 +260,7 @@ class AllocQuickBooks
         $f = null; // field index's from raw file
         $c = 0;
         $t = $this->poFieldTitles;
+        
         // qb maps
         $qbHeaderRowStr = "Vendor,Transaction Date,PO Number,Item,Quantity,Description,Rate";
         $qbHeaderRow = explode(",", $qbHeaderRowStr);
@@ -328,7 +333,18 @@ class AllocQuickBooks
         
         $this->qbPurchaseOrderMap = $qbPurchaseOrderMap;
         
-        CsvParseModel::export2csv($qbPurchaseOrderMap, './', 'qb_mapped_po');
+        // h:i:s a
+        $date = date('m/d/Y', time());
+        try {
+            $date = new \DateTime($date);
+        }
+        catch(\Throwable $e) {
+            AppGlobals::rsLogInfo($e->getMessage());
+        }
+        $week = (int)$date->format("W")- 1;
+        $this->poFileName = $file = "w$week-purchase_orders";
+        $path = $this->poExportPath;
+        CsvParseModel::export2csv($qbPurchaseOrderMap, $path, $file);
         
     } // END OF: qbPurchaseOrderMap()
     

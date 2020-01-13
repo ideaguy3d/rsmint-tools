@@ -1,10 +1,10 @@
 <?php
-
 /**
  * master branch
  */
 
 ini_set('memory_limit', '512M');
+date_default_timezone_set('America/Los_Angeles');
 
 if(PHP_SAPI == 'cli-server') {
     // To help the built-in PHP dev server, check if the request was actually for
