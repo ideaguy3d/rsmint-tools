@@ -168,7 +168,7 @@ abstract class RsmSuppressAbstract
         $suppressionKeys = [];
         $wasBestCase = false; // assume worst case
         
-        // $keys are lowercase, $keysOrig is their original case
+        // LAMBDA - $keys are lowercase, $keysOrig is their original case
         $getBestCase = function(array $keys, array $keysOrig) use (
             $bestCase, &$wasBestCase
         ): array {

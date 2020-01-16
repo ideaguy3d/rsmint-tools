@@ -109,7 +109,8 @@ return function(App $app) {
     );
     
     /**
-     * This will be the route that does the Allocadence PO and Receiving to QuickBooks mapping
+     * ALLOCADENCE Purchase Order & Item Receipts
+     * This is the route that does the Allocadence PO and Receiving to QuickBooks mapping
      *
      * ?po=<yes||no>&rec=<yes||no>
      */
@@ -142,8 +143,9 @@ return function(App $app) {
     
     /** .17/redstone/tools/comauto-upload2/upload
      *
-     * The ComAuto self service iframe will post a file to this route
-     * so that the normal process of of "comauto" can get invoked.
+     * The ComAuto self service iframe will post a file to this route so that the normal
+     * process of "comauto" can get invoked.
+     *
      */
     $app->post('/comauto-upload2/upload',
         function(Request $request, Response $response) use ($container, $app) {

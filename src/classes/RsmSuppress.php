@@ -39,7 +39,7 @@ class RsmSuppress extends RsmSuppressAbstract
         }
         
         // this may not be the lit
-        $this->suppressId =  substr($baseFile, 0, 8);
+        $this->suppressId = substr($baseFile, 0, 8);
         $folder = AppGlobals::PathToUploadDirectory();
         $this->baseFileFullPath = $folder . DIRECTORY_SEPARATOR . $baseFile;
         $this->exportPath = $folder;
