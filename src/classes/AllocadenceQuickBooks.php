@@ -128,7 +128,14 @@ class AllocadenceQuickBooks
         $isLocal = AppGlobals::isLocalHost();
         
         $this->qbVendors = CsvParseModel::specificCsv2array('./csv', 'rs-vendors.csv');
-        $this->allocSuppliers = CsvParseModel::specificCsv2array('./csv', 'suppliers.csv');
+        
+        // read the Allocadence suppliers CSV into memory
+        $allocSuppliers = CsvParseModel::specificCsv2array('./csv', 'suppliers.csv');
+        // create hash's real quick
+        foreach($allocSuppliers as $i => $supplierRec) {
+            $allocSuppliers[$i] = array_combine(array_values($allocSuppliers[0]), $supplierRec);
+        }
+        $this->allocSuppliers = $allocSuppliers;
         
         $this->itemReceiptFields = [
             // [Name]
@@ -635,7 +642,7 @@ class AllocadenceQuickBooks
      *
      * @return string
      */
-    private function qbMapVendor(string $allocSupplier): string {
+    private function qbMapVendor(string $allocSupplier): ?string {
         $qbVendorsOld = [
             'Cathy Welsh Envelopes',
             'Ennis, Inc',
@@ -647,10 +654,18 @@ class AllocadenceQuickBooks
             'Wilmer',
         ];
         
-        // [["Ennis, Inc", 0],["Wilmer", 1]... etc.]
+        // [["Ennis, Inc", 0], ["Wilmer", 1]... etc.]
         $qbVendors = $this->qbVendors;
+        $matchedAllocSupplier = null;
+    
+        foreach($this->allocSuppliers as $supplier) {
+            if(trim($allocSupplier) == trim($supplier)) {
+                $matchedAllocSupplier = $supplier;
+                break;
+            }
+        }
         
-        $supplier = strtolower($allocSupplier);
+        $supplier = strtolower($matchedAllocSupplier[]);
         $supplier = substr($supplier, 0, strpos($supplier, ' '));
         
         foreach($qbVendors as $vendorRec) {
@@ -661,7 +676,7 @@ class AllocadenceQuickBooks
             }
         }
         
-        return 'not found';
+        return null;
         
     } // END OF: qbMapVendor()
     
