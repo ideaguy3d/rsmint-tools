@@ -43,7 +43,10 @@ class CsvParseModel implements ICsvParseModel
     }
     
     public static function specificCsv2array(string $path2folder, string $csvName): array {
-        $csvFile = "$path2folder\\$csvName";
+        if(strpos($csvName, '.csv') === false) {
+            $csvName = "$csvName.csv";
+        }
+        $csvFile = "$path2folder/$csvName";
         $csv = [];
         $count = 0;
         

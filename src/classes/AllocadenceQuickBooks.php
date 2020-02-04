@@ -80,6 +80,19 @@ class AllocadenceQuickBooks
     private $poRawHeader;
     
     /**
+     * The QB vendors exported from QuickBooks with an assigned ID to join on.
+     * @var array
+     */
+    private $qbVendors;
+    
+    /**
+     * I manually scraped the suppliers to get this CSV by copying the HTML and using
+     * Instant Scraper on that.
+     * @var array
+     */
+    private $allocSuppliers;
+    
+    /**
      * The raw header row from the received items just to have as reference using the
      *  var_export() while in debug mode.
      * @var array
@@ -104,26 +117,7 @@ class AllocadenceQuickBooks
      *
      * @var array
      */
-    public $itemReceiptFields = [
-        // [Name]
-        'Vendor' => '',
-        // [Received Data]
-        'Transaction Date' => '',
-        // [Receipt]
-        'RefNumber' => '',
-        // [SKU]
-        'Item' => '',
-        // [Description]
-        'Description' => '',
-        // [Quantity]
-        'Qty' => '',
-        // [Unit Cost]
-        'Cost' => '',
-        // [Quantity] * [Unit Cost]
-        'Amount' => 0,
-        // [PO # / Receipt #]
-        'PO No.' => '',
-    ];
+    public $itemReceiptFields;
     
     /**
      * AllocQuickBooks constructor.
@@ -132,6 +126,30 @@ class AllocadenceQuickBooks
         $localDownloads = 'C:\Users\julius\Downloads';
         $proDownloads = 'C:\Users\RSMADMIN\Downloads';
         $isLocal = AppGlobals::isLocalHost();
+        
+        $this->qbVendors = CsvParseModel::specificCsv2array('./csv', 'rs-vendors.csv');
+        $this->allocSuppliers = CsvParseModel::specificCsv2array('./csv', 'suppliers.csv');
+        
+        $this->itemReceiptFields = [
+            // [Name]
+            'Vendor' => '',
+            // [Received Data]
+            'Transaction Date' => '',
+            // [Receipt]
+            'RefNumber' => '',
+            // [SKU]
+            'Item' => '',
+            // [Description]
+            'Description' => '',
+            // [Quantity]
+            'Qty' => '',
+            // [Unit Cost]
+            'Cost' => '',
+            // [Quantity] * [Unit Cost]
+            'Amount' => 0,
+            // [PO # / Receipt #]
+            'PO No.' => '',
+        ];
         
         // var_export() of PO export raw header row while debugging just to have as reference
         $this->poRawHeader = [
@@ -194,9 +212,11 @@ class AllocadenceQuickBooks
         // ULTRA important field names cached into an anonymous class for better
         // code completion this is essentially an ENUM
         $this->poFieldTitles = new class() {
-            public $receivedQty = 'Received Qty';
             public $poNum = 'PO Number';
+            // E, P, PS
             public $category = 'Category';
+            // vendor
+            public $supplier = 'Supplier';
         };
         
         // the fields are spelled as they are in the Alloc CSV file
@@ -298,12 +318,6 @@ class AllocadenceQuickBooks
                 $_sku = trim($po[$f['SKU']]);
                 $_description = trim($po[$f['Description']]);
                 $_warehouse = trim($po[$f['Warehouse Name']]);
-                $_received = (int)trim($po[$f[$t->receivedQty]]);
-                
-                // old way the "received items" were created, this is using the PO export CSV
-                if($_received > 0) {
-                    $this->receivedItems [] = $po;
-                }
                 
                 $value1 = $po[$f['Value']];
                 $value = str_replace(',', '', $value1);
@@ -622,7 +636,7 @@ class AllocadenceQuickBooks
      * @return string
      */
     private function qbMapVendor(string $allocSupplier): string {
-        $qbVendors = [
+        $qbVendorsOld = [
             'Cathy Welsh Envelopes',
             'Ennis, Inc',
             'Kelly Paper',
@@ -633,14 +647,17 @@ class AllocadenceQuickBooks
             'Wilmer',
         ];
         
+        // [["Ennis, Inc", 0],["Wilmer", 1]... etc.]
+        $qbVendors = $this->qbVendors;
+        
         $supplier = strtolower($allocSupplier);
         $supplier = substr($supplier, 0, strpos($supplier, ' '));
         
-        foreach($qbVendors as $vendor) {
-            $vendorLower = strtolower($vendor);
+        foreach($qbVendors as $vendorRec) {
+            $vendorLower = strtolower($vendorRec[0]);
             $isVendor = (strpos($vendorLower, $supplier) !== false);
             if($isVendor) {
-                return $vendor;
+                return $vendorRec;
             }
         }
         

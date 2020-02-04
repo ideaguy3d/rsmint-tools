@@ -235,7 +235,6 @@ return function(App $app) {
                 $log->info("\n\r$info $sanitizedFilePath\n\r");
                 return $response->getBody()->write('In Debug Mode.');
             }
-            
             //-- NOT in debug mode, it's go time --\\
             else if(
                 $baseFile && $baseFile->getError() === UPLOAD_ERR_OK && $suppressFiles
@@ -246,7 +245,7 @@ return function(App $app) {
                 );
                 
                 $suppressFilesPrint = print_r($suppressFiles, true);
-                $log->info("[ suppression files = $suppressFiles ]");
+                $log->info("[ suppression files = $suppressFilesPrint ]");
                 
                 $suppress = new RsmSuppress($baseFileName, $suppressionFileNames, $log);
                 $suppress->suppressionStart();
@@ -258,14 +257,12 @@ return function(App $app) {
                 $contentType = 'Content-Type';
                 $contentTransferEncoding = 'Content-Transfer-Encoding';
                 
-                
                 /* -- test file path to see if this works --
                 $testSuppressed = 'C:\xampp\htdocs\tools\uploads\test\suppressed_test.csv';
                 $testSuppressed = str_replace('\\', '/', $testSuppressed);
                 $testRemoved = 'C:\xampp\htdocs\tools\uploads\test\removed_test.csv';
                 $testRemoved = str_replace('\\', '/', $testRemoved);
                 */
-                
                 
                 $suppressed = $suppress->fullPathToSuppressed;
                 $removed = $suppress->fullPathToRemoves;
@@ -311,7 +308,6 @@ return function(App $app) {
                 
                 return $response->withRedirect("../../ap2.php?file=$zipName");
             }
-            
             // something broke :'(
             else {
                 $errorInfo = '<h1>No file selected and the submit button was clicked</h1> <br/>';
