@@ -293,27 +293,37 @@ class AllocadenceQuickBooks
     public function qbPurchaseOrderMap(): void {
         $f = null; // field index's from raw file
         $c = 0;
-        $t = $this->poFieldTitles;
+        $facilities = '';
         
         // qb maps
         $qbHeaderRowStr = "Vendor,Transaction Date,PO Number,Item,Quantity,Description,Rate";
         $qbHeaderRow = explode(",", $qbHeaderRowStr);
         $qbPurchaseOrderMap = [$qbHeaderRow];
         
-        // O(4 * ~100) = O(~400) "4 CSVs with roughly a worst case of 100 recs each"
-        // OUTER LOOP - worst case = 4 "because we only have 4 facilities", but really this is going to loop over each
-        // file that contains "inboundexportbydate" in the downloads folder and convert each downloaded file to an array
-        // and UNION them
+        // MAIN_LOOP: loop over each file that contains "inboundexportbydate" in the downloads folder & UNION them,
+        // worst case = O(4 * ~100) "4 CSVs with roughly a worst case of 100 recs each"
         foreach($this->allocPoExportFiles as $poFile) {
             $poArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $poFile);
             
-            // get header row real quick
+            // get header row real quick, 1st should be Sacramento
             if($c === 0) {
                 // add the qb mapped vendor to the output QB mapped array
                 $poArray[0] [] = 'qb_vendor';
                 $f = $this->indexKeys($poArray[0]);
                 $this->poField = $f;
-                $c++;
+                $facilities .= ' SAC';
+            }
+            // 2nd file should be Denver
+            else if($c === 1) {
+                $facilities .= ' DEN';
+            }
+            // 3rd is Atlanta
+            else if($c === 2) {
+                $facilities .= ' ATL';
+            }
+            // 4th is Envelopes & Forms
+            else if($c === 3) {
+                $facilities .= ' E&F';
             }
             
             // get rid of header row real quick
@@ -321,7 +331,7 @@ class AllocadenceQuickBooks
             
             // INNER LOOP worst case = < ~100 "depends on how many purchase orders we make in a week, probably < 50"
             //- created the QB mapped 2D array
-            foreach($poArray as $po) {
+            foreach($poArray as $i => $po) {
                 // Allocadence fields
                 $_supplier = trim($po[$f['Supplier']]);
                 $_requiredBy = trim($po[$f['Required By']]);
@@ -337,8 +347,8 @@ class AllocadenceQuickBooks
                 $value = str_replace(',', '', $value1);
                 $_value = (float)$value;
                 
-                $_qbDescription = "sku: $_sku, $_description, $_supplier, Category: $_category, "
-                    . "Amount: $ {$value1} for $_warehouse";
+                $tDes = 'sku: %s, %s, %s, Category: %s, Amount: $ %f for %s';
+                $_qbDescription = sprintf($tDes, $_sku, $_description, $_supplier, $_category, $value1, $_warehouse);
                 
                 $qbVendor = $this->qbMapVendor($_supplier);
                 
@@ -346,7 +356,7 @@ class AllocadenceQuickBooks
                     'Vendor' => $qbVendor,
                     'Transaction Date' => $_requiredBy,
                     'PO Number' => $_poNum,
-                    'Item' => ($_category === 'E' ? 'Envelopes' : 'Paper'),
+                    'Item' => 'Purchase Order:' . ($_category === 'E' ? 'Envelopes' : 'Paper'),
                     'Quantity' => number_format($_orderedQty),
                     'Description' => $_qbDescription,
                     'Rate' => $_orderedQty !== 0 ? (round($_value / $_orderedQty, 7)) : 0,
@@ -356,7 +366,8 @@ class AllocadenceQuickBooks
                 $this->poCombined [] = $po;
                 
             } // end of the inner loop
-            
+    
+            $c++;
         } // end of the main loop
         
         $this->qbPurchaseOrderMap = $qbPurchaseOrderMap;
@@ -369,8 +380,8 @@ class AllocadenceQuickBooks
         catch(\Throwable $e) {
             AppGlobals::rsLogInfo($e->getMessage());
         }
-        $week = (int)$date->format("W")- 1;
-        $this->poFileName = $file = "purchase-orders_2020-week-$week";
+        $week = (int)$date->format("W") - 1;
+        $this->poFileName = $file = "purchase orders 2020 week $week $facilities";
         $path = $this->poExportPath;
         CsvParseModel::export2csv($qbPurchaseOrderMap, $path, $file);
         
@@ -385,7 +396,6 @@ class AllocadenceQuickBooks
         $c = 0;
         $t = $this->irFieldTitles;
         $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
-        $qbItemReceiptHeaderRow = explode(",", $qbItemReceiptStr);
         
         // enum for QB Item Receipts fields
         $qb = new class() {
@@ -650,7 +660,7 @@ class AllocadenceQuickBooks
         // [["Ennis, Inc", 0], ["Wilmer", 1]... etc.]
         $qbVendors = $this->qbVendors;
         $matchedAllocSupplier = null;
-    
+        
         foreach($this->allocSuppliers as $supplierRec) {
             if(trim($allocSupplier) == trim($supplierRec['vendor'])) {
                 $matchedAllocSupplier = $supplierRec;
