@@ -294,6 +294,8 @@ class AllocadenceQuickBooks
         $f = null; // field index's from raw file
         $c = 0;
         $facilities = '';
+        // formatted description for sprintf() in PO loop
+        $fDes = 'sku: %s, %s, %s, Category: %s, Amount: $ %s for %s';
         
         // qb maps
         $qbHeaderRowStr = "Vendor,Transaction Date,PO Number,Item,Quantity,Description,Rate";
@@ -346,9 +348,7 @@ class AllocadenceQuickBooks
                 $value1 = $po[$f['Value']];
                 $value = str_replace(',', '', $value1);
                 $_value = (float)$value;
-                
-                $tDes = 'sku: %s, %s, %s, Category: %s, Amount: $ %f for %s';
-                $_qbDescription = sprintf($tDes, $_sku, $_description, $_supplier, $_category, $value1, $_warehouse);
+                $_qbDescription = sprintf($fDes, $_sku, $_description, $_supplier, $_category, $value1, $_warehouse);
                 
                 $qbVendor = $this->qbMapVendor($_supplier);
                 
@@ -661,6 +661,7 @@ class AllocadenceQuickBooks
         $qbVendors = $this->qbVendors;
         $matchedAllocSupplier = null;
         
+        // match the current $allocSupplier to a supplier in the Alloc Supplier CSV
         foreach($this->allocSuppliers as $supplierRec) {
             if(trim($allocSupplier) == trim($supplierRec['vendor'])) {
                 $matchedAllocSupplier = $supplierRec;
@@ -670,6 +671,7 @@ class AllocadenceQuickBooks
         
         $supplierId = strtolower($matchedAllocSupplier['vendor_id']);
         
+        // match the [vendor_id] from the allocadence suppliers csv to the quickbooks vendors csv
         foreach($qbVendors as $vendorRec) {
             // _HARD CODED 0 & 1 because I created the QB Vendor CSV: 0 = vendor name, 1 = vendor id
             if($vendorRec[1] === $supplierId) {
@@ -677,7 +679,7 @@ class AllocadenceQuickBooks
             }
         }
         
-        return null;
+        return "Vendor $allocSupplier Not Found";
         
     } // END OF: qbMapVendor()
     
