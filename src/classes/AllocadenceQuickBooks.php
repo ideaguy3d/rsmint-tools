@@ -669,12 +669,10 @@ class AllocadenceQuickBooks
             }
         }
         
-        $supplierId = strtolower($matchedAllocSupplier['vendor_id']);
-        
         // match the [vendor_id] from the allocadence suppliers csv to the quickbooks vendors csv
         foreach($qbVendors as $vendorRec) {
-            // _HARD CODED 0 & 1 because I created the QB Vendor CSV: 0 = vendor name, 1 = vendor id
-            if($vendorRec[1] === $supplierId) {
+            // _HARD CODED: 0 = vendor name, 1 = vendor id
+            if($vendorRec[1] === $matchedAllocSupplier['vendor_id']) {
                 return $vendorRec[0];
             }
         }
