@@ -366,7 +366,7 @@ class AllocadenceQuickBooks
                 $this->poCombined [] = $po;
                 
             } // end of the inner loop
-    
+            
             $c++;
         } // end of the main loop
         
@@ -671,6 +671,17 @@ class AllocadenceQuickBooks
         
         // match the [vendor_id] from the allocadence suppliers csv to the quickbooks vendors csv
         foreach($qbVendors as $vendorRec) {
+            if(!isset($vendorRec)) {
+                $rsError = '__ERROR: Unknown vendor ' . var_export($vendorRec, true);
+                AppGlobals::rsLogInfo($rsError);
+                return $rsError;
+            }
+            else if(!isset($matchedAllocSupplier)) {
+                $rsError = '__ERROR: Unknown supplier ' . $allocSupplier . ' - ';
+                $rsError .= var_export($matchedAllocSupplier, true);
+                AppGlobals::rsLogInfo($rsError);
+                return $rsError;
+            }
             // _HARD CODED: 0 = vendor name, 1 = vendor id
             if($vendorRec[1] === $matchedAllocSupplier['vendor_id']) {
                 return $vendorRec[0];

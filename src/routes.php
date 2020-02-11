@@ -122,7 +122,7 @@ return function(App $app) {
             // 'Receiving' query value
             $rec = $qStr['rec'] ?? null; // // yes or no
             $qbAlloc = new AllocadenceQuickBooks();
-    
+            
             // route helper functions
             function go($q) {
                 if($q === null) return false;
@@ -331,6 +331,17 @@ return function(App $app) {
     $app->get('/comauto-upload2',
         function(Request $request, Response $response, array $args) use ($container) {
             return $container->get('renderer')->render($response, 'temp.comauto-upload.phtml', $args);
+        }
+    );
+    
+    /**
+     * make sure the logging works
+     * rem the path is relative to 'tools/app' so the full path is:
+     * 192.168.5.230/tools/app/log-test
+     */
+    $app->get('/log-test',
+        function(Request $request, Response $response, array $args) use ($container) {
+            return AppGlobals::rsLogInfo('test log');
         }
     );
     

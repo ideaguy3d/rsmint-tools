@@ -24,7 +24,7 @@ class AppGlobals
     //-------------------------------------------------------------
     
     // local path, NOT the production path
-    private static $LogFolderPath = 'C:\xampp\htdocs\ninja\app\logs\\';
+    private static $LogFolderPath = 'C:\xampp\htdocs\tools\app\logs\\';
     public static $accounting_csv = 'accounting-php.csv';
     public static $coordinator_csv = 'coordinator-php.csv';
     
@@ -39,7 +39,7 @@ class AppGlobals
         return (gethostname() === 'Julius1');
     }
     
-    public static function rsLogInfo(string $info): void {
+    public static function rsLogInfo(string $info): string {
         // fopen(), fwrite(), fclose()
         $handle = null;
         $newLines = "\n\r\n\r";
@@ -48,19 +48,21 @@ class AppGlobals
         
         // append all logs by day to the same file
         $date = getdate();
-        $logDay = "COM_AUTO_LOG - $date[month] $date[mday], $date[year]";
+        $logDay = "_RS_LOG_$date[month]-$date[mday]-$date[year]";
         $filePath = self::$LogFolderPath . $logDay . '.txt';
         
         // using file_exists() may be better
         try {
+            $ml = __METHOD__ . 'line: ' . __LINE__;
+            $error = "File at $filePath could not be created ~AppGlobals.php $ml";
             // file already exists so just append to it.
-            $handle = fopen($filePath, 'a') or false;
+            $handle = fopen($filePath, 'a') or exit($error);
             fwrite($handle, $info);
+            return "logged to $filePath";
         }
-        catch(\Exception $e) {
+        catch(\Throwable $e) {
             // create the file then write to it
-            $handle = fopen($filePath, 'w') or exit("File at $filePath could not be created ~AppGlobals.php line 36 ish");
-            fwrite($handle, $info);
+            return $e->getMessage();
         }
         finally {
             fclose($handle);
