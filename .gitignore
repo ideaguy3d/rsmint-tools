@@ -1,6 +1,6 @@
 /logs/*
 !/logs/README.md
 .idea
-app/csv/_purchase_orders/*.csv
-app/csv/_item_receipts/*.csv
+app/csv/_purchase-orders
+app/csv/_item-receipts
 vendor

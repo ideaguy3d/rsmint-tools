@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "ext-pdo": "*",
         "monolog/monolog": "^1.17",
         "parsecsv/php-parsecsv": "^1.1",

@@ -114,16 +114,14 @@ class AllocadenceQuickBooks
     /**
      * The QuickBooks Item Receipt fields that Allocadence Received Items
      * need to be mapped to
-     *
-     * @var array
      */
-    public $itemReceiptFields;
+    private array $irFields;
     
-    private $irExportPath = 'csv/_item_receipts';
-    
-    private $qbVendorInputPath = 'csv/quickbooks';
-    
-    private $allocSupplierInputPath = 'csv/allocadence';
+    /* Class Initializations */
+    private string $outFolder_itemReceipts = 'csv/_item-receipts';
+    private string $inFolder_requiredCsv = 'csv/@required_csv';
+    private string $inFileName_qbVendors = 'quickbooks-vendors.csv';
+    private string $inFileName_allocSuppliers = 'allocadence-suppliers.csv';
     
     /**
      * AllocQuickBooks constructor.
@@ -133,19 +131,19 @@ class AllocadenceQuickBooks
         $proDownloads = 'C:\Users\RSMADMIN\Downloads';
         $isLocal = AppGlobals::isLocalHost();
         
-        $this->qbVendors = CsvParseModel::specificCsv2array($this->qbVendorInputPath, 'rs-vendors.csv');
+        $this->qbVendors = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFileName_qbVendors);
         
         // read the Allocadence suppliers CSV into memory
-        $allocSuppliers = CsvParseModel::specificCsv2array($this->allocSupplierInputPath, 'suppliers.csv');
+        $allocSuppliers = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFileName_allocSuppliers);
         // create hash's real quick
         foreach($allocSuppliers as $i => $supplierRec) {
             $allocSuppliers[$i] = array_combine(array_values($allocSuppliers[0]), $supplierRec);
         }
-        
         // init to the class prop
         $this->allocSuppliers = $allocSuppliers;
         
-        $this->itemReceiptFields = [
+        // may not be needed
+        $this->irFields = [
             // [Name]
             'Vendor' => '',
             // [Received Data]
@@ -601,7 +599,7 @@ class AllocadenceQuickBooks
                 $itemReceipt = [array_keys($itemReceipt), array_values($itemReceipt)];
                 
                 CsvParseModel::export2csv(
-                    $itemReceipt, $this->irExportPath, "item-receipt_{$po}_$sku"
+                    $itemReceipt, $this->outFolder_itemReceipts, "item-receipt_{$po}_$sku"
                 );
             }
             

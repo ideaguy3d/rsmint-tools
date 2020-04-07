@@ -41,4 +41,11 @@ $cors_route = require __DIR__ . '/../src/cors_route.php';
 $cors_route($app); // cors
 
 // Run app
-$app->run();
+try {
+    $app->run();
+} catch(Throwable $e) {
+    $ml = __METHOD__ . ' line: ' . __LINE__;
+    $infoMes = 'RS_FATAL_ERROR: an exception has bubbled up to root scope:';
+    $errMes = $e->getMessage();
+    exit ("\n\n __>> $infoMes ~$ml  \n\n $errMes \n\n");
+}

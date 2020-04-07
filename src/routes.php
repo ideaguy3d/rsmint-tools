@@ -112,7 +112,9 @@ return function(App $app) {
      * ALLOCADENCE Purchase Order & Item Receipts
      * This is the route that does the Allocadence PO and Receiving to QuickBooks mapping
      *
-     * ?po=<yes||no>&rec=<yes||no>
+     * Q string:
+     * ?po= yes||no
+     * &rec= yes||no
      */
     $app->get('/alloc/qb',
         function(Request $request, Response $response) use ($container, $app) {
