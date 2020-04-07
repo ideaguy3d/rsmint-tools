@@ -42,7 +42,7 @@ class CsvParseModel implements ICsvParseModel
         return $csv;
     }
     
-    public static function specificCsv2array(string $path2folder, string $csvName): array {
+    public static function specificCsv2array(string $path2folder, string $csvName): ?array {
         if(strpos($csvName, '.csv') === false) {
             $csvName = "$csvName.csv";
         }
@@ -50,16 +50,28 @@ class CsvParseModel implements ICsvParseModel
         $csv = [];
         $count = 0;
         
-        if(($handle = @fopen($csvFile, 'r')) !== false) {
-            while(($data = fgetcsv($handle, 8096, ",")) !== false) {
-                $csv[$count] = $data;
-                ++$count;
-            }
-
-            fclose($handle);
-        }
+        try {
+            if(($handle = @fopen($csvFile, 'r')) !== false) {
+                while(($data = fgetcsv($handle, 8096, ",")) !== false) {
+                    $csv[$count] = $data;
+                    ++$count;
+                }
         
-        return $csv;
+                fclose($handle);
+            }
+            else {
+                throw new \Exception("The CSV file $csvFile count not be opened");
+            }
+            return $csv;
+        }
+        catch(\Throwable $e) {
+            //TODO: log this exception
+            $ml = __METHOD__ . ' line: ' . __LINE__;
+            echo "\n__>> RS_EXCEPTION: ~$ml \n {$e->getMessage()}\n";
+        }
+        finally {
+            return null;
+        }
     }
     
     public static function export2csv(array $dataSet, string $exportPath, string $name2giveFile): string {

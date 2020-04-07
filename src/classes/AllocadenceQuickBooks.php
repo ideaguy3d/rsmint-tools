@@ -18,98 +18,70 @@ class AllocadenceQuickBooks
 {
     /**
      * The windows downloads folder path
-     * @var string
      */
-    private $downloadsFolder;
-    
-    private $poExportPath = 'csv/_purchase_orders';
-    private $poFileName;
+    private string $inFolder_downloads;
     
     /**
-     * The raw fields for received items. PHP adds recs to this array IF the
-     * `Received Qty` is greater than 0. This uses the Alloc PO export CSV.
-     * @var array
+     * The name of the exported PO csv, PHP attempts to give it the correct week num
+     * and attempts to append each facility scanned into the name
      */
-    private $receivedItems;
+    private string $outFileName_purchaseOrders;
     
     /**
      * The downloaded CSVs from Allocadence Purchase Orders. I select the date range & tick 'Show Received POs'
      * I have to click download while in West Sacramento, Denver, and Atlanta mode
-     * @var array
      */
-    private $allocPoExportFiles;
+    private array $inFilesList_allocPoDownloads;
     
     /**
-     * The CSV downloaded from Allocadence Reports > Inventory Reports > Received Inventory
-     * I have to click download while in West Sacramento, Denver, and Atlanta mode
-     * @var array
+     * The CSV downloaded from Allocadence "Reports > Inventory Reports > Received Inventory"
+     * I have to click download while in West Sacramento, Denver, Atlanta, E&F, Baltimore mode
      */
-    private $allocIrExportFiles;
+    private array $inFilesList_allocItemReceiptsDownloads;
     
     /**
      * All the purchase orders combined into 1 large array (increases computer memory)
-     * @var array
      */
-    private $poCombined = [];
+    private array $combinedPo;
     
     /**
      * All of the received items combined into 1 large array
-     * @var array
      */
-    private $irCombined = [];
+    private array $combinedIr;
     
     /**
-     * This is the Alloc mapped purchase orders for QB
-     * @var array (2D array, in.ar[as.ar])
+     * This is the Alloc mapped purchase orders and item receipts
+     * for QB (2D array, in.ar[as.ar])
      */
-    private $qbPurchaseOrderMap; // <3
-    private $qbItemReceiptMap;
+    private array $qbPurchaseOrderMap;
     
     /**
      * This as.ar is the field index for each of the fields from the raw file
-     * @var array (assoc.)
      */
-    private $poField;
-    private $irField;
-    
-    /**
-     * The raw field titles from the downloaded PO export CSV file from Allocadence
-     *  I used var_export() while in debug mode to get them.
-     * @var array
-     */
-    private $poRawHeader;
+    private array $indexPo;
     
     /**
      * The QB vendors exported from QuickBooks with an assigned ID to join on.
-     * @var array
      */
-    private $qbVendors;
+    private array $qbVendors;
     
     /**
      * I manually scraped the suppliers to get this CSV by copying the HTML and using
      * Instant Scraper on that.
-     * @var array
      */
-    private $allocSuppliers;
+    private array $allocSuppliers;
     
     /**
-     * The raw header row from the received items just to have as reference using the
-     *  var_export() while in debug mode.
-     * @var array
+     * ENUM for important fields names aka titles / header row
+     * from the raw PO CSV
      */
-    private $irRawHeader;
+    private object $titlesPo;
     
     /**
-     * ENUM for important fields from the raw PO CSV
-     * @var stdClass
+     * ENUM for important fields names aka titles / header row
+     * from raw IR csv
      */
-    private $poFieldTitles;
-    
-    /**
-     * ENUM for important fields from raw IR csv
-     * @var stdClass
-     */
-    private $irFieldTitles;
+    private object $titlesIr;
     
     /**
      * The QuickBooks Item Receipt fields that Allocadence Received Items
@@ -119,121 +91,34 @@ class AllocadenceQuickBooks
     
     /* Class Initializations */
     private string $outFolder_itemReceipts = 'csv/_item-receipts';
+    private string $outFolder_poExport = 'csv/_purchase_orders';
     private string $inFolder_requiredCsv = 'csv/@required_csv';
     private string $inFileName_qbVendors = 'quickbooks-vendors.csv';
     private string $inFileName_allocSuppliers = 'allocadence-suppliers.csv';
     
-    /**
-     * AllocQuickBooks constructor.
-     */
     public function __construct() {
         $localDownloads = 'C:\Users\julius\Downloads';
         $proDownloads = 'C:\Users\RSMADMIN\Downloads';
         $isLocal = AppGlobals::isLocalHost();
         
-        $this->qbVendors = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFileName_qbVendors);
+        $qbVendors = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFileName_qbVendors);
+        $this->qbVendors = $this->hashArray($qbVendors);
         
-        // read the Allocadence suppliers CSV into memory
         $allocSuppliers = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFileName_allocSuppliers);
-        // create hash's real quick
-        foreach($allocSuppliers as $i => $supplierRec) {
-            $allocSuppliers[$i] = array_combine(array_values($allocSuppliers[0]), $supplierRec);
-        }
-        // init to the class prop
-        $this->allocSuppliers = $allocSuppliers;
+        $this->allocSuppliers = $this->hashArray($allocSuppliers);
         
-        // may not be needed
-        $this->irFields = [
-            // [Name]
-            'Vendor' => '',
-            // [Received Data]
-            'Transaction Date' => '',
-            // [Receipt]
-            'RefNumber' => '',
-            // [SKU]
-            'Item' => '',
-            // [Description]
-            'Description' => '',
-            // [Quantity]
-            'Qty' => '',
-            // [Unit Cost]
-            'Cost' => '',
-            // [Quantity] * [Unit Cost]
-            'Amount' => 0,
-            // [PO # / Receipt #]
-            'PO No.' => '',
-        ];
-        
-        // var_export() of PO export raw header row while debugging just to have as reference
-        $this->poRawHeader = [
-            0 => 'PO Number',
-            1 => 'Required By',
-            2 => 'Ship Method',
-            3 => 'Ordered By',
-            4 => 'Order Prepared',
-            5 => 'Value',
-            6 => 'Warehouse Name',
-            7 => 'Project Number',
-            8 => 'Purchase Order Terms',
-            9 => 'Purchase Order Notes',
-            10 => 'SKU',
-            11 => 'Ordered Qty',
-            12 => 'Received Qty',
-            13 => 'UOM',
-            14 => 'Unit Cost',
-            15 => 'Sales Price',
-            16 => 'Description',
-            17 => 'UPC / EAN',
-            18 => 'Category',
-            19 => 'Weight',
-            20 => 'Default Econ Order',
-            21 => 'Default Lead Time (Days)',
-            22 => 'Recommended Retail Price',
-            23 => 'Manufacturer Website',
-            24 => 'Serializable',
-            25 => 'Non-Inventory',
-            26 => 'Perishable',
-            27 => 'Track Lot',
-            28 => 'Size',
-            29 => 'Color',
-            30 => 'Window?',
-            31 => 'Special',
-            32 => 'Builds',
-            33 => 'Reserved',
-            34 => 'Supplier',
-            35 => 'Supplier Address 1',
-            36 => 'Supplier Address 1',
-            37 => 'Supplier City',
-            38 => 'Supplier State',
-            39 => 'Supplier Zip',
-            40 => 'Supplier Country',
-            41 => 'Supplier Main Contact',
-            42 => 'Supplier Phone',
-            43 => 'Supplier Email',
-            44 => 'Supplier Alternative Contact',
-            45 => 'Supplier Phone',
-            46 => 'Supplier Email',
-            47 => 'Supplier Office Phone',
-            48 => 'Supplier Office Fax',
-            49 => 'Supplier Website',
-            50 => 'Supplier Account Number',
-            51 => 'Supplier Terms',
-        ];
-        
-        $this->irRawHeader = [];
-        
-        // ULTRA important field names cached into an anonymous class for better
-        // code completion this is essentially an ENUM
-        $this->poFieldTitles = new class() {
+        // ULTRA important field names cached into an object
+        $this->titlesPo = new class() {
             public $poNum = 'PO Number';
             // E, P, PS
             public $category = 'Category';
             // vendor
             public $supplier = 'Supplier';
+            
         };
         
         // the fields are spelled as they are in the Alloc CSV file
-        $this->irFieldTitles = new class() {
+        $this->titlesIr = new class() {
             public $receipt = 'Receipt';
             public $sku = 'SKU';
             public $quantity = 'Quantity';
@@ -246,17 +131,17 @@ class AllocadenceQuickBooks
         };
         
         if($isLocal) {
-            $this->downloadsFolder = $localDownloads;
+            $this->inFolder_downloads = $localDownloads;
         }
         else {
-            $this->downloadsFolder = $proDownloads;
+            $this->inFolder_downloads = $proDownloads;
         }
         
         $poFileName = 'inboundexportbydate';
         $irFileName = 'inventoryreceived';
         
         // scan all the files in the windows download folder
-        $downloadedFiles = scandir($this->downloadsFolder);
+        $downloadedFiles = scandir($this->inFolder_downloads);
         
         // each po & ir CSV downloaded from Allocadence
         $poFilesArray = [];
@@ -276,8 +161,8 @@ class AllocadenceQuickBooks
             }
         }
         
-        $this->allocPoExportFiles = $poFilesArray;
-        $this->allocIrExportFiles = $irFilesArray;
+        $this->inFilesList_allocPoDownloads = $poFilesArray;
+        $this->inFilesList_allocItemReceiptsDownloads = $irFilesArray;
         
     } // END OF: __construct()
     
@@ -293,6 +178,13 @@ class AllocadenceQuickBooks
         $f = null; // field index's from raw file
         $c = 0;
         $facilities = '';
+        
+        $ff = new class () {
+            public array $idx;
+            public int $c = 0;
+            public string $facilities = '';
+        };
+        
         // formatted description for sprintf() in PO loop
         $fDes = 'sku: %s, %s, %s, Category: %s, Amount: $ %s for %s';
         
@@ -303,16 +195,26 @@ class AllocadenceQuickBooks
         
         // MAIN_LOOP: loop over each file that contains "inboundexportbydate" in the downloads folder & UNION them,
         // worst case = O(4 * ~100) "4 CSVs with roughly a worst case of 100 recs each"
-        foreach($this->allocPoExportFiles as $poFile) {
-            $poArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $poFile);
+        foreach($this->inFilesList_allocPoDownloads as $poFile) {
+            $poArray = CsvParseModel::specificCsv2array($this->inFolder_downloads, $poFile);
+            
+            // There are less fields in the csv header row than there are in the csv body rows
+            // so just splice the first 40 fields from the csv header row & csv body rows
+            // ... but this may lead to incorrect hash's
+            array_splice($poArray, 40);
+            
+            $poHash = $this->hashArray($poArray);
+            
+            $curFac = null; // $poArray[$this->titlesPo->]
             
             // get header row real quick, 1st should be Sacramento
             if($c === 0) {
                 // add the qb mapped vendor to the output QB mapped array
                 $poArray[0] [] = 'qb_vendor';
-                $f = $this->indexKeys($poArray[0]);
-                $this->poField = $f;
-                $facilities .= ' SAC';
+                $ff->idx = $this->indexKeys($poArray[0]);
+                $this->indexPo = $ff->idx;
+                $ff->facilities .= ' SAC';
+                $debug = 1;
             }
             // 2nd file should be Denver
             else if($c === 1) {
@@ -362,7 +264,7 @@ class AllocadenceQuickBooks
                 ];
                 
                 $po [] = $qbVendor;
-                $this->poCombined [] = $po;
+                $this->combinedPo [] = $po;
                 
             } // end of the inner loop
             
@@ -380,8 +282,8 @@ class AllocadenceQuickBooks
             AppGlobals::rsLogInfo($e->getMessage());
         }
         $week = (int)$date->format("W") - 1;
-        $this->poFileName = $file = "purchase orders 2020 week $week $facilities";
-        $path = $this->poExportPath;
+        $this->outFileName_purchaseOrders = $file = "purchase orders 2020 week $week $facilities";
+        $path = $this->outFolder_poExport;
         CsvParseModel::export2csv($qbPurchaseOrderMap, $path, $file);
         
     } // END OF: qbPurchaseOrderMap()
@@ -393,8 +295,7 @@ class AllocadenceQuickBooks
     public function qbItemReceiptMap(): void {
         $f = null; // field index's from raw file
         $c = 0;
-        $t = $this->irFieldTitles;
-        $qbItemReceiptStr = "Vendor,Transaction Date,RefNumber,Item,Description	Qty	Cost,Amount	PO No.";
+        $t = $this->titlesIr;
         
         // enum for QB Item Receipts fields
         $qb = new class() {
@@ -411,11 +312,11 @@ class AllocadenceQuickBooks
         
         // OUTER LOOP
         // 1st create the irCombined array, create the indexed keys for the received items array
-        foreach($this->allocIrExportFiles as $irFile) {
-            $irArray = CsvParseModel::specificCsv2array($this->downloadsFolder, $irFile);
+        foreach($this->inFilesList_allocItemReceiptsDownloads as $irFile) {
+            $irArray = CsvParseModel::specificCsv2array($this->inFolder_downloads, $irFile);
             
             if($c === 0) {
-                $this->irCombined [] = $irArray[0];
+                $this->combinedIr [] = $irArray[0];
                 $f = $this->indexKeys($irArray[0]);
                 
                 // not sure adding as class field is needed or useful
@@ -428,7 +329,7 @@ class AllocadenceQuickBooks
             
             // make irCombined a 2D array
             foreach($irArray as $item) {
-                $this->irCombined [] = $item;
+                $this->combinedIr [] = $item;
             }
             
             unset($irArray);
@@ -440,7 +341,7 @@ class AllocadenceQuickBooks
         
         // OUTER LOOP
         // loop over all the combined received items to group by PO Number
-        foreach($this->irCombined as $receivedItem) {
+        foreach($this->combinedIr as $receivedItem) {
             // skip header row
             if($c === 0) {
                 $c++;
@@ -617,9 +518,9 @@ class AllocadenceQuickBooks
      */
     private function groupByPoNumber(): array {
         $grpByPo = [];
-        $f = $this->poField;
-        $t = $this->poFieldTitles;
-        $purchaseOrders = $this->poCombined;
+        $f = $this->indexPo;
+        $t = $this->titlesPo;
+        $purchaseOrders = $this->combinedPo;
         array_shift($purchaseOrders);
         
         foreach($purchaseOrders as $item) {
@@ -628,6 +529,39 @@ class AllocadenceQuickBooks
         }
         
         return $grpByPo;
+    }
+    
+    /**
+     * Use the values in the header row to create a hashed array
+     * So basically convert an indexed array to an associative array
+     *
+     * @param array $indexedArray - an array like [['po', 'qty'],[123, 1000]]
+     *
+     * @return array - return an array like [['po' => 'po', 'qty'=>'qty], ['po'=>123, 'qty'=>1000]]
+     */
+    private function hashArray(array $indexedArray): array {
+        foreach($indexedArray as $i => $rec) {
+            $headerRow = $indexedArray[0];
+            $headerRowCount = count($headerRow);
+            $recCount = count($rec);
+            
+            //TODO: throw an exception
+            if($recCount !== $headerRowCount) {
+                $debug = 1;
+            }
+            
+            // sanitize each field in rec a bit
+            foreach($rec as $idx => $val) {
+                if(empty($val)) {
+                    continue;
+                }
+                
+                $rec[$idx] = trim($val);
+            }
+            
+            $indexedArray[$i] = array_combine(array_values($headerRow), $rec);
+        }
+        return $indexedArray;
     }
     
     /**
