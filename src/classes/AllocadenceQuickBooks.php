@@ -198,12 +198,8 @@ class AllocadenceQuickBooks
         foreach($this->inFilesList_allocPoDownloads as $poFile) {
             $poArray = CsvParseModel::specificCsv2array($this->inFolder_downloads, $poFile);
             
-            // There are less fields in the csv header row than there are in the csv body rows
-            // so just splice the first 40 fields from the csv header row & csv body rows
-            // ... but this may lead to incorrect hash's
-            foreach($poArray as $i => $row) {
-                array_splice($row, 40);
-            }
+            // if there are no records, don't process it
+            if(1 === count($poArray)) continue;
             
             $poHash = $this->hashArray($poArray);
             
@@ -213,19 +209,6 @@ class AllocadenceQuickBooks
                 $poArray[0] [] = 'qb_vendor';
                 $f = $this->indexPo = $ff->idx = $this->indexKeys($poArray[0]);
                 
-                // reach ahead a rec to get the ware house
-                $facExplode = explode(' ', $poHash[1][$this->titlesPo->warehouse]);
-                if(count($facExplode) > 1) {
-                    $a = substr($facExplode[0], 0, 1);
-                    $b = substr($facExplode[1], 0, 3);
-                    $ff->facilities .= strtoupper("$a.$b");
-                }
-                else {
-                    $ff->facilities .= strtoupper(substr($facExplode[0], 0, 3));
-                }
-                
-                $debug = 1;
-                
                 // our facilities abbreviated
                 $facilities .= 'SAC';
                 $facilities .= ' DEN';
@@ -233,6 +216,20 @@ class AllocadenceQuickBooks
                 $facilities .= ' E&F';
                 $facilities .= ' BAL';
             }
+    
+            // reach ahead a rec to get the ware house
+            $facExplode = explode(' ', $poHash[1][$this->titlesPo->warehouse]);
+            if(count($facExplode) > 1) {
+                $a = substr($facExplode[0], 0, 1);
+                $b = substr($facExplode[1], 0, 3);
+                $ff->facilities .= strtoupper(" $a.$b");
+            }
+            else {
+                $a = substr($facExplode[0], 0, 3);
+                $ff->facilities .= strtoupper(" $a");
+            }
+    
+            $debug = 1;
             
             // get rid of header row real quick
             array_shift($poArray);

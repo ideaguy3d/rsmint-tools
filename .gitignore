@@ -1,6 +1,7 @@
-/logs/*
+**/**/logs
 !/logs/README.md
 .idea
 app/csv/_purchase-orders
 app/csv/_item-receipts
 vendor
+app/logs
