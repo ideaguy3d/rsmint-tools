@@ -91,7 +91,7 @@ class AllocadenceQuickBooks
     
     /* Class Initializations */
     private string $outFolder_itemReceipts = 'csv/_item-receipts';
-    private string $outFolder_poExport = 'csv/_purchase_orders';
+    private string $outFolder_poExport = 'csv/_purchase-orders';
     private string $inFolder_requiredCsv = 'csv/@required_csv';
     private string $inFileName_qbVendors = 'quickbooks-vendors.csv';
     private string $inFileName_allocSuppliers = 'allocadence-suppliers.csv';
@@ -114,7 +114,7 @@ class AllocadenceQuickBooks
             public $category = 'Category';
             // vendor
             public $supplier = 'Supplier';
-            
+            public string $warehouse = 'Warehouse Name';
         };
         
         // the fields are spelled as they are in the Alloc CSV file
@@ -201,38 +201,43 @@ class AllocadenceQuickBooks
             // There are less fields in the csv header row than there are in the csv body rows
             // so just splice the first 40 fields from the csv header row & csv body rows
             // ... but this may lead to incorrect hash's
-            array_splice($poArray, 40);
+            foreach($poArray as $i => $row) {
+                array_splice($row, 40);
+            }
             
             $poHash = $this->hashArray($poArray);
             
-            $curFac = null; // $poArray[$this->titlesPo->]
-            
-            // get header row real quick, 1st should be Sacramento
+            // do special ops while on header row real quick
             if($c === 0) {
                 // add the qb mapped vendor to the output QB mapped array
                 $poArray[0] [] = 'qb_vendor';
-                $ff->idx = $this->indexKeys($poArray[0]);
-                $this->indexPo = $ff->idx;
-                $ff->facilities .= ' SAC';
+                $f = $this->indexPo = $ff->idx = $this->indexKeys($poArray[0]);
+                
+                // reach ahead a rec to get the ware house
+                $facExplode = explode(' ', $poHash[1][$this->titlesPo->warehouse]);
+                if(count($facExplode) > 1) {
+                    $a = substr($facExplode[0], 0, 1);
+                    $b = substr($facExplode[1], 0, 3);
+                    $ff->facilities .= strtoupper("$a.$b");
+                }
+                else {
+                    $ff->facilities .= strtoupper(substr($facExplode[0], 0, 3));
+                }
+                
                 $debug = 1;
-            }
-            // 2nd file should be Denver
-            else if($c === 1) {
+                
+                // our facilities abbreviated
+                $facilities .= 'SAC';
                 $facilities .= ' DEN';
-            }
-            // 3rd is Atlanta
-            else if($c === 2) {
                 $facilities .= ' ATL';
-            }
-            // 4th is Envelopes & Forms
-            else if($c === 3) {
                 $facilities .= ' E&F';
+                $facilities .= ' BAL';
             }
             
             // get rid of header row real quick
             array_shift($poArray);
             
-            // INNER LOOP worst case = < ~100 "depends on how many purchase orders we make in a week, probably < 50"
+            // INNER_LOOP_1: worst case = < ~100 "depends on how many purchase orders we make in a week, probably < 50"
             //- created the QB mapped 2D array
             foreach($poArray as $i => $po) {
                 // Allocadence fields
@@ -266,10 +271,11 @@ class AllocadenceQuickBooks
                 $po [] = $qbVendor;
                 $this->combinedPo [] = $po;
                 
-            } // end of the inner loop
+            } // end of INNER_LOOP_1
             
             $c++;
-        } // end of the main loop
+            
+        } // end of: MAIN_LOOP
         
         $this->qbPurchaseOrderMap = $qbPurchaseOrderMap;
         
@@ -282,7 +288,7 @@ class AllocadenceQuickBooks
             AppGlobals::rsLogInfo($e->getMessage());
         }
         $week = (int)$date->format("W") - 1;
-        $this->outFileName_purchaseOrders = $file = "purchase orders 2020 week $week $facilities";
+        $this->outFileName_purchaseOrders = $file = "purchase orders 2020 week $week $ff->facilities";
         $path = $this->outFolder_poExport;
         CsvParseModel::export2csv($qbPurchaseOrderMap, $path, $file);
         
@@ -535,19 +541,23 @@ class AllocadenceQuickBooks
      * Use the values in the header row to create a hashed array
      * So basically convert an indexed array to an associative array
      *
-     * @param array $indexedArray - an array like [['po', 'qty'],[123, 1000]]
+     * @param array $indexedArrayTable - an 2D array like [['po', 'qty'],[123, 1000]]
      *
      * @return array - return an array like [['po' => 'po', 'qty'=>'qty], ['po'=>123, 'qty'=>1000]]
      */
-    private function hashArray(array $indexedArray): array {
-        foreach($indexedArray as $i => $rec) {
-            $headerRow = $indexedArray[0];
-            $headerRowCount = count($headerRow);
+    private function hashArray(array $indexedArrayTable): array {
+        $headerRow = $indexedArrayTable[0];
+        $headerRowCount = count($headerRow);
+        
+        foreach($indexedArrayTable as $i => $rec) {
             $recCount = count($rec);
             
             //TODO: throw an exception
             if($recCount !== $headerRowCount) {
-                $debug = 1;
+                $ml = __METHOD__ . ' line: ' . __LINE__;
+                $rsError = "\n\n__>> RS_ERROR: header row and record are not equal in count ~$ml \n\n";
+                echo $rsError;
+                AppGlobals::rsLogInfo($rsError);
             }
             
             // sanitize each field in rec a bit
@@ -559,9 +569,10 @@ class AllocadenceQuickBooks
                 $rec[$idx] = trim($val);
             }
             
-            $indexedArray[$i] = array_combine(array_values($headerRow), $rec);
+            $indexedArrayTable[$i] = array_combine(array_values($headerRow), $rec);
         }
-        return $indexedArray;
+        
+        return $indexedArrayTable;
     }
     
     /**
@@ -603,25 +614,27 @@ class AllocadenceQuickBooks
         }
         
         // match the [vendor_id] from the allocadence suppliers csv to the quickbooks vendors csv
-        foreach($qbVendors as $vendorRec) {
+        foreach($qbVendors as $hash => $vendorRec) {
             if(!isset($vendorRec)) {
-                $rsError = '__ERROR: Unknown vendor ' . var_export($vendorRec, true);
+                $rsError = '__ERROR: Unknown vendor "' . var_export($vendorRec, true) . '"';
                 AppGlobals::rsLogInfo($rsError);
                 return $rsError;
             }
             else if(!isset($matchedAllocSupplier)) {
-                $rsError = '__ERROR: Unknown supplier ' . $allocSupplier . ' - ';
+                $rsError = '__ERROR: Unknown supplier "' . $allocSupplier . '" - ';
                 $rsError .= var_export($matchedAllocSupplier, true);
                 AppGlobals::rsLogInfo($rsError);
                 return $rsError;
             }
+            
             // _HARD CODED: 0 = vendor name, 1 = vendor id
-            if($vendorRec[1] === $matchedAllocSupplier['vendor_id']) {
-                return $vendorRec[0];
+            if($vendorRec['vendor_id'] === $matchedAllocSupplier['vendor_id']) {
+                return $vendorRec['vendor'];
             }
-        }
+            
+        } // end of loop
         
-        return "Vendor $allocSupplier Not Found";
+        return "Vendor '$allocSupplier' Not Found";
         
     } // END OF: qbMapVendor()
     

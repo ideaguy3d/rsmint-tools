@@ -42,6 +42,14 @@ class CsvParseModel implements ICsvParseModel
         return $csv;
     }
     
+    /**
+     * Basic CSV import with an enclosure being used
+     *
+     * @param string $path2folder
+     * @param string $csvName
+     *
+     * @return array|null
+     */
     public static function specificCsv2array(string $path2folder, string $csvName): ?array {
         if(strpos($csvName, '.csv') === false) {
             $csvName = "$csvName.csv";
@@ -52,7 +60,7 @@ class CsvParseModel implements ICsvParseModel
         
         try {
             if(($handle = @fopen($csvFile, 'r')) !== false) {
-                while(($data = fgetcsv($handle, 8096, ",")) !== false) {
+                while(($data = fgetcsv($handle, 8096, ",", '"')) !== false) {
                     $csv[$count] = $data;
                     ++$count;
                 }
@@ -65,11 +73,11 @@ class CsvParseModel implements ICsvParseModel
             return $csv;
         }
         catch(\Throwable $e) {
-            //TODO: log this exception
             $ml = __METHOD__ . ' line: ' . __LINE__;
-            echo "\n__>> RS_EXCEPTION: ~$ml \n {$e->getMessage()}\n";
-        }
-        finally {
+            $rsExcep = "\n\n__>> RS_EXCEPTION: ~$ml \n {$e->getMessage()}\n\n";
+            echo $rsExcep;
+            AppGlobals::rsLogInfo($rsExcep);
+            
             return null;
         }
     }

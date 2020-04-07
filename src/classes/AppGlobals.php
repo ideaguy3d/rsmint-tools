@@ -24,9 +24,7 @@ class AppGlobals
     //-------------------------------------------------------------
     
     // local path, NOT the production path
-    private static $LogFolderPath = 'C:\xampp\htdocs\tools\app\logs\\';
-    public static $accounting_csv = 'accounting-php.csv';
-    public static $coordinator_csv = 'coordinator-php.csv';
+    private static string $LogFolderPath = 'logs';
     
     public static function PathToUploadDirectory() {
         //TODO: try to figure out how to cache whether current env is local or production
@@ -48,7 +46,12 @@ class AppGlobals
         
         // append all logs by day to the same file
         $date = getdate();
-        $logDay = "_RS_LOG_$date[month]-$date[mday]-$date[year]";
+        $logDay = "\_RS_LOG_$date[month]-$date[mday]-$date[year]";
+        // check if the dir exists, if not, create it
+        if(!file_exists(self::$LogFolderPath)) {
+            $cwdLog = getcwd() . self::$LogFolderPath;
+            mkdir($cwdLog, 0777, true);
+        }
         $filePath = self::$LogFolderPath . $logDay . '.txt';
         
         // using file_exists() may be better

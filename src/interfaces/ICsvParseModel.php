@@ -58,9 +58,9 @@ interface ICsvParseModel
      * @param string $path
      * @param string $csvName
      *
-     * @return array
+     * @return array - make nullable in case an exception is hit
      */
-    public static function specificCsv2array(string $path, string $csvName): array;
+    public static function specificCsv2array(string $path, string $csvName): ?array;
     
     /**
      * Basically this function won't prepend "rs_" it will literally just export
