@@ -11,7 +11,7 @@ use stdClass;
  *
  * Class AllocQuickBooks as of 11-27-2019 this class is SUPER HARDCODED and not meant to be
  * used by anyone other than me.
- *
+ * @class AllocadenceQuickBooks
  * @package Redstone\Tools
  */
 class AllocadenceQuickBooks
@@ -141,6 +141,7 @@ class AllocadenceQuickBooks
         foreach($allocSuppliers as $i => $supplierRec) {
             $allocSuppliers[$i] = array_combine(array_values($allocSuppliers[0]), $supplierRec);
         }
+        
         // init to the class prop
         $this->allocSuppliers = $allocSuppliers;
         

@@ -34,13 +34,11 @@ $middleware($app);
 
 // Register routes
 $routes_sql = require __DIR__ . '/../src/routes_sql.php';
-$routes_sql($app);
-
-$routes = require __DIR__ . '/../src/routes.php';
-$routes($app);
-
+$routes_sql($app); // sql
+$routes_base = require __DIR__ . '/../src/routes.php';
+$routes_base($app); // base
 $cors_route = require __DIR__ . '/../src/cors_route.php';
-$cors_route($app);
+$cors_route($app); // cors
 
 // Run app
 $app->run();
