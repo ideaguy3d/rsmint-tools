@@ -57,7 +57,7 @@ class AppGlobals
         // using file_exists() may be better
         try {
             $ml = __METHOD__ . 'line: ' . __LINE__;
-            $error = "File at $filePath could not be created ~AppGlobals.php $ml";
+            $error = "File at $filePath could not be created ~AppGlobals.php ~$ml";
             // file already exists so just append to it.
             $handle = fopen($filePath, 'a') or exit($error);
             fwrite($handle, $info);

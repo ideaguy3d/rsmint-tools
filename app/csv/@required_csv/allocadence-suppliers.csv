@@ -1,26 +1,30 @@
-vendor_id,vendor
-57,Kelly Paper - Sacramento
-90,Southland Envelopes - Sacramento
-114,Advanced Image Direct
-112,Wilmer - Sacramento
-39,Ennis - Sacramento
-104,Veritiv - Sacramento
-104,Veritiv - Denver
-104,Veritiv - Atlanta
-104,Veritiv - Dallas
-93,Spicers - Sacramento
-93,Spicers - Denver
-110,Whittier Mailing Products - Sacramento
-62,Master Packaging Solutions
-105,Volume Press
-17,Cathy Welsh Envelopes
-40,Envelopes & Forms
-88,Sierra Printing
-112,Wilmer - Denver
-110,Whittier Mailing Products - Denver
-112,Wilmer - Atlanta
-39,Ennis - Denver
-39,Ennis - Atlanta
-90,Southland Envelopes - Denver
-57,Kelly Paper - Denver
-57,Kelly Paper - Atlanta
+vendor,vendor_id
+Kelly Paper - Sacramento,57
+Southland Envelopes - Sacramento,90
+Advanced Image Direct,114
+Wilmer - Sacramento,112
+Ennis - Baltimore,39
+Ennis - Sacramento,39
+Veritiv - Baltimore,104
+Veritiv - Sacramento,104
+Veritiv - Denver,104
+Veritiv - Atlanta,104
+Veritiv - Dallas,104
+Spicers - Sacramento,93
+Spicers - Denver,93
+Whittier Mailing Products - Sacramento,110
+Master Packaging Solutions,62
+Volume Press,105
+Cathy Welsh Envelopes,17
+Envelopes & Forms,40
+Sierra Printing,88
+Wilmer - Denver,112
+Whittier Mailing Products - Denver,110
+Wilmer - Atlanta,112
+Ennis - Denver,39
+Ennis - Atlanta,39
+Southland Envelopes - Denver,90
+Kelly Paper - Denver,57
+Kelly Paper - Atlanta,57
+Uline,115
+Double Envelope Company,116

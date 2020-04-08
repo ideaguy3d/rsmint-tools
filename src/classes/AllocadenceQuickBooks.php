@@ -228,8 +228,6 @@ class AllocadenceQuickBooks
                 $a = substr($facExplode[0], 0, 3);
                 $ff->facilities .= strtoupper(" $a");
             }
-    
-            $debug = 1;
             
             // get rid of header row real quick
             array_shift($poArray);
@@ -313,7 +311,18 @@ class AllocadenceQuickBooks
             public $poNum = 'PO No.';
         };
         
-        // OUTER LOOP
+        function map_item($category, $sku) {
+            if($category === 'E') return 'Envelopes';
+            else if(strpos($category, 'P') !== false) return 'Paper';
+            else if(strpos(strtolower($sku), 'freight') !== false) {
+                return 'Freight In (Non Mail)';
+            }
+            else {
+                return 'unknown';
+            }
+        }
+        
+        // OUTER_LOOP_1
         // 1st create the irCombined array, create the indexed keys for the received items array
         foreach($this->inFilesList_allocItemReceiptsDownloads as $irFile) {
             $irArray = CsvParseModel::specificCsv2array($this->inFolder_downloads, $irFile);
@@ -336,13 +345,14 @@ class AllocadenceQuickBooks
             }
             
             unset($irArray);
-        }
+            
+        } // end of: OUTER_LOOP_1
         
         // reset counter
         $c = 0;
         $groupByPo = [];
         
-        // OUTER LOOP
+        // OUTER_LOOP_2
         // loop over all the combined received items to group by PO Number
         foreach($this->combinedIr as $receivedItem) {
             // skip header row
@@ -356,30 +366,19 @@ class AllocadenceQuickBooks
             $groupByPo[$_poNum] [] = $receivedItem;
         }
         
-        function map_item($category, $sku) {
-            if($category === 'E') return 'Envelopes';
-            else if(strpos($category, 'P') !== false) return 'Paper';
-            else if(strpos(strtolower($sku), 'freight') !== false) {
-                return 'Freight In (Non Mail)';
-            }
-            else {
-                return 'unknown';
-            }
-        }
-        
-        // OUTER LOOP
+        // OUTER_LOOP_3
         // loop over each group to create an Item Receipt
         foreach($groupByPo as $po => $poGroup) {
             $skuGroup = [];
             
-            // INNER LOOP 1
+            // INNER_LOOP_1
             // loop over each element in the po group to group by sku
             foreach($poGroup as $poNum => $receivedItem) {
                 $_sku = trim($receivedItem[$f[$t->sku]]);
                 $skuGroup[$_sku] [] = $receivedItem;
             }
             
-            // INNER LOOP 2
+            // INNER_LOOP_2
             // loop over each item in the sku group
             foreach($skuGroup as $sku => $groupByItemReceipt) {
                 $category = $groupByItemReceipt[0][$f['Category']];
@@ -408,23 +407,18 @@ class AllocadenceQuickBooks
                 $qtyStr = '';
                 $qtyAr = [];
                 
-                // INNER LOOP 3
+                // INNER_INNER_LOOP_1
                 // loop over each SKU in the Purchase Order group
                 foreach($groupByItemReceipt as $key => $receivedItem) {
                     // cache relevant Allocadence fields values
                     $_receipt = trim($receivedItem[$f[$t->receipt]]);
-                    $_sku = trim($receivedItem[$f[$t->sku]]);
                     $_quantity = trim($receivedItem[$f[$t->quantity]]);
                     $_quantityInt = (int)$_quantity;
                     $_unitCost = trim($receivedItem[$f[$t->unitCost]]);
                     $_unitCostFloat = (float)trim($_unitCost);
                     $_receivedDate = trim($receivedItem[$f[$t->receivedDate]]);
-                    $_poNum = trim($receivedItem[$f[$t->poNum]]);
-                    $_name = trim($receivedItem[$f[$t->name]]);
                     
                     // cache relevant QB item receipt values
-                    //$qbTransactionDate = &$itemReceipt[$qb->transactionDate];
-                    //$qbRefNum = &$itemReceipt[$qb->refNumber];
                     $qbTransactionDate = &$itemReceipt[$qb->transactionDate];
                     $qbRefNum = &$itemReceipt[$qb->refNumber];
                     $qbDescription = &$itemReceipt[$qb->description];
@@ -432,7 +426,7 @@ class AllocadenceQuickBooks
                     $qbCost = &$itemReceipt[$qb->cost];
                     $qbAmount = &$itemReceipt[$qb->amount];
                     
-                    // `TRANSACTION DATE`
+                    // [Transaction Date]
                     // check if there are multiple values for received date
                     if(empty($qbTransactionDate)) {
                         $qbTransactionDate = $_receivedDate;
@@ -452,7 +446,7 @@ class AllocadenceQuickBooks
                     $qtyFormatted = number_format($_quantityInt);
                     $qtyStr = "$qtyFormatted+";
                     
-                    // `REF NUMBER` & `DESCRIPTION`
+                    // [RefNumber] & [Description]
                     if(empty($qbRefNum)) {
                         $qbRefNum = $_receipt;
                         $qtyAr[] = $qtyStr;
@@ -466,10 +460,10 @@ class AllocadenceQuickBooks
                         $qbDescription .= $d;
                     }
                     
-                    // `QUANTITY`
+                    // [Qty]
                     $qbQty += $_quantityInt;
                     
-                    // `COST` &  `AMOUNT`
+                    // [Cost] & [Amount]
                     if($qbCost == 0.0 || $qbCost == $_unitCost) {
                         $qbCost = $_unitCostFloat;
                         $qbAmount = ($qbQty * $qbCost);
@@ -483,7 +477,8 @@ class AllocadenceQuickBooks
                             $qbAmount = ($qbAmount + ($_unitCostFloat * $_quantity));
                         }
                     }
-                } // end of inner loop
+                    
+                } // end of INNER_INNER_LOOP_1
                 
                 // add the formatted quantity string
                 if(isset($qbDescription)) {
@@ -613,14 +608,16 @@ class AllocadenceQuickBooks
         // match the [vendor_id] from the allocadence suppliers csv to the quickbooks vendors csv
         foreach($qbVendors as $hash => $vendorRec) {
             if(!isset($vendorRec)) {
-                $rsError = '__ERROR: Unknown vendor "' . var_export($vendorRec, true) . '"';
+                $ml = __METHOD__ . ' line: ' . __LINE__;
+                $rsError = 'RS_ERROR: Unknown vendor "' . var_export($vendorRec, true) . '" ~' . $ml;
                 AppGlobals::rsLogInfo($rsError);
                 return $rsError;
             }
             else if(!isset($matchedAllocSupplier)) {
-                $rsError = '__ERROR: Unknown supplier "' . $allocSupplier . '" - ';
+                $ml = __METHOD__ . ' line: ' . __LINE__;
+                $rsError = 'RS_ERROR: Unknown supplier "' . $allocSupplier . '" - ';
                 $rsError .= var_export($matchedAllocSupplier, true);
-                AppGlobals::rsLogInfo($rsError);
+                AppGlobals::rsLogInfo($rsError . "~$ml");
                 return $rsError;
             }
             
