@@ -72,6 +72,11 @@ class AllocadenceQuickBooks
     private array $allocSuppliers;
     
     /**
+     * The vendor codes AND vendor sku costs the bot scraped
+     */
+    private array $vendorCodes;
+    
+    /**
      * ENUM for important fields names aka titles / header row
      * from the raw PO CSV
      */
@@ -83,11 +88,6 @@ class AllocadenceQuickBooks
      */
     private object $titlesIr;
     
-    /**
-     * The QuickBooks Item Receipt fields that Allocadence Received Items
-     * need to be mapped to
-     */
-    private array $irFields;
     
     /* Class Initializations */
     private string $outFolder_itemReceipts = 'csv/_item-receipts';
@@ -95,6 +95,7 @@ class AllocadenceQuickBooks
     private string $inFolder_requiredCsv = 'csv/@required_csv';
     private string $inFileName_qbVendors = 'quickbooks-vendors.csv';
     private string $inFileName_allocSuppliers = 'allocadence-suppliers.csv';
+    private string $inFleName_vendorCodes = 'supplier_vendor_codes.csv';
     
     public function __construct() {
         $localDownloads = 'C:\Users\julius\Downloads';
@@ -107,13 +108,19 @@ class AllocadenceQuickBooks
         $allocSuppliers = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFileName_allocSuppliers);
         $this->allocSuppliers = $this->hashArray($allocSuppliers);
         
+        // create {supplier + sku} hash to get "vendor code + vendor sku cost"
+        $vendorCodes = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFleName_vendorCodes);
+        $vendorHash = $this->hashArray($vendorCodes);
+        $this->vendorCodes = $this->supplierSkuHash($vendorHash);
+        $debug = 1;
+        
         // ULTRA important field names cached into an object
         $this->titlesPo = new class() {
-            public $poNum = 'PO Number';
+            public string $poNum = 'PO Number';
             // E, P, PS
-            public $category = 'Category';
+            public string $category = 'Category';
             // vendor
-            public $supplier = 'Supplier';
+            public string $supplier = 'Supplier';
             public string $warehouse = 'Warehouse Name';
         };
         
@@ -209,14 +216,14 @@ class AllocadenceQuickBooks
                 $poArray[0] [] = 'qb_vendor';
                 $f = $this->indexPo = $ff->idx = $this->indexKeys($poArray[0]);
                 
-                // our facilities abbreviated
+                // our facilities abbreviated, these never get used
                 $facilities .= 'SAC';
                 $facilities .= ' DEN';
                 $facilities .= ' ATL';
                 $facilities .= ' E&F';
                 $facilities .= ' BAL';
             }
-    
+            
             // reach ahead a rec to get the ware house
             $facExplode = explode(' ', $poHash[1][$this->titlesPo->warehouse]);
             if(count($facExplode) > 1) {
@@ -235,7 +242,7 @@ class AllocadenceQuickBooks
             // INNER_LOOP_1: worst case = < ~100 "depends on how many purchase orders we make in a week, probably < 50"
             //- created the QB mapped 2D array
             foreach($poArray as $i => $po) {
-                // Allocadence fields
+                // cache the Allocadence fields values
                 $_supplier = trim($po[$f['Supplier']]);
                 $_requiredBy = trim($po[$f['Required By']]);
                 $_poNum = trim($po[$f['PO Number']]);
@@ -243,7 +250,8 @@ class AllocadenceQuickBooks
                 $_orderedQty = trim($po[$f['Ordered Qty']]);
                 $_orderedQty = (int)$_orderedQty;
                 $_sku = trim($po[$f['SKU']]);
-                $_description = trim($po[$f['Description']]);
+                //-- replacing description with [vendor code]
+                //$_description = trim($po[$f['Description']]);
                 $_warehouse = trim($po[$f['Warehouse Name']]);
                 
                 $value1 = $po[$f['Value']];
@@ -568,6 +576,33 @@ class AllocadenceQuickBooks
     }
     
     /**
+     * This function is ONLY for the vendor code data set. Each supplier has a different
+     * cost per sku so the hash will be the supplier + sku. The array passed in MUST be
+     * hashed
+     *
+     * @param array $vendorCodesHash
+     *
+     * @return array
+     */
+    private function supplierSkuHash(array $vendorCodesHash): array {
+        // _HARD CODED hash's (literally copied & pasted from csv)
+        $hSku = 'sku';
+        $hSupplier = 'supplier';
+        $hashTable = [];
+        
+        foreach($vendorCodesHash as $h => $supplierInfo) {
+            // "Block Check"
+            if(0 === $h) continue;
+            [$hSupplier => $_supplier, $hSku => $_sku] = $supplierInfo;
+            // sanitize a bit
+            $hash = trim($_supplier) . '+' . trim($_sku);
+            $hashTable[$hash] = $supplierInfo;
+        }
+        
+        return $hashTable;
+    }
+    
+    /**
      * Dynamically find the indexes rather than hard coding each index
      *
      * @param $rawHeaderRow
@@ -593,6 +628,8 @@ class AllocadenceQuickBooks
      * @return string
      */
     private function qbMapVendor(string $allocSupplier): ?string {
+        //TODO: get [vendor_codes] added to output file
+        
         // [["Ennis, Inc", 0], ["Wilmer", 1]... etc.]
         $qbVendors = $this->qbVendors;
         $matchedAllocSupplier = null;
