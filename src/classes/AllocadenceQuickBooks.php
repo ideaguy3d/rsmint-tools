@@ -266,11 +266,6 @@ class AllocadenceQuickBooks
                 //$_description = trim($po[$f['Description']]);
                 $_warehouse = trim($po[$f['Warehouse Name']]);
                 
-                // _DEBUG
-                if($_supplier === 'Wilmer - Baltimore') {
-                    $debug = 1;
-                }
-                
                 // [vendor code]
                 $_vendorCode = 'no vendor code'; // default val
                 $_supplierCost = ''; // default val
@@ -280,7 +275,7 @@ class AllocadenceQuickBooks
                     $vendorCode = $tVendorCode[$this->titlesVendorCodes->vendorCode];
                     $_supplierCost = ' cost = ' . $tVendorCode[$this->titlesVendorCodes->unitCost];
                     if($vendorCode !== $_sku && $vendorCode !== 'none') {
-                        $_vendorCode = $vendorCode;
+                        $_vendorCode = "vendor code: $vendorCode";
                     }
                 }
                 
