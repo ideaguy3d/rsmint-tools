@@ -77,6 +77,11 @@ class AllocadenceQuickBooks
     private array $vendorCodes;
     
     /**
+     * ENUM for vendor codes CSV
+     */
+    private object $titlesVendorCodes;
+    
+    /**
      * ENUM for important fields names aka titles / header row
      * from the raw PO CSV
      */
@@ -101,6 +106,37 @@ class AllocadenceQuickBooks
         $localDownloads = 'C:\Users\julius\Downloads';
         $proDownloads = 'C:\Users\RSMADMIN\Downloads';
         $isLocal = AppGlobals::isLocalHost();
+    
+        // literal field names of the vendor codes csv
+        $this->titlesVendorCodes = new class() {
+            public string $supplier = 'supplier';
+            public string $sku = 'sku';
+            public string $vendorCode = 'vendor_code';
+            public string $unitCost = 'unit_cost';
+        };
+    
+        // ULTRA important field names cached into an object
+        $this->titlesPo = new class() {
+            public string $poNum = 'PO Number';
+            // E, P, PS
+            public string $category = 'Category';
+            // vendor
+            public string $supplier = 'Supplier';
+            public string $warehouse = 'Warehouse Name';
+        };
+    
+        // the fields are spelled as they are in the Alloc CSV file
+        $this->titlesIr = new class() {
+            public $receipt = 'Receipt';
+            public $sku = 'SKU';
+            public $quantity = 'Quantity';
+            public $unitCost = 'Unit Cost';
+            public $receivedDate = 'Received Date';
+        
+            // PO# and Receipt#
+            public $poNum = 'PO# / Receipt#';
+            public $name = 'Name'; // vendor
+        };
         
         $qbVendors = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFileName_qbVendors);
         $this->qbVendors = $this->hashArray($qbVendors);
@@ -111,31 +147,7 @@ class AllocadenceQuickBooks
         // create {supplier + sku} hash to get "vendor code + vendor sku cost"
         $vendorCodes = CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFleName_vendorCodes);
         $vendorHash = $this->hashArray($vendorCodes);
-        $this->vendorCodes = $this->supplierSkuHash($vendorHash);
-        $debug = 1;
-        
-        // ULTRA important field names cached into an object
-        $this->titlesPo = new class() {
-            public string $poNum = 'PO Number';
-            // E, P, PS
-            public string $category = 'Category';
-            // vendor
-            public string $supplier = 'Supplier';
-            public string $warehouse = 'Warehouse Name';
-        };
-        
-        // the fields are spelled as they are in the Alloc CSV file
-        $this->titlesIr = new class() {
-            public $receipt = 'Receipt';
-            public $sku = 'SKU';
-            public $quantity = 'Quantity';
-            public $unitCost = 'Unit Cost';
-            public $receivedDate = 'Received Date';
-            
-            // PO# and Receipt#
-            public $poNum = 'PO# / Receipt#';
-            public $name = 'Name'; // vendor
-        };
+        $this->vendorCodes = $this->hashTableSupplierSku($vendorHash);
         
         if($isLocal) {
             $this->inFolder_downloads = $localDownloads;
@@ -254,10 +266,33 @@ class AllocadenceQuickBooks
                 //$_description = trim($po[$f['Description']]);
                 $_warehouse = trim($po[$f['Warehouse Name']]);
                 
+                // _DEBUG
+                if($_supplier === 'Wilmer - Baltimore') {
+                    $debug = 1;
+                }
+                
+                // [vendor code]
+                $_vendorCode = 'no vendor code'; // default val
+                $_supplierCost = ''; // default val
+                $tVendorCodeHash = trim($_supplier) . '+' . trim($_sku);
+                $tVendorCode = $this->vendorCodes[$tVendorCodeHash] ?? null;
+                if(null !== $tVendorCode) {
+                    $vendorCode = $tVendorCode[$this->titlesVendorCodes->vendorCode];
+                    $_supplierCost = ' cost = ' . $tVendorCode[$this->titlesVendorCodes->unitCost];
+                    if($vendorCode !== $_sku && $vendorCode !== 'none') {
+                        $_vendorCode = $vendorCode;
+                    }
+                }
+                
+                // [value]
                 $value1 = $po[$f['Value']];
                 $value = str_replace(',', '', $value1);
                 $_value = (float)$value;
-                $_qbDescription = sprintf($fDes, $_sku, $_description, $_supplier, $_category, $value1, $_warehouse);
+                
+                // [description]
+                $_qbDescription = sprintf(
+                    $fDes, $_sku, $_vendorCode, $_supplier . $_supplierCost, $_category, $value1, $_warehouse
+                );
                 
                 $qbVendor = $this->qbMapVendor($_supplier);
                 
@@ -584,10 +619,10 @@ class AllocadenceQuickBooks
      *
      * @return array
      */
-    private function supplierSkuHash(array $vendorCodesHash): array {
+    private function hashTableSupplierSku(array $vendorCodesHash): array {
         // _HARD CODED hash's (literally copied & pasted from csv)
-        $hSku = 'sku';
-        $hSupplier = 'supplier';
+        $hSku = $this->titlesVendorCodes->sku;
+        $hSupplier = $this->titlesVendorCodes->supplier;
         $hashTable = [];
         
         foreach($vendorCodesHash as $h => $supplierInfo) {
