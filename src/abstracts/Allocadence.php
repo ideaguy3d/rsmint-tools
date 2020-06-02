@@ -17,6 +17,8 @@ abstract class Allocadence
     
     protected string $proDownloads = 'C:\Users\RSMADMIN\Downloads';
     
+    protected string $inFileName_botSupplierInfo = 'BOT_apr2020_supplier_info.csv';
+    
     /**
      * The windows downloads folder path
      */
@@ -26,16 +28,22 @@ abstract class Allocadence
     
     protected array $downloadedFiles;
     
+    protected array $botSupplierInfo;
+    
     public function __construct() {
         $this->isLocal = AppGlobals::isLocalHost();
-    
+        
+        $this->botSupplierInfo = $this->hashArray(
+            CsvParseModel::specificCsv2array($this->inFolder_requiredCsv, $this->inFileName_botSupplierInfo)
+        );
+        
         if($this->isLocal) {
             $this->inFolder_downloads = $this->localDownloads;
         }
         else {
             $this->inFolder_downloads = $this->proDownloads;
         }
-    
+        
         // scan all the files in the windows download folder
         $this->downloadedFiles = scandir($this->inFolder_downloads);
     }
