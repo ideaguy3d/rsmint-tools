@@ -14,18 +14,12 @@ use stdClass;
  * @class AllocadenceQuickBooks
  * @package Redstone\Tools
  */
-class AllocadenceQuickBooks
+class AllocadenceQuickBooks extends Allocadence
 {
     /**
      * The windows downloads folder path
      */
     private string $inFolder_downloads;
-    
-    /**
-     * The name of the exported PO csv, PHP attempts to give it the correct week num
-     * and attempts to append each facility scanned into the name
-     */
-    private string $outFileName_purchaseOrders;
     
     /**
      * The downloaded CSVs from Allocadence Purchase Orders. I select the date range & tick 'Show Received POs'
@@ -103,9 +97,7 @@ class AllocadenceQuickBooks
     private string $inFleName_vendorCodes = 'supplier_vendor_codes.csv';
     
     public function __construct() {
-        $localDownloads = 'C:\Users\julius\Downloads';
-        $proDownloads = 'C:\Users\RSMADMIN\Downloads';
-        $isLocal = AppGlobals::isLocalHost();
+        parent::__construct();
     
         // literal field names of the vendor codes csv
         $this->titlesVendorCodes = new class() {
@@ -149,11 +141,11 @@ class AllocadenceQuickBooks
         $vendorHash = $this->hashArray($vendorCodes);
         $this->vendorCodes = $this->hashTableSupplierSku($vendorHash);
         
-        if($isLocal) {
-            $this->inFolder_downloads = $localDownloads;
+        if($this->isLocal) {
+            $this->inFolder_downloads = $this->localDownloads;
         }
         else {
-            $this->inFolder_downloads = $proDownloads;
+            $this->inFolder_downloads = $this->proDownloads;
         }
         
         $poFileName = 'inboundexportbydate';
@@ -321,7 +313,7 @@ class AllocadenceQuickBooks
             AppGlobals::rsLogInfo($e->getMessage());
         }
         $week = (int)$date->format("W") - 1;
-        $this->outFileName_purchaseOrders = $file = "purchase orders 2020 week $week $ff->facilities";
+        $outFileName_purchaseOrders = $file = "purchase orders 2020 week $week $ff->facilities";
         $path = $this->outFolder_poExport;
         CsvParseModel::export2csv($qbPurchaseOrderMap, $path, $file);
         
