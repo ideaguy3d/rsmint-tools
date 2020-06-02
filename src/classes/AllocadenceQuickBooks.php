@@ -17,11 +17,6 @@ use stdClass;
 class AllocadenceQuickBooks extends Allocadence
 {
     /**
-     * The windows downloads folder path
-     */
-    private string $inFolder_downloads;
-    
-    /**
      * The downloaded CSVs from Allocadence Purchase Orders. I select the date range & tick 'Show Received POs'
      * I have to click download while in West Sacramento, Denver, and Atlanta mode
      */
@@ -90,10 +85,13 @@ class AllocadenceQuickBooks extends Allocadence
     
     /* Class Initializations */
     private string $outFolder_itemReceipts = 'csv/_item-receipts';
+    
     private string $outFolder_poExport = 'csv/_purchase-orders';
-    private string $inFolder_requiredCsv = 'csv/@required_csv';
+   
     private string $inFileName_qbVendors = 'quickbooks-vendors.csv';
+    
     private string $inFileName_allocSuppliers = 'allocadence-suppliers.csv';
+    
     private string $inFleName_vendorCodes = 'supplier_vendor_codes.csv';
     
     public function __construct() {
@@ -151,15 +149,12 @@ class AllocadenceQuickBooks extends Allocadence
         $poFileName = 'inboundexportbydate';
         $irFileName = 'inventoryreceived';
         
-        // scan all the files in the windows download folder
-        $downloadedFiles = scandir($this->inFolder_downloads);
-        
         // each po & ir CSV downloaded from Allocadence
         $poFilesArray = [];
         $irFilesArray = [];
         
         // get each downloaded inboundexportbydate & inventoryreceived file from Allocadence
-        foreach($downloadedFiles as $file) {
+        foreach($this->downloadedFiles as $file) {
             $isPoFile = (strpos($file, $poFileName) !== false);
             $isIrFile = (strpos($file, $irFileName) !== false);
             
@@ -557,44 +552,6 @@ class AllocadenceQuickBooks extends Allocadence
         }
         
         return $grpByPo;
-    }
-    
-    /**
-     * Use the values in the header row to create a hashed array
-     * So basically convert an indexed array to an associative array
-     *
-     * @param array $indexedArrayTable - an 2D array like [['po', 'qty'],[123, 1000]]
-     *
-     * @return array - return an array like [['po' => 'po', 'qty'=>'qty], ['po'=>123, 'qty'=>1000]]
-     */
-    private function hashArray(array $indexedArrayTable): array {
-        $headerRow = $indexedArrayTable[0];
-        $headerRowCount = count($headerRow);
-        
-        foreach($indexedArrayTable as $i => $rec) {
-            $recCount = count($rec);
-            
-            //TODO: throw an exception
-            if($recCount !== $headerRowCount) {
-                $ml = __METHOD__ . ' line: ' . __LINE__;
-                $rsError = "\n\n__>> RS_ERROR: header row and record are not equal in count ~$ml \n\n";
-                echo $rsError;
-                AppGlobals::rsLogInfo($rsError);
-            }
-            
-            // sanitize each field in rec a bit
-            foreach($rec as $idx => $val) {
-                if(empty($val)) {
-                    continue;
-                }
-                
-                $rec[$idx] = trim($val);
-            }
-            
-            $indexedArrayTable[$i] = array_combine(array_values($headerRow), $rec);
-        }
-        
-        return $indexedArrayTable;
     }
     
     /**

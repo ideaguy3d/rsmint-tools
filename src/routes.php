@@ -146,8 +146,7 @@ return function(App $app) {
             
             // do the inv usage cost !!
             $invUsage = new AllocadenceInvUsuageCosts();
-            
-            
+            $invUsage->calcInUsageCosts();
             return $response->getBody()->write('<br><br> <p>Controller completed processing</p> <br><br>');
         }
     );
