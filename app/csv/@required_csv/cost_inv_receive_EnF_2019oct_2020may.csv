@@ -1,0 +1,4 @@
+Receipt,SKU,Category,Description,Quantity,UOM,"Lot Number","Expiration Date","PKG #","Item #","Pallet #","Unit Cost","Sales Price",Weight,Size,Color,Window?,Special,Builds,Reserved,Client,"Received Date","PO# / Receipt#",Name
+1844,"P475-80GL-T-SMARTBIZ BT INST ",P,"4X7.5 SMARTBIZ BANKTERM INSERT",175000,Each,,"0000-00-00 00:00:00",,,,0.02665,0.000000,80.000000,4X7.5,MULTI,,,"Letter, Print Other","0000-00-00 00:00:00",,"11/05/2019 6:42:35 am",A-00185,"Envelopes & Forms"
+1844,E10WH-2W-SC-SMARTBIZ-DW-CUST,E,"#10 D/W WH SMARTBIZ CUSTOM WINDOW",250000,Each,,"0000-00-00 00:00:00",,,,0.0185,0.000000,24.000000,#10,WHITE,2W,,"Letter, Print Other","0000-00-00 00:00:00",,"11/05/2019 6:42:35 am",A-00185,"Envelopes & Forms"
+1909,E10WH-2W-SC-SMARTBIZ-DW-CUST,E,"#10 D/W WH SMARTBIZ CUSTOM WINDOW",250800,Each,,"0000-00-00 00:00:00",,,,0.0185,0.000000,24.000000,#10,WHITE,2W,,"Letter, Print Other","0000-00-00 00:00:00",,"11/14/2019 10:42:22 am",A-00136,"Envelopes & Forms"
