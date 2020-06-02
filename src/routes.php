@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Redstone\Tools\AllocadenceInvUsuageCosts;
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -115,21 +116,23 @@ return function(App $app) {
      * Q string:
      * ?po= yes||no
      * &rec= yes||no
+     * &inv= yes||no
      */
     $app->get('/alloc/qb',
         function(Request $request, Response $response) use ($container, $app) {
+            // route helper functions
+            function go($q) {
+                if($q === null) return false;
+                return (array_search($q, ['yes', '1', 'true']) !== false);
+            }
+            
+            // function inits
             $qStr = $request->getQueryParams();
             // 'Purchase Order' query value
             $po = $qStr['po'] ?? null; // yes or no
             // 'Receiving' query value
             $rec = $qStr['rec'] ?? null; // // yes or no
             $qbAlloc = new AllocadenceQuickBooks();
-            
-            // route helper functions
-            function go($q) {
-                if($q === null) return false;
-                return (array_search($q, ['yes', '1', 'true']) !== false);
-            }
             
             if(go($po)) {
                 // map the purchase orders
@@ -140,6 +143,12 @@ return function(App $app) {
                 // map the item receipts
                 $qbAlloc->qbItemReceiptMap();
             }
+            
+            // do the inv usage cost !!
+            $invUsage = new AllocadenceInvUsuageCosts();
+            
+            
+            return $response->getBody()->write('<br><br> <p>Controller completed processing</p> <br><br>');
         }
     );
     

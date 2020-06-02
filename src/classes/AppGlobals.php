@@ -15,12 +15,12 @@ class AppGlobals
 {
     //-------------------------------------------------------------
     // TURN DEBUG MODE on OR off, then set the route in routes.php
-    public static $NINJA_AUTO_DEBUG = true;
+    public static bool $NINJA_AUTO_DEBUG = false;
     //-------------------------------------------------------------
     
     //-------------------------------------------------------------
     // TURN TEST MODE on OR off, this is set for unit testing
-    public static $NINJA_AUTO_TEST = false;
+    public static bool $NINJA_AUTO_TEST = false;
     //-------------------------------------------------------------
     
     // local path, NOT the production path
