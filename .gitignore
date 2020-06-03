@@ -5,3 +5,4 @@ app/csv/_purchase-orders
 app/csv/_item-receipts
 vendor
 app/logs
+csv
