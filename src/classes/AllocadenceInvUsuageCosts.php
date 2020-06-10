@@ -48,6 +48,9 @@ class AllocadenceInvUsuageCosts extends Allocadence
     public function __construct() {
         parent::__construct();
         
+        // add header row to the simple SKU no cost table
+        $this->noSkuCostSlim['header_row'] = ['sku', 'cost'];
+        
         $this->titlesOrderDetails = new class() {
             public string $sku = 'SKU';
             public string $qty = 'Picked Qty';
@@ -273,7 +276,7 @@ class AllocadenceInvUsuageCosts extends Allocadence
         // normalize from [[[]][[]]] to [[][]], O(5n), only 2-5 facilities
         foreach($this->noSkuCost as $fac => $records) {
             foreach($records as $sku => $rec) {
-                $this->noSkuCostSlim[$sku] ??= [$sku, '???'];
+                $this->noSkuCostSlim[$sku] ??= [$sku, '?'];
                 $rec = $rec[0]['all_data'] ?? $rec[0];
             
                 // inv received
@@ -370,7 +373,6 @@ class AllocadenceInvUsuageCosts extends Allocadence
                 
                 // if cost is still null, delete it and add it to the no sku list
                 if(is_null($cost)) {
-                    $this->noSkuCostInvReceive[$fac][$sku] = $this->facHashTable[$fac][$sku];
                     unset($this->facHashTable[$fac][$sku]);
                 }
                 else {

@@ -130,8 +130,11 @@ return function(App $app) {
             $qStr = $request->getQueryParams();
             // 'Purchase Order' query value
             $po = $qStr['po'] ?? null; // yes or no
-            // 'Receiving' query value
-            $rec = $qStr['rec'] ?? null; // // yes or no
+            // 'Inventory Received' query value
+            $rec = $qStr['rec'] ?? null; // yes or no
+            // 'Usage Cost' query val
+            $usage = $qStr['usage'] ?? null; // yes or no
+            
             $qbAlloc = new AllocadenceQuickBooks();
             
             if(go($po)) {
@@ -144,9 +147,13 @@ return function(App $app) {
                 $qbAlloc->qbItemReceiptMap();
             }
             
-            // do the inv usage cost !!
-            $invUsage = new AllocadenceInvUsuageCosts();
-            $invUsage->calcInUsageCosts();
+            if(go($usage)) {
+                // do the inv usage cost !!
+                $invUsage = new AllocadenceInvUsuageCosts();
+                $invUsage->calcInUsageCosts();
+            }
+            
+            
             return $response->getBody()->write('<br><br> <p>Controller completed processing</p> <br><br>');
         }
     );
