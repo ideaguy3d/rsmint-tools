@@ -37,9 +37,9 @@ class AllocadenceInvUsuageCosts extends Allocadence
     
     private array $orderDetails;
     
-    private array $noSkuCostInvReceive;
+    private array $noSkuCost;
     
-    private array $noSkuCostOrdDetail;
+    private array $noSkuCostSlim;
     
     private array $facHashTable;
     
@@ -109,14 +109,6 @@ class AllocadenceInvUsuageCosts extends Allocadence
             public string $kDen = 'Denver';
             public string $kEnf = 'E&F';
             public string $kSac = 'West Sacramento';
-            
-            // r = result
-            public array $rAtl;
-            public array $rBal;
-            public array $rDen;
-            public array $rEnf;
-            public array $rSac;
-            
             // the RS Inv Costs field names
             public string $rsCost = 'total_cost';
             public string $rsOrder = 'total_orders';
@@ -125,12 +117,10 @@ class AllocadenceInvUsuageCosts extends Allocadence
             // Costs' by SKU & Category
             public string $rsSku = 'SKU';
             public string $rsCat = 'Category';
-            
             // SKU COST ARRAY
             public array $facSkuCost;
             // CATEGORY COST ARRAY
             public array $facCategoryCost;
-            
             // a list of valid facilities
             public array $facList;
             
@@ -167,13 +157,15 @@ class AllocadenceInvUsuageCosts extends Allocadence
         // OUTER_LOOP_1, calculate the SKU costs
         foreach($this->orderDetails as $i => $order) {
             if(0 === $i) continue;
-            
             $_fac = $facRemap($order[$this->titlesOrderDetails->fac]);
             $_qty = $order[$this->titlesOrderDetails->qty];
             $_sku = $order[$this->titlesOrderDetails->sku];
             $_category = $order[$this->titlesOrderDetails->cat];
-            //$_completeOn = $order[$this->titlesOrderDetails->completeOn];
-            //$_placeOn = $order[$this->titlesOrderDetails->placeOn];
+            $_completeOn = $order[$this->titlesOrderDetails->completeOn];
+            $_placeOn = $order[$this->titlesOrderDetails->placeOn];
+            
+            // if SKU has already been added to the no cost table, continue
+            if(isset($this->noSkuCost[$_fac][$_sku])) continue;
             
             // some SKUs contain '-cli'
             if(stripos($_sku, 'cli') !== false) {
@@ -181,21 +173,22 @@ class AllocadenceInvUsuageCosts extends Allocadence
             }
             // do NOT include freight
             if(stripos($_sku, 'inbound') !== false) {
-                $this->noSkuCostOrdDetail[$_fac][$_sku] [] = $order;
+                $this->noSkuCost[$_fac][$_sku] [] = $order;
                 continue;
             }
             
             // make sure the order is from a known facility
             if(!in_array($_fac, $ff->facList)) {
-                $this->noSkuCostOrdDetail[$_fac][$_sku] [] = $order;
+                $this->noSkuCost[$_fac][$_sku] [] = $order;
                 continue;
             }
             
             // 'cost' may be undefined if something went wrong
             $facHashTableSkuCost = $this->facHashTable[$_fac][$_sku]['cost'] ?? null;
             if(is_null($facHashTableSkuCost)) {
-                // maybe throw an exception
-                $this->noSkuCostOrdDetail[$_fac][$_sku] [] = $order;
+                $facHashTableSkuCost = $this->checkBotSupplierInfo($_sku, $_fac, $order);
+            }
+            if(is_null($facHashTableSkuCost)) {
                 continue;
             }
             $c_skuCost = ($_qty * $facHashTableSkuCost);
@@ -228,6 +221,7 @@ class AllocadenceInvUsuageCosts extends Allocadence
                 $ff->facCategoryCost[$_fac][$_category][$ff->rsQty] = $_qty;
                 $ff->facCategoryCost[$_fac][$_category][$ff->rsFac] = $_fac;
             }
+            
             $debug = 1;
             
         } // end of: OUTER_LOOP_1
@@ -253,36 +247,79 @@ class AllocadenceInvUsuageCosts extends Allocadence
                 $records, $this->outFolder_invUsage, "$fac-sku-costs"
             );
         }
-        
-        // export No Cost SKUs from the orderdetails.csv
-        foreach($this->noSkuCostOrdDetail as $fac => $records) {
-            foreach($records as $sku => $rec) {
-                $headerRow = array_keys($rec[0]);
-                array_unshift($rec, $headerRow);
-                $debug = 1;
-                CsvParseModel::export2csv(
-                    $rec, $this->outFolder_invUsage . "/no-costs", "$fac $sku -NO COST FROM ORDER DETAILS"
-                );
-            }
-        }
-        
-        // export No Cost SKUs from inventoryreceived.csv
-        foreach($this->noSkuCostInvReceive as $fac => $records) {
+    
+        /*
+                [
+                    [] // header
+                    [] // body
+                ]
             
+                [
+                    [[]]
+                    [[]]
+                ]
+            */
+    
+        // 70+ fields
+        $ordDetailsNoCost = [];
+        // 24 fields
+        $invReceivedNoCost = [];
+    
+        $normNoCosts = function(array &$set) use (&$rec) {
+            if(count($set) === 0) $set [] = array_keys($rec);
+            $set [] = $rec;
+        };
+    
+        // normalize from [[[]][[]]] to [[][]], O(5n), only 2-5 facilities
+        foreach($this->noSkuCost as $fac => $records) {
             foreach($records as $sku => $rec) {
-                // this can be a huge ______PAIN if there is ever more than 1 elem in $rec
-                $rec = [$rec[0]['all_data']];
-                $headerRow = array_keys($rec[0]);
-                array_unshift($rec, $headerRow);
-                $debug = 1;
-                CsvParseModel::export2csv(
-                    $rec, $this->outFolder_invUsage . "/no-costs", "$fac $sku -NO COST FROM INVENTORY RECEIVED"
-                );
+                $this->noSkuCostSlim[$sku] ??= [$sku, '???'];
+                $rec = $rec[0]['all_data'] ?? $rec[0];
+            
+                // inv received
+                if(count($rec) < 30) $normNoCosts($invReceivedNoCost);
+                // ord details
+                else $normNoCosts($ordDetailsNoCost);
             }
         }
+    
+        CsvParseModel::export2csv(
+            $invReceivedNoCost, $this->outFolder_invUsage . "/no-costs", "no_cost_inventory_received"
+        );
+        CsvParseModel::export2csv(
+            $ordDetailsNoCost, $this->outFolder_invUsage . "/no-costs", "no_cost_order_details"
+        );
+        CsvParseModel::export2csv(
+            $this->noSkuCostSlim, $this->outFolder_invUsage . "/no-costs", 'simple_no_cost_list'
+        );
         
         $debug = 1;
         
+    }
+    
+    /**
+     * Cost has not been found for an order or from the inventory received, so
+     * check the scraped supplier info table
+     *
+     * DEPENDS ON CLASS PROP: $this->facHashTable
+     *
+     * @param string $sku
+     * @param string $fac
+     * @param array|null $order
+     *
+     * @return float|null
+     */
+    private function checkBotSupplierInfo(string $sku, string $fac, array $order = null): ?float {
+        foreach($this->botSupplierInfo as $item) {
+            if($item['sku'] == $sku) {
+                return (float)$item['unit_cost'];
+            }
+        }
+        
+        $this->noSkuCost[$fac][$sku] = is_null($order)
+            ? $this->facHashTable[$fac][$sku] : [$order];
+        
+        return null;
     }
     
     /**
@@ -296,12 +333,12 @@ class AllocadenceInvUsuageCosts extends Allocadence
             'enf' => $this->i_enfCosts,
             'sac' => $this->i_sacCosts,
         ];
-        $facHashTable = [];
         
         // OUTER_LOOP_1 O(6*n)
         foreach($facCosts as $fac => $costSet) {
             $_sku = null;
-            // inner_loop_1
+            
+            // inner_loop_1, create the $facHashTable
             foreach($costSet as $i => $costs) {
                 if(0 === $i) continue;
                 
@@ -312,13 +349,14 @@ class AllocadenceInvUsuageCosts extends Allocadence
                 $_cost = $costs [$this->titlesInvReceived->cost];
                 $_date = $costs[$this->titlesInvReceived->date];
                 
-                $facHashTable[$fac][$_sku] [] = [
+                $this->facHashTable[$fac][$_sku] [] = [
                     'sku' => $_sku, 'cost' => $_cost, 'date' => $_date, 'fac' => $fac, 'all_data' => $costs,
                 ];
             }
             
-            // inner_loop_2
-            foreach($facHashTable[$fac] as $sku => $skuTable) {
+            // inner_loop_2 over $facHashTable, as the facHashTable is being constructed loop over
+            // the just created $fac.$sku hash
+            foreach($this->facHashTable[$fac] as $sku => $skuTable) {
                 $dates = array_column($skuTable, 'date');
                 arsort($dates);
                 $datesSorted = array_values($dates);
@@ -327,21 +365,16 @@ class AllocadenceInvUsuageCosts extends Allocadence
                 
                 // search the bot scraped data for a supplier cost
                 if(is_null($cost)) {
-                    foreach($this->botSupplierInfo as $item) {
-                        if($item['sku'] == $sku) {
-                            $cost = (float)$item['unit_cost'];
-                            break;
-                        }
-                    }
+                    $cost = $this->checkBotSupplierInfo($sku, $fac);
                 }
                 
                 // if cost is still null, delete it and add it to the no sku list
                 if(is_null($cost)) {
-                    $this->noSkuCostInvReceive[$fac][$sku] = $facHashTable[$fac][$sku];
-                    unset($facHashTable[$fac][$sku]);
+                    $this->noSkuCostInvReceive[$fac][$sku] = $this->facHashTable[$fac][$sku];
+                    unset($this->facHashTable[$fac][$sku]);
                 }
                 else {
-                    $facHashTable[$fac][$sku]['cost'] = $cost;
+                    $this->facHashTable[$fac][$sku]['cost'] = $cost;
                 }
                 
             } // END OF: inner_loop_2
@@ -350,11 +383,11 @@ class AllocadenceInvUsuageCosts extends Allocadence
             
         } // end of: OUTER_LOOP_1
         
-        $this->facHashTable = $facHashTable;
         $debug = 1;
     }
     
     /**
+     * Helper recursive function
      * The most recent cost can sometimes have a cost of 0, so I need to
      * recursively get cost, if the most recent cost is 0... recurse to the
      * next most recent cost and get it if it's not 0
