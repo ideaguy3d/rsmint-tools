@@ -1,395 +1,464 @@
-supplier,sku,vendor_code,unit_cost
-Kelly Paper - Sacramento,EA6WH-0W,none,0.04552
-Kelly Paper - Sacramento,E9WH-0W,none,0.01799
-Kelly Paper - Sacramento,E10WH-2W-FC-EAG,3003937,0.01704
-Kelly Paper - Sacramento,E10WH-1W-SC-EAG,3003983,0.01594
-Kelly Paper - Sacramento,E10WH-1W-FC-EAG,3003984,0.01594
-Kelly Paper - Sacramento,E10WH-1W,3003985,0.01566
-Kelly Paper - Sacramento,E10WH-2W,3003986,0.01676
-Kelly Paper - Sacramento,E10WH-2W-SC-EAG,3003987,0.01704
-Kelly Paper - Sacramento,E10WH-1W-FC-BOX,3008671,0.01594
-Kelly Paper - Sacramento,E10WH-1W-SC-BOX,3008672,0.01594
-Kelly Paper - Sacramento,E10WH-2W-SC-BOX,3008673,0.01704
-Kelly Paper - Sacramento,E10WH-2W-FC-BOX,3008674,0.01704
-Kelly Paper - Sacramento,E69WH-0W,E69WH-0W,0.03346
-Kelly Paper - Sacramento,EA7WH-0W,EA7WH-0W,0.05116
-Kelly Paper - Sacramento,P8511-60WH,P8511-60WH,0.0092
-Southland Envelopes - Sacramento,E10GR-1W-FC-BOX,E10GR-1W-FC-BOX,0.0215
-Southland Envelopes - Sacramento,E10GR-PW,E10GR-PW,0.02215
-Southland Envelopes - Sacramento,E10GR-PW-FC-BOX,E10GR-PW-FC-BOX,0.02245
-Southland Envelopes - Sacramento,E10GR-PW-SC-BOX,E10GR-PW-SC-BOX,0.02245
-Southland Envelopes - Sacramento,E10WH-1W-FC-EAG,E10WH-1W-FC – EAG,0.01595
-Southland Envelopes - Sacramento,E10WH-1W-SC-EAG,E10WH-1W-SC-EAG,0.01595
-Southland Envelopes - Sacramento,E10WH-2W-SC-BOX,E10WH-2W-SC-BOX,0.01765
-Southland Envelopes - Sacramento,E10WH-2W-SC1935 SMARTBIZ DW CUST-CLI,none,0.02
-Southland Envelopes - Sacramento,E69IV-0W-LN,none,0.07475
-Southland Envelopes - Sacramento,E10IV-0W-LN,none,0.04965
-Southland Envelopes - Sacramento,E912BK-0W,none,0.0595
-Southland Envelopes - Sacramento,E10WH-2W-MONSTERTFSB-1946FC-M,none,0.0225
-Southland Envelopes - Sacramento,E10BK-1W,E10BK-1W,0.019
-Southland Envelopes - Sacramento,E10BK-1W-FC-BOX,E10BK-1W-FC-BOX,0.0195
-Southland Envelopes - Sacramento,E10BK-1W-SC-CIR,E10BK-1W-SC,0.0195
-Southland Envelopes - Sacramento,E10BK-1W-SC-BOX,E10BK-1W-SC-BOX,0.0195
-Southland Envelopes - Sacramento,E10BK-2W,E10BK-2W,0.02035
-Southland Envelopes - Sacramento,E10BK-2W-FC-EAG,E10BK-2W-FC-Eag,0.02075
-Southland Envelopes - Sacramento,E10BK-HW-FC1935,E10BK-HW-FC1935,0
-Southland Envelopes - Sacramento,E10GR-1W,E10GR-1W,0.01975
-Southland Envelopes - Sacramento,E10GR-1W-SC-BOX,E10GR-1W-SC-BOX,0.0215
-Southland Envelopes - Sacramento,E10WH-0W,E10WH-0W,0.015
-Southland Envelopes - Sacramento,E10WH-1W,E10WH-1W,0.01595
-Southland Envelopes - Sacramento,E10WH-1W-FC-BOX,E10WH-1W-FC - BOX,0.01635
-Southland Envelopes - Sacramento,E10WH-1W-SC-BOX,E10WH-1W-SC-BOX,0.01635
-Southland Envelopes - Sacramento,E10WH-2W,E10WH-2W,0.01715
-Southland Envelopes - Sacramento,E10WH-2W-FC-BOX,E10WH-2W-FC-BOX,0.0195
-Southland Envelopes - Sacramento,E10WH-2W-FC-EAG,E10WH-2W-FC-EAG,0.0195
-Southland Envelopes - Sacramento,E10WH-2W-FC1946M,E10WH-2W-FC1946,0.01765
-Southland Envelopes - Sacramento,E10WH-2W-MONSTERTFSB,E10WH-2W-MonsterTFSB,0.0225
-Southland Envelopes - Sacramento,E10WH-2W-SC-EAG,E10WH-2W-SC-EAG,0.01765
-Southland Envelopes - Sacramento,E10WH-FULLW,E10WH-FULLW,0.0296
-Southland Envelopes - Sacramento,E10WH-HW,E10WH-HW,0.01955
-Southland Envelopes - Sacramento,E10WH-HW-FC-BOX,E10WH-HW-FC-BOX,0.01995
-Southland Envelopes - Sacramento,E10WH-HW-SC-BOX,E10WH-HW-SC-BOX,0.01995
-Southland Envelopes - Sacramento,E10WH-OSHW-FC1946M,E10WH-OSHW-FC1946,0.01995
-Southland Envelopes - Sacramento,E10WH-PW,E10WH-PW,0.01835
-Southland Envelopes - Sacramento,E10WH-PW-FC-BOX,E10WH-PW-FC-BOX,0.01875
-Southland Envelopes - Sacramento,E10WH-PW-FC1946M,E10WH-PW-FC1946,0.01875
-Southland Envelopes - Sacramento,E10WH-PW-SC-BOX,E10WH-PW-SC-BOX,0.01875
-Southland Envelopes - Sacramento,E69WH-0W,E69WH-0W,0.02395
-Southland Envelopes - Sacramento,E69WH-1W,E69WH-1W,0.0289
-Southland Envelopes - Sacramento,E69WH-2W,E69WH-2W,0.038
-Southland Envelopes - Sacramento,E69WH-2W-SC-BOX,E69WH-2W-SC1935-Box,0.03925
-Southland Envelopes - Sacramento,E9WH-0W,E9WH-0W,0.01475
-Southland Envelopes - Sacramento,E9WH-1W,E9WH-1W,0.01595
-Southland Envelopes - Sacramento,EA7WH-0W,EA7WH-0W,0.0224
-Advanced Image Direct,E10BK-1W,none,0.01994
-Advanced Image Direct,E10WH-HW-FC-BOX,none,0.02275
-Advanced Image Direct,E10WH-HW-SC-BOX,none,0.02275
-Wilmer - Sacramento,INBOUND FREIGHT,none,125
-Wilmer - Sacramento,PS8514-GRCK-CAPITOL,EZ14GB-28CUST,0.02425
-Wilmer - Sacramento,PS8511-GRWDO,WLPSCSTKGNWDO,0.03432
-Wilmer - Sacramento,PS8511-BLWDO,WLPSCSTKWDOS ,0.03432
-Wilmer - Sacramento,PS8511-BLKWHT-CF,WLPSCSTKWHFMS1,0.0233
-Wilmer - Sacramento,PS8511-BLKWHT-HF,WLPSVSTKWH,0.0233
-Wilmer - Sacramento,PS8511-WH-HF,WLPSVSTKWH0,0.0233
-Wilmer - Sacramento,PS8514-BL-ZF,WLPSZSTK14BLFM,0.02625
-Wilmer - Sacramento,PS8514-WH-ZF,WLPSZSTK14WHFM0 ,0.02625
-Wilmer - Sacramento,PS8511-BLKWHT-ZF,WLPSZSTKWH28FM,0.0233
-Wilmer - Sacramento,PS8511-WH-ZF,WLPSZSTKWH28FMO,0.0233
-Ennis - Sacramento,PS8511-BLKWHT-HF,none,0.02625
-Ennis - Sacramento,PS8511-WH-HF,none,0.02625
-Ennis - Sacramento,PS8511-BLKWHT-CF,C81100,0.02625
-Ennis - Sacramento,PS8511-BLWDO,PS8511-BLWDO,0.0305
-Ennis - Sacramento,PS8511-GRWDO,PS8511-GRWDO,0.0305
-Ennis - Sacramento,PS8511-BLKWHT-ZF,Z81100,0.02625
-Ennis - Sacramento,PS8511-WH-ZF,Z81100,0.02625
-Ennis - Sacramento,PS8514-BL-ZF,Z81400,0.02825
-Ennis - Sacramento,PS8514-WH-ZF,Z81400,0.02825
-Veritiv - Sacramento,E69WH-0W,E69WH-0W,0.02583
-Veritiv - Sacramento,E10WH-1W-BLSECTNT,10766067,0.0165
-Veritiv - Sacramento,E10WH-0W-BLSECTNT,10776973,0.0101
-Veritiv - Sacramento,E10WH-0W,E10WH-0W,0.01625
-Veritiv - Sacramento,E10WH-1W,E10WH-1W,0.01961
-Veritiv - Sacramento,E69WH-1W,E69WH-1W,0.0414
-Veritiv - Sacramento,E9WH-0W,E9WH-0W,0.01595
-Veritiv - Sacramento,E9WH-1W,E9WH-1W,0.02276
-Veritiv - Sacramento,P1117-60WH,P1117-60WH,0.02079
-Veritiv - Sacramento,P1117-70CA-V,P1117-70CA-V,0.04549
-Veritiv - Sacramento,P1117-70WH,P1117-70WH,0.02792
-Veritiv - Sacramento,P1117-70WH-V,P1117-70WH-V,0.04615
-Veritiv - Sacramento,P1218-100WHGL-C,P1218-100WHGL-C,0.07033
-Veritiv - Sacramento,P1218-100WHGL-T,P1218-100WHGL-T,0.03924
-Veritiv - Sacramento,P1218-67CA-V-CT,P1218-67CA-V-CT,0
-Veritiv - Sacramento,P1218-67WH-V-CT,P1218-67WH-V-CT,0
-Veritiv - Sacramento,P1218-80WHGL-C,P1218-80WHGL-C,0.06055
-Veritiv - Sacramento,P1218-80WHGL-T,P1218-80WHGL-T,0.03186
-Veritiv - Sacramento,P1319-100WHGL-C,P1319-100WHGL-C,0.08068
-Veritiv - Sacramento,P1319-100WHGL-T,P1319-100WHGL-T,0.04342
-Veritiv - Sacramento,P1319-80WH-SO-C,P1319-80WH-SO-C,0
-Veritiv - Sacramento,P1319-80WHGL-C,P1319-80WHGL-C,0.07041
-Veritiv - Sacramento,P1319-80WHGL-T,P1319-80WHGL-T,0.03564
-Veritiv - Sacramento,P2335-65MGR-C,P2335-65MGR-C,0
-Veritiv - Sacramento,P2335-80WH-OS,P2335-80WH-OS,0.13092
-Veritiv - Sacramento,P2640-67BL-V,P2640-67BL-V,0.2631
-Veritiv - Sacramento,P2640-67CA-V,P2640-67CA-V,0.2631
-Veritiv - Sacramento,P2640-67GR-V,P2640-67GR-V,0.2631
-Veritiv - Sacramento,P2640-67WH-V,P2640-67WH-V,0.24837
-Veritiv - Sacramento,P2640-65OR-C,P2649-65OR-C,0
-Veritiv - Sacramento,P8511-20BL,P8511-20BL,0.00989
-Veritiv - Sacramento,P8511-20CA,P8511-20CA,0.00989
-Veritiv - Sacramento,P8511-20GR,P8511-20GR,0.00989
-Veritiv - Sacramento,P8511-20PI,P8511-20PI,0.00989
-Veritiv - Sacramento,P8511-20WH,P8511-20WH,0.0064
-Veritiv - Sacramento,P8511-60CR,P8511-60CR,0.01241
-Veritiv - Sacramento,P8511-60WH,P8511-60WH,0.0098
-Veritiv - Sacramento,P8511-70WH,P8511-70WH,0.01149
-Veritiv - Sacramento,P8514-20WH,P8514-20WH,0.0103
-Veritiv - Sacramento,P8514-60WH,P8514-60WH,0.01448
-Veritiv - Denver,E69WH-0W,E69WH-0W,0.02583
-Veritiv - Denver,E69WH-1W,E69WH-1W,0.0414
-Veritiv - Denver,P8511-65OR-C,10494218,0.04509
-Veritiv - Denver,E10WH-0W,E10WH-0W,0.01625
-Veritiv - Denver,E10WH-1W,E10WH-1W,0.01961
-Veritiv - Denver,E9WH-0W,E9WH-0W,0.01595
-Veritiv - Denver,P1117-60WH,P1117-60WH,0.02079
-Veritiv - Denver,P1117-70CA-V,P1117-70CA-V,0.04549
-Veritiv - Denver,P1117-70WH,P1117-70WH,0.02792
-Veritiv - Denver,P1117-70WH-V,P1117-70WH-V,0.04615
-Veritiv - Denver,P1218-100WHGL-C,P1218-100WHGL-C,0.07033
-Veritiv - Denver,P1218-100WHGL-T,P1218-100WHGL-T,0.03924
-Veritiv - Denver,P1218-80WHGL-C,P1218-80WHGL-C,0.06055
-Veritiv - Denver,P1218-80WHGL-T,P1218-80WHGL-T,0.03186
-Veritiv - Denver,P1319-100WHGL-C,P1319-100WHGL-C,0.08068
-Veritiv - Denver,P1319-100WHGL-T,P1319-100WHGL-T,0.04342
-Veritiv - Denver,P1319-80WHGL-C,P1319-80WHGL-C,0.07041
-Veritiv - Denver,P1319-80WHGL-T,P1319-80WHGL-T,0.03564
-Veritiv - Denver,P2335-65MGR-C,P2335-65MGR-C,0.3251
-Veritiv - Denver,P2640-67BL-V,P2640-67BL-V,0.2631
-Veritiv - Denver,P2640-67CA-V,P2640-67CA-V,0.2631
-Veritiv - Denver,P2640-67GR-V,P2640-67GR-V,0.2631
-Veritiv - Denver,P2640-67WH-V,P2640-67WH-V,0.24837
-Veritiv - Denver,P8511-20BL,P8511-20BL,0.00989
-Veritiv - Denver,P8511-20CA,P8511-20CA,0.00989
-Veritiv - Denver,P8511-20GR,P8511-20GR,0.00989
-Veritiv - Denver,P8511-20PI,P8511-20PI,0.00989
-Veritiv - Denver,P8511-20WH,P8511-20WH,0.0066
-Veritiv - Denver,P8511-60CR,P8511-60CR,0.01241
-Veritiv - Denver,P8511-60WH,P8511-60WH,0.0098
-Veritiv - Denver,P8511-70WH,P8511-70WH,0.01149
-Veritiv - Denver,P8514-20WH,P8514-20WH,0.0103
-Veritiv - Denver,P8514-60WH,P8514-60WH,0.01448
-Veritiv - Atlanta,E10WH-0W,E10WH-0W,0.01625
-Veritiv - Atlanta,E10WH-1W,E10WH-1W,0.01961
-Veritiv - Atlanta,P1117-60WH,P1117-60WH,0.02188
-Veritiv - Atlanta,P1117-70CA-V,P1117-70CA-V,0.04904
-Veritiv - Atlanta,P1117-70WH,P1117-70WH,0.02908
-Veritiv - Atlanta,P1117-70WH-V,P1117-70WH-V,0.04858
-Veritiv - Atlanta,P1218-100WHGL-C,P1218-100WHGL-C,0.07403
-Veritiv - Atlanta,P1218-100WHGL-T,P1218-100WHGL-T,0.0413
-Veritiv - Atlanta,P1218-80WHGL-C,P1218-80WHGL-C,0.06374
-Veritiv - Atlanta,P1218-80WHGL-T,P1218-80WHGL-T,0.03298
-Veritiv - Atlanta,P1319-100WHGL-C,P1319-100WHGL-C,0.08492
-Veritiv - Atlanta,P1319-100WHGL-T,P1319-100WHGL-T,0.0457
-Veritiv - Atlanta,P1319-80WHGL-C,P1319-80WHGL-C,0.07412
-Veritiv - Atlanta,P1319-80WHGL-T,P1319-80WHGL-T,0.03883
-Veritiv - Atlanta,P2335-80WH-OS,P2335-80WH-OS,0.13764
-Veritiv - Atlanta,P2640-67BL-V,P2640-67BL-V,0.26421
-Veritiv - Atlanta,P2640-67CA-V,P2640-67CA-V,26421
-Veritiv - Atlanta,P2640-67GR-V,P2640-67GR-V,0.26421
-Veritiv - Atlanta,P2640-67WH-V,P2640-67WH-V,0.26421
-Veritiv - Atlanta,P8511-20BL,P8511-20BL,0.01089
-Veritiv - Atlanta,P8511-20CA,P8511-20CA,0.01089
-Veritiv - Atlanta,P8511-20GR,P8511-20GR,0.01089
-Veritiv - Atlanta,P8511-20PI,P8511-20PI,0.01089
-Veritiv - Atlanta,P8511-20WH,P8511-20WH,0.0064
-Veritiv - Atlanta,P8511-60CR,P8511-60CR,0.01294
-Veritiv - Atlanta,P8511-60GR,P8511-60GR,0
-Veritiv - Atlanta,P8511-60WH,P8511-60WH,0.01035
-Veritiv - Atlanta,P8511-70WH,P8511-70WH,0.0121
-Veritiv - Atlanta,P8514-20WH,P8514-20WH,0.0103
-Veritiv - Atlanta,P8514-60WH,P8514-60WH,0.01448
-Veritiv - Dallas,E10WH-0W,E10WH-0W,0
-Veritiv - Dallas,E10WH-1W,E10WH-1W,0.01895
-Veritiv - Dallas,E9WH-0W,E9WH-0W,0
-Veritiv - Dallas,P1117-60WH,P1117-60WH,0.01998
-Veritiv - Dallas,P1117-70CA-V,P1117-70CA-V,0
-Veritiv - Dallas,P1117-70WH,P1117-70WH,0.02655
-Veritiv - Dallas,P1117-70WH-V,P1117-70WH-V,0.04694
-Veritiv - Dallas,P1218-100WHGL-C,P1218-100WHGL-C,0.07153
-Veritiv - Dallas,P1218-100WHGL-T,P1218-100WHGL-T,0.0399
-Veritiv - Dallas,P1218-67CA-V-CT,P1218-67CA-V-CT,0
-Veritiv - Dallas,P1218-67WH-V-CT,P1218-67WH-V-CT,0
-Veritiv - Dallas,P1218-80WHGL-C,P1218-80WHGL-C,0
-Veritiv - Dallas,P1218-80WHGL-T,P1218-80WHGL-T,0.03186
-Veritiv - Dallas,P1319-100WHGL-C,P1319-100WHGL-C,0
-Veritiv - Dallas,P1319-100WHGL-T,P1319-100WHGL-T,0
-Veritiv - Dallas,P1319-80WHGL-C,P1319-80WHGL-C,0
-Veritiv - Dallas,P1319-80WHGL-T,P1319-80WHGL-T,0
-Veritiv - Dallas,P2335-65MGR-C,P2335-65MGR-C,0
-Veritiv - Dallas,P2335-80WH-OS,P2335-80WH-OS,0.12567
-Veritiv - Dallas,P2640-67BL-V,P2640-67BL-V,0
-Veritiv - Dallas,P2640-67CA-V,P2640-67CA-V,0
-Veritiv - Dallas,P2640-67GR-V,P2640-67GR-V,0
-Veritiv - Dallas,P2640-67WH-V,P2640-67WH-V,0
-Veritiv - Dallas,P2640-65OR-C,P2649-65OR-C,0
-Veritiv - Dallas,P8511-20BL,P8511-20BL,0.01052
-Veritiv - Dallas,P8511-20CA,P8511-20CA,0.01052
-Veritiv - Dallas,P8511-20GR,P8511-20GR,0.01052
-Veritiv - Dallas,P8511-20PI,P8511-20PI,0.01052
-Veritiv - Dallas,P8511-20WH,P8511-20WH,0.00618
-Veritiv - Dallas,P8511-60CR,P8511-60CR,0
-Veritiv - Dallas,P8511-60WH,P8511-60WH,0.00945
-Veritiv - Dallas,P8511-70WH,P8511-70WH,0.01105
-Veritiv - Dallas,P8514-20WH,P8514-20WH,0.00995
-Veritiv - Dallas,P8514-60GR,P8514-60GR,0
-Veritiv - Dallas,P8514-60WH,P8514-60WH,0
-Spicers - Sacramento,P2335-67PI-V,P2335-67PI-V,0.235
-Spicers - Sacramento,P1218-100WHGL-T-SG,none,0.042
-Spicers - Sacramento,P8511-24IV-LN,none,0.04305
-Spicers - Sacramento,P8511-70CA,none,0.01405
-Spicers - Sacramento,E9WH-1W,E9WH-1W,0.0249
-Spicers - Sacramento,P1117-60WH,P1117-60WH,0.0196
-Spicers - Sacramento,P1117-70CA-V,P1117-70CA-V,0.045
-Spicers - Sacramento,P1117-70WH,P1117-70WH,0.022
-Spicers - Sacramento,P1117-70WH-V,P1117-70WH-V,0.044
-Spicers - Sacramento,P1218-100WHGL-T,P1218-100WHGL,0.041
-Spicers - Sacramento,P1218-100WHGL-C,P1218-100WHGL-C,0.07839
-Spicers - Sacramento,P1218-80WHGL-C,P1218-80WHGL-C,0.06233
-Spicers - Sacramento,P1218-80WHGL-T,P1218-80WHGL-T,0.0328
-Spicers - Sacramento,P1319-100WHGL-C,P1319-100WHGL-C,0.08972
-Spicers - Sacramento,P1319-100WHGL-T,P1319-100WHGL-T,0.04738
-Spicers - Sacramento,P1319-80WH-SO-C,P1319-80WH-SO-C,0
-Spicers - Sacramento,P1319-80WHGL-C,P1319-80WHGL-C,0.07178
-Spicers - Sacramento,P1319-80WHGL-T,P1319-80WHGL-T,0.03827
-Spicers - Sacramento,P2335-65MGR-C,P2335-65MGR-C,0.355
-Spicers - Sacramento,P2335-80WH-OS,P2335-80WH-OS,0.0985
-Spicers - Sacramento,P255305-110BF-C,P255355-110BF-C,0
-Spicers - Sacramento,P2640-67CA-V,P2640-67CA-V,0.25
-Spicers - Sacramento,P2640-67GR-V,P2640-67GR-V,0.25
-Spicers - Sacramento,P2640-67WH-V,P2640-67WH-V,0.25
-Spicers - Sacramento,P2640-65OR-C,P2649-65OR-C,0.695
-Spicers - Sacramento,P8511-20BL,P8511-20BL,0.0094
-Spicers - Sacramento,P8511-20CA,P8511-20CA,0.0094
-Spicers - Sacramento,P8511-20GR,P8511-20GR,0.0094
-Spicers - Sacramento,P8511-20PI,P8511-20PI,0.0094
-Spicers - Sacramento,P8511-20WH,P8511-20WH,0.0063
-Spicers - Sacramento,P8511-60CR,P8511-60CR,0.0121
-Spicers - Sacramento,P8511-60WH,P8511-60WH,0.0092
-Spicers - Sacramento,P8511-70WH,P8511-70WH,0.01035
-Spicers - Sacramento,P8514-20WH,P8514-20WH,0.0088
-Spicers - Sacramento,P8514-60GR,P8514-60GR,0.0155
-Spicers - Sacramento,P8514-60WH,P8514-60WH,0.0136
-Spicers - Denver,EA7WH-0W,EA7WH-0W,0.0411
-Spicers - Denver,P8511-100WH-T,P8511-100WH-T,0.01968
-Spicers - Denver,P1218-130WHSLK-C,none,0.11806
-Spicers - Denver,P1117-60WH,P1117-60WH,0.0213
-Spicers - Denver,P1117-70CA-V,P1117-70CA-V,0.045
-Spicers - Denver,P1117-70WH,P1117-70WH,0.02486
-Spicers - Denver,P1117-70WH-V,P1117-70WH-V,0.044
-Spicers - Denver,P1218-100WHGL-C,P1218-100WHGL-C,0.07839
-Spicers - Denver,P1218-100WHGL-T,P1218-100WHGL-T,0.041
-Spicers - Denver,P1218-80WHGL-C,P1218-80WHGL-C,0.06233
-Spicers - Denver,P1218-80WHGL-T,P1218-80WHGL-T,0.0328
-Spicers - Denver,P1319-100WHGL-C,P1319-100WHGL-C,0.08972
-Spicers - Denver,P1319-100WHGL-T,P1319-100WHGL-T,0.04738
-Spicers - Denver,P1319-80WHGL-C,P1319-80WHGL-C,0.07178
-Spicers - Denver,P1319-80WHGL-T,P1319-80WHGL-T,0.03827
-Spicers - Denver,P2335-65MGR-C,P2335-65MGR-C,0.355
-Spicers - Denver,P2335-80WH-OS,P2335-80WH-OS,0.0985
-Spicers - Denver,P2640-67CA-V,P2640-67CA-V,0.25
-Spicers - Denver,P2640-67GR-V,P2640-67GR-V,0.25
-Spicers - Denver,P2640-67WH-V,P2640-67WH-V,0.25
-Spicers - Denver,P2640-65OR-C,P2649-65OR-C,0.695
-Spicers - Denver,P8511-20BL,P8511-20BL,0.01
-Spicers - Denver,P8511-20CA,P8511-20CA,0.01
-Spicers - Denver,P8511-20GR,P8511-20GR,0.01
-Spicers - Denver,P8511-20PI,P8511-20PI,0.01
-Spicers - Denver,P8511-20WH,P8511-20WH,0.0063
-Spicers - Denver,P8511-60CR,P8511-60CR,0.0121
-Spicers - Denver,P8511-60WH,P8511-60WH,0.0097
-Spicers - Denver,P8511-70WH,P8511-70WH,0.01175
-Spicers - Denver,P8514-20WH,P8514-20WH,0.0088
-Spicers - Denver,P8514-60GR,P8514-60GR,0.0155
-Spicers - Denver,P8514-60WH,P8514-60WH,0.0136
-Whittier Mailing Products - Sacramento,PS8511-BLKWHT-ZF,WLPSZSTKWH28FM,0.0224
-Volume Press,P475-80GL-T-SMARTBIZ BT INST,none,0
-Volume Press,P8514-60-SMARTBIZ SHELL,none,0
-Cathy Welsh Envelopes,E10WH-2W-NP1935-EAG,none,0.0035
-Test Supplier,TISPTST#10,2111,0.002
-Test Supplier,TISM#10,2112,0.002
-Test Supplier,TIPPR-20#TESTPAPER,2113,0.002
-Test Supplier,TIENV#10BW,2114,0.008
-Test Supplier,TIPINS#20,2115,0.001
-Envelopes & Forms,E10WH-1W-SMARTBIZ TIME SEN,E10WH-1W-Smartbiz Time Sen,0
-Envelopes & Forms,P475-80GL-T-SMARTBIZ BT INST,P475-80GL-T-Smartbiz BT Inst,0.02665
-Envelopes & Forms,E10WH-2W-SC-SMARTBIZ-DW-CUST,E10WH-2W-SC1935 Smartbiz DW Cust,0.0185
-Envelopes & Forms,P8514-60-SMARTBIZ SHELL,P8514-60-Smartbiz Shell,0
-Wilmer - Denver,PS8511-BLWDO,WLPSCSTKWDOS,0.03432
-Wilmer - Denver,PS8511-BLKWHT-CF,WLPSCSTKWHFMS1P,0.0233
-Wilmer - Denver,PS8511-BLKWHT-HF,WLPSVSTKWH,0.0233
-Wilmer - Denver,PS8511-BLKWHT-ZF,WLPSZSTKWH28FM,0.0233
-Wilmer - Atlanta,PS8511-BLKWHT-CF,WLPSCSTKWHFMS1P,0.0233
-Ennis - Denver,PS8511-BLKWHT-HF,none,0.02625
-Ennis - Denver,PS8511-WH-HF,none,0.02625
-Ennis - Denver,PS8514-BL-ZF,none,0.02825
-Ennis - Denver,PS8514-WH-ZF,none,0.02825
-Ennis - Denver,PS8511-BLKWHT-CF,C81100,0.02625
-Ennis - Denver,PS8511-BLWDO,PS8511-BLWDO,0.0305
-Ennis - Denver,PS8511-GRWDO,PS8511-GRWDO,0.0305
-Ennis - Denver,PS8511-BLKWHT-ZF,Z81100,0.02625
-Ennis - Denver,PS8511-WH-ZF,Z81100,0.02625
-Ennis - Atlanta,PS8511-BLKWHT-CF,none,0.02625
-Ennis - Atlanta,PS8511-BLKWHT-HF,none,0.02625
-Ennis - Atlanta,PS8511-BLKWHT-ZF,none,0.02625
-Ennis - Atlanta,PS8511-WH-ZF,none,0.02625
-Ennis - Atlanta,PS8511-WH-HF,none,0.02625
-Ennis - Atlanta,PS8514-BL-ZF,none,0.02825
-Ennis - Atlanta,PS8514-WH-ZF,none,0.02825
-Ennis - Atlanta,PS8511-GRWDO,none,0.02725
-Southland Envelopes - Denver,E10BK-2W-FC-EAG,E10BK-2W-FC-Eag,0.02075
-Southland Envelopes - Denver,E10GR-1W-FC-BOX,E10GR-1W-FC-BOX,0.02015
-Southland Envelopes - Denver,E10GR-1W-SC-BOX,E10GR-1W-SC-BOX,0.02015
-Southland Envelopes - Denver,E10GR-PW,E10GR-PW,0.02215
-Southland Envelopes - Denver,E10GR-PW-FC-BOX,E10GR-PW-FC-BOX,0.02245
-Southland Envelopes - Denver,E10GR-PW-SC-BOX,E10GR-PW-SC-BOX,0.02245
-Southland Envelopes - Denver,E695BK-0W,E695BK-0W,0.05185
-Southland Envelopes - Denver,E69WH-0W,E69WH-0W,0.038
-Southland Envelopes - Denver,EA7WH-0W,EA7WH-0W,0.0224
-Southland Envelopes - Denver,E69WH-2W,none,0.038
-Southland Envelopes - Denver,E912BK-0W,none,0.0595
-Southland Envelopes - Denver,E10BK-0W,E10BK-0W,0.018
-Southland Envelopes - Denver,E10BK-2W,E10BK-2W,0.02035
-Southland Envelopes - Denver,E10GR-1W,E10GR-1W,0.01975
-Southland Envelopes - Denver,E10WH-0W,E10WH-0W,0.015
-Southland Envelopes - Denver,E10WH-1W,E10WH-1W,0.01595
-Southland Envelopes - Denver,E10WH-1W-FC-BOX,E10WH-1W-FC - BOX,0.01635
-Southland Envelopes - Denver,E10WH-1W-FC-EAG,E10WH-1W-FC – EAG,0.01635
-Southland Envelopes - Denver,E10WH-1W-SC-BOX,E10WH-1W-SC-BOX,0.01635
-Southland Envelopes - Denver,E10WH-1W-SC-EAG,E10WH-1W-SC-EAG,0.01635
-Southland Envelopes - Denver,E10WH-2W,E10WH-2W,0.01715
-Southland Envelopes - Denver,E10WH-2W-FC-BOX,E10WH-2W-FC-BOX,0.01765
-Southland Envelopes - Denver,E10WH-2W-FC-EAG,E10WH-2W-FC-EAG,0.01765
-Southland Envelopes - Denver,E10WH-2W-SC-BOX,E10WH-2W-SC-BOX,0.01765
-Southland Envelopes - Denver,E10WH-2W-SC-EAG,E10WH-2W-SC-EAG,0.01765
-Southland Envelopes - Denver,E10WH-FULLW,E10WH-FULLW,0.0296
-Southland Envelopes - Denver,E10WH-HW,E10WH-HW,0.01955
-Southland Envelopes - Denver,E10WH-HW-FC-BOX,E10WH-HW-FC-BOX,0.01995
-Southland Envelopes - Denver,E10WH-HW-FC-EAG,E10WH-HW-FC-EAG,0.01995
-Southland Envelopes - Denver,E10WH-HW-SC-BOX,E10WH-HW-SC-BOX,0.01995
-Southland Envelopes - Denver,E10WH-HW-SC-EAG,E10WH-HW-SC-EAG,0.01995
-Southland Envelopes - Denver,E9WH-0W,E9WH-0W,0.01475
-Kelly Paper - Denver,E10WH-2W-FC-EAG,3003937,0.01704
-Kelly Paper - Denver,E10WH-1W-SC-EAG,3003983,0.01594
-Kelly Paper - Denver,E10WH-1W-FC-EAG,3003984,0.01594
-Kelly Paper - Denver,E10WH-1W,3003985,0.01566
-Kelly Paper - Denver,E10WH-2W,3003986,0.01676
-Kelly Paper - Denver,E10WH-2W-SC-EAG,3003987,0.01704
-Kelly Paper - Denver,E10WH-1W-FC-BOX,3008671,0.01594
-Kelly Paper - Denver,E10WH-1W-SC-BOX,3008672,0.01594
-Kelly Paper - Denver,E10WH-2W-SC-BOX,3008673,0.01704
-Kelly Paper - Denver,E10WH-2W-FC-BOX,3008674,0.01704
-Kelly Paper - Denver,E69WH-0W,E69WH-0W,0.03346
-Kelly Paper - Denver,EA7WH-0W,EA7WH-0W,0.05116
-Kelly Paper - Denver,P8511-60WH,P8511-60WH,0.0092
-Kelly Paper - Atlanta,E10WH-2W-FC-EAG,3003937,0.01704
-Kelly Paper - Atlanta,E10WH-1W-SC-EAG,3003983,0.01594
-Kelly Paper - Atlanta,E10WH-1W-FC-EAG,3003984,0.01594
-Kelly Paper - Atlanta,E10WH-1W,3003985,0.01566
-Kelly Paper - Atlanta,E10WH-2W,3003986,0.01676
-Kelly Paper - Atlanta,E10WH-2W-SC-EAG,3003987,0.01704
-Kelly Paper - Atlanta,E10WH-1W-FC-BOX,3008671,0.01594
-Kelly Paper - Atlanta,E10WH-1W-SC-BOX,3008672,0.01594
-Kelly Paper - Atlanta,E10WH-2W-SC-BOX,3008673,0.01704
-Kelly Paper - Atlanta,E10WH-2W-FC-BOX,3008674,0.01704
-Kelly Paper - Atlanta,E69WH-0W,E69WH-0W,0.03346
-Kelly Paper - Atlanta,EA7WH-0W,EA7WH-0W,0.05116
-Kelly Paper - Atlanta,P8511-60WH,P8511-60WH,0.0092
-MAC Papers - Atlanta,P8514-60WH,P8514-60WH,0.01352
-Veritiv - Baltimore,P8511-60WH,none,0.01035
-Veritiv - Baltimore,P8511-70WH,none,0.0121
-Ennis - Baltimore,PS8511-BLWDO,PS8511-BLWDO,0.02725
-Ennis - Baltimore,PS8511-GRWDO,PS8511-GRWDO,0.02725
-Uline,E10WH-2W-BLSECTNT,S-11502,0.052
-Wilmer - Baltimore,PS8511-BLKWHT-CF,WLPSCSTKWHFMS1,0.0233
-Wilmer - Baltimore,PS8511-BLKWHT-HF,WLPSVSTKWH,0.0233
-Wilmer - Baltimore,PS8514-BLKWHT-ZF,WLPSZSTK14WHFMO,0.02625
-Wilmer - Baltimore,PS8511-BLKWHT-ZF,WLPSZSTKWH28FM,0.0233
+supplier,sku,vendor_code,unit_cost,
+Kelly Paper - Sacramento,EA6WH-0W,none,0.04552,
+Kelly Paper - Sacramento,E9WH-0W,none,0.01799,
+Kelly Paper - Sacramento,E10WH-2W-FC-EAG,3003937,0.01704,
+Kelly Paper - Sacramento,E10WH-1W-SC-EAG,3003983,0.01594,
+Kelly Paper - Sacramento,E10WH-1W-FC-EAG,3003984,0.01594,
+Kelly Paper - Sacramento,E10WH-1W,3003985,0.01566,
+Kelly Paper - Sacramento,E10WH-2W,3003986,0.01676,
+Kelly Paper - Sacramento,E10WH-2W-SC-EAG,3003987,0.01704,
+Kelly Paper - Sacramento,E10WH-1W-FC-BOX,3008671,0.01594,
+Kelly Paper - Sacramento,E10WH-1W-SC-BOX,3008672,0.01594,
+Kelly Paper - Sacramento,E10WH-2W-SC-BOX,3008673,0.01704,
+Kelly Paper - Sacramento,E10WH-2W-FC-BOX,3008674,0.01704,
+Kelly Paper - Sacramento,E69WH-0W,E69WH-0W,0.03346,
+Kelly Paper - Sacramento,EA7WH-0W,EA7WH-0W,0.05116,
+Kelly Paper - Sacramento,P8511-60WH,P8511-60WH,0.0092,
+Southland Envelopes - Sacramento,E10GR-1W-FC-BOX,E10GR-1W-FC-BOX,0.0215,
+Southland Envelopes - Sacramento,E10GR-PW,E10GR-PW,0.02215,
+Southland Envelopes - Sacramento,E10GR-PW-FC-BOX,E10GR-PW-FC-BOX,0.02245,
+Southland Envelopes - Sacramento,E10GR-PW-SC-BOX,E10GR-PW-SC-BOX,0.02245,
+Southland Envelopes - Sacramento,E10WH-1W-FC-EAG,E10WH-1W-FC – EAG,0.01595,
+Southland Envelopes - Sacramento,E10WH-1W-SC-EAG,E10WH-1W-SC-EAG,0.01595,
+Southland Envelopes - Sacramento,E10WH-2W-SC-BOX,E10WH-2W-SC-BOX,0.01765,
+Southland Envelopes - Sacramento,E10WH-2W-SC1935 SMARTBIZ DW CUST-CLI,none,0.02,
+Southland Envelopes - Sacramento,E69IV-0W-LN,none,0.07475,
+Southland Envelopes - Sacramento,E10IV-0W-LN,none,0.04965,
+Southland Envelopes - Sacramento,E912BK-0W,none,0.0595,
+Southland Envelopes - Sacramento,E10WH-2W-MONSTERTFSB-1946FC-M,none,0.0225,
+Southland Envelopes - Sacramento,E10BK-1W,E10BK-1W,0.019,
+Southland Envelopes - Sacramento,E10BK-1W-FC-BOX,E10BK-1W-FC-BOX,0.0195,
+Southland Envelopes - Sacramento,E10BK-1W-SC-CIR,E10BK-1W-SC,0.0195,
+Southland Envelopes - Sacramento,E10BK-1W-SC-BOX,E10BK-1W-SC-BOX,0.0195,
+Southland Envelopes - Sacramento,E10BK-2W,E10BK-2W,0.02035,
+Southland Envelopes - Sacramento,E10BK-2W-FC-EAG,E10BK-2W-FC-Eag,0.02075,
+Southland Envelopes - Sacramento,E10BK-HW-FC1935,E10BK-HW-FC1935,0,
+Southland Envelopes - Sacramento,E10GR-1W,E10GR-1W,0.01975,
+Southland Envelopes - Sacramento,E10GR-1W-SC-BOX,E10GR-1W-SC-BOX,0.0215,
+Southland Envelopes - Sacramento,E10WH-0W,E10WH-0W,0.015,
+Southland Envelopes - Sacramento,E10WH-1W,E10WH-1W,0.01595,
+Southland Envelopes - Sacramento,E10WH-1W-FC-BOX,E10WH-1W-FC - BOX,0.01635,
+Southland Envelopes - Sacramento,E10WH-1W-SC-BOX,E10WH-1W-SC-BOX,0.01635,
+Southland Envelopes - Sacramento,E10WH-2W,E10WH-2W,0.01715,
+Southland Envelopes - Sacramento,E10WH-2W-FC-BOX,E10WH-2W-FC-BOX,0.0195,
+Southland Envelopes - Sacramento,E10WH-2W-FC-EAG,E10WH-2W-FC-EAG,0.0195,
+Southland Envelopes - Sacramento,E10WH-2W-FC1946M,E10WH-2W-FC1946,0.01765,
+Southland Envelopes - Sacramento,E10WH-2W-MONSTERTFSB,E10WH-2W-MonsterTFSB,0.0225,
+Southland Envelopes - Sacramento,E10WH-2W-SC-EAG,E10WH-2W-SC-EAG,0.01765,
+Southland Envelopes - Sacramento,E10WH-FULLW,E10WH-FULLW,0.0296,
+Southland Envelopes - Sacramento,E10WH-HW,E10WH-HW,0.01955,
+Southland Envelopes - Sacramento,E10WH-HW-FC-BOX,E10WH-HW-FC-BOX,0.01995,
+Southland Envelopes - Sacramento,E10WH-HW-SC-BOX,E10WH-HW-SC-BOX,0.01995,
+Southland Envelopes - Sacramento,E10WH-OSHW-FC1946M,E10WH-OSHW-FC1946,0.01995,
+Southland Envelopes - Sacramento,E10WH-PW,E10WH-PW,0.01835,
+Southland Envelopes - Sacramento,E10WH-PW-FC-BOX,E10WH-PW-FC-BOX,0.01875,
+Southland Envelopes - Sacramento,E10WH-PW-FC1946M,E10WH-PW-FC1946,0.01875,
+Southland Envelopes - Sacramento,E10WH-PW-SC-BOX,E10WH-PW-SC-BOX,0.01875,
+Southland Envelopes - Sacramento,E69WH-0W,E69WH-0W,0.02395,
+Southland Envelopes - Sacramento,E69WH-1W,E69WH-1W,0.0289,
+Southland Envelopes - Sacramento,E69WH-2W,E69WH-2W,0.038,
+Southland Envelopes - Sacramento,E69WH-2W-SC-BOX,E69WH-2W-SC1935-Box,0.03925,
+Southland Envelopes - Sacramento,E9WH-0W,E9WH-0W,0.01475,
+Southland Envelopes - Sacramento,E9WH-1W,E9WH-1W,0.01595,
+Southland Envelopes - Sacramento,EA7WH-0W,EA7WH-0W,0.0224,
+Advanced Image Direct,E10BK-1W,none,0.01994,
+Advanced Image Direct,E10WH-HW-FC-BOX,none,0.02275,
+Advanced Image Direct,E10WH-HW-SC-BOX,none,0.02275,
+Wilmer - Sacramento,INBOUND FREIGHT,none,125,
+Wilmer - Sacramento,PS8514-GRCK-CAPITOL,EZ14GB-28CUST,0.02425,
+Wilmer - Sacramento,PS8511-GRWDO,WLPSCSTKGNWDO,0.03432,
+Wilmer - Sacramento,PS8511-BLWDO,WLPSCSTKWDOS ,0.03432,
+Wilmer - Sacramento,PS8511-BLKWHT-CF,WLPSCSTKWHFMS1,0.0233,
+Wilmer - Sacramento,PS8511-BLKWHT-HF,WLPSVSTKWH,0.0233,
+Wilmer - Sacramento,PS8511-WH-HF,WLPSVSTKWH0,0.0233,
+Wilmer - Sacramento,PS8514-BL-ZF,WLPSZSTK14BLFM,0.02625,
+Wilmer - Sacramento,PS8514-WH-ZF,WLPSZSTK14WHFM0 ,0.02625,
+Wilmer - Sacramento,PS8511-BLKWHT-ZF,WLPSZSTKWH28FM,0.0233,
+Wilmer - Sacramento,PS8511-WH-ZF,WLPSZSTKWH28FMO,0.0233,
+Ennis - Sacramento,PS8511-BLKWHT-HF,none,0.02625,
+Ennis - Sacramento,PS8511-WH-HF,none,0.02625,
+Ennis - Sacramento,PS8511-BLKWHT-CF,C81100,0.02625,
+Ennis - Sacramento,PS8511-BLWDO,PS8511-BLWDO,0.0305,
+Ennis - Sacramento,PS8511-GRWDO,PS8511-GRWDO,0.0305,
+Ennis - Sacramento,PS8511-BLKWHT-ZF,Z81100,0.02625,
+Ennis - Sacramento,PS8511-WH-ZF,Z81100,0.02625,
+Ennis - Sacramento,PS8514-BL-ZF,Z81400,0.02825,
+Ennis - Sacramento,PS8514-WH-ZF,Z81400,0.02825,
+Veritiv - Sacramento,E69WH-0W,E69WH-0W,0.02583,
+Veritiv - Sacramento,E10WH-1W-BLSECTNT,10766067,0.0165,
+Veritiv - Sacramento,E10WH-0W-BLSECTNT,10776973,0.0101,
+Veritiv - Sacramento,E10WH-0W,E10WH-0W,0.01625,
+Veritiv - Sacramento,E10WH-1W,E10WH-1W,0.01961,
+Veritiv - Sacramento,E69WH-1W,E69WH-1W,0.0414,
+Veritiv - Sacramento,E9WH-0W,E9WH-0W,0.01595,
+Veritiv - Sacramento,E9WH-1W,E9WH-1W,0.02276,
+Veritiv - Sacramento,P1117-60WH,P1117-60WH,0.02079,
+Veritiv - Sacramento,P1117-70CA-V,P1117-70CA-V,0.04549,
+Veritiv - Sacramento,P1117-70WH,P1117-70WH,0.02792,
+Veritiv - Sacramento,P1117-70WH-V,P1117-70WH-V,0.04615,
+Veritiv - Sacramento,P1218-100WHGL-C,P1218-100WHGL-C,0.07033,
+Veritiv - Sacramento,P1218-100WHGL-T,P1218-100WHGL-T,0.03924,
+Veritiv - Sacramento,P1218-67CA-V-CT,P1218-67CA-V-CT,0,
+Veritiv - Sacramento,P1218-67WH-V-CT,P1218-67WH-V-CT,0,
+Veritiv - Sacramento,P1218-80WHGL-C,P1218-80WHGL-C,0.06055,
+Veritiv - Sacramento,P1218-80WHGL-T,P1218-80WHGL-T,0.03186,
+Veritiv - Sacramento,P1319-100WHGL-C,P1319-100WHGL-C,0.08068,
+Veritiv - Sacramento,P1319-100WHGL-T,P1319-100WHGL-T,0.04342,
+Veritiv - Sacramento,P1319-80WH-SO-C,P1319-80WH-SO-C,0,
+Veritiv - Sacramento,P1319-80WHGL-C,P1319-80WHGL-C,0.07041,
+Veritiv - Sacramento,P1319-80WHGL-T,P1319-80WHGL-T,0.03564,
+Veritiv - Sacramento,P2335-65MGR-C,P2335-65MGR-C,0,
+Veritiv - Sacramento,P2335-80WH-OS,P2335-80WH-OS,0.13092,
+Veritiv - Sacramento,P2640-67BL-V,P2640-67BL-V,0.2631,
+Veritiv - Sacramento,P2640-67CA-V,P2640-67CA-V,0.2631,
+Veritiv - Sacramento,P2640-67GR-V,P2640-67GR-V,0.2631,
+Veritiv - Sacramento,P2640-67WH-V,P2640-67WH-V,0.24837,
+Veritiv - Sacramento,P2640-65OR-C,P2649-65OR-C,0,
+Veritiv - Sacramento,P8511-20BL,P8511-20BL,0.00989,
+Veritiv - Sacramento,P8511-20CA,P8511-20CA,0.00989,
+Veritiv - Sacramento,P8511-20GR,P8511-20GR,0.00989,
+Veritiv - Sacramento,P8511-20PI,P8511-20PI,0.00989,
+Veritiv - Sacramento,P8511-20WH,P8511-20WH,0.0064,
+Veritiv - Sacramento,P8511-60CR,P8511-60CR,0.01241,
+Veritiv - Sacramento,P8511-60WH,P8511-60WH,0.0098,
+Veritiv - Sacramento,P8511-70WH,P8511-70WH,0.01149,
+Veritiv - Sacramento,P8514-20WH,P8514-20WH,0.0103,
+Veritiv - Sacramento,P8514-60WH,P8514-60WH,0.01448,
+Veritiv - Denver,E69WH-0W,E69WH-0W,0.02583,
+Veritiv - Denver,E69WH-1W,E69WH-1W,0.0414,
+Veritiv - Denver,P8511-65OR-C,10494218,0.04509,
+Veritiv - Denver,E10WH-0W,E10WH-0W,0.01625,
+Veritiv - Denver,E10WH-1W,E10WH-1W,0.01961,
+Veritiv - Denver,E9WH-0W,E9WH-0W,0.01595,
+Veritiv - Denver,P1117-60WH,P1117-60WH,0.02079,
+Veritiv - Denver,P1117-70CA-V,P1117-70CA-V,0.04549,
+Veritiv - Denver,P1117-70WH,P1117-70WH,0.02792,
+Veritiv - Denver,P1117-70WH-V,P1117-70WH-V,0.04615,
+Veritiv - Denver,P1218-100WHGL-C,P1218-100WHGL-C,0.07033,
+Veritiv - Denver,P1218-100WHGL-T,P1218-100WHGL-T,0.03924,
+Veritiv - Denver,P1218-80WHGL-C,P1218-80WHGL-C,0.06055,
+Veritiv - Denver,P1218-80WHGL-T,P1218-80WHGL-T,0.03186,
+Veritiv - Denver,P1319-100WHGL-C,P1319-100WHGL-C,0.08068,
+Veritiv - Denver,P1319-100WHGL-T,P1319-100WHGL-T,0.04342,
+Veritiv - Denver,P1319-80WHGL-C,P1319-80WHGL-C,0.07041,
+Veritiv - Denver,P1319-80WHGL-T,P1319-80WHGL-T,0.03564,
+Veritiv - Denver,P2335-65MGR-C,P2335-65MGR-C,0.3251,
+Veritiv - Denver,P2640-67BL-V,P2640-67BL-V,0.2631,
+Veritiv - Denver,P2640-67CA-V,P2640-67CA-V,0.2631,
+Veritiv - Denver,P2640-67GR-V,P2640-67GR-V,0.2631,
+Veritiv - Denver,P2640-67WH-V,P2640-67WH-V,0.24837,
+Veritiv - Denver,P8511-20BL,P8511-20BL,0.00989,
+Veritiv - Denver,P8511-20CA,P8511-20CA,0.00989,
+Veritiv - Denver,P8511-20GR,P8511-20GR,0.00989,
+Veritiv - Denver,P8511-20PI,P8511-20PI,0.00989,
+Veritiv - Denver,P8511-20WH,P8511-20WH,0.0066,
+Veritiv - Denver,P8511-60CR,P8511-60CR,0.01241,
+Veritiv - Denver,P8511-60WH,P8511-60WH,0.0098,
+Veritiv - Denver,P8511-70WH,P8511-70WH,0.01149,
+Veritiv - Denver,P8514-20WH,P8514-20WH,0.0103,
+Veritiv - Denver,P8514-60WH,P8514-60WH,0.01448,
+Veritiv - Atlanta,E10WH-0W,E10WH-0W,0.01625,
+Veritiv - Atlanta,E10WH-1W,E10WH-1W,0.01961,
+Veritiv - Atlanta,P1117-60WH,P1117-60WH,0.02188,
+Veritiv - Atlanta,P1117-70CA-V,P1117-70CA-V,0.04904,
+Veritiv - Atlanta,P1117-70WH,P1117-70WH,0.02908,
+Veritiv - Atlanta,P1117-70WH-V,P1117-70WH-V,0.04858,
+Veritiv - Atlanta,P1218-100WHGL-C,P1218-100WHGL-C,0.07403,
+Veritiv - Atlanta,P1218-100WHGL-T,P1218-100WHGL-T,0.0413,
+Veritiv - Atlanta,P1218-80WHGL-C,P1218-80WHGL-C,0.06374,
+Veritiv - Atlanta,P1218-80WHGL-T,P1218-80WHGL-T,0.03298,
+Veritiv - Atlanta,P1319-100WHGL-C,P1319-100WHGL-C,0.08492,
+Veritiv - Atlanta,P1319-100WHGL-T,P1319-100WHGL-T,0.0457,
+Veritiv - Atlanta,P1319-80WHGL-C,P1319-80WHGL-C,0.07412,
+Veritiv - Atlanta,P1319-80WHGL-T,P1319-80WHGL-T,0.03883,
+Veritiv - Atlanta,P2335-80WH-OS,P2335-80WH-OS,0.13764,
+Veritiv - Atlanta,P2640-67BL-V,P2640-67BL-V,0.26421,
+Veritiv - Atlanta,P2640-67CA-V,P2640-67CA-V,26421,
+Veritiv - Atlanta,P2640-67GR-V,P2640-67GR-V,0.26421,
+Veritiv - Atlanta,P2640-67WH-V,P2640-67WH-V,0.26421,
+Veritiv - Atlanta,P8511-20BL,P8511-20BL,0.01089,
+Veritiv - Atlanta,P8511-20CA,P8511-20CA,0.01089,
+Veritiv - Atlanta,P8511-20GR,P8511-20GR,0.01089,
+Veritiv - Atlanta,P8511-20PI,P8511-20PI,0.01089,
+Veritiv - Atlanta,P8511-20WH,P8511-20WH,0.0064,
+Veritiv - Atlanta,P8511-60CR,P8511-60CR,0.01294,
+Veritiv - Atlanta,P8511-60GR,P8511-60GR,0,
+Veritiv - Atlanta,P8511-60WH,P8511-60WH,0.01035,
+Veritiv - Atlanta,P8511-70WH,P8511-70WH,0.0121,
+Veritiv - Atlanta,P8514-20WH,P8514-20WH,0.0103,
+Veritiv - Atlanta,P8514-60WH,P8514-60WH,0.01448,
+Veritiv - Dallas,E10WH-0W,E10WH-0W,0,
+Veritiv - Dallas,E10WH-1W,E10WH-1W,0.01895,
+Veritiv - Dallas,E9WH-0W,E9WH-0W,0,
+Veritiv - Dallas,P1117-60WH,P1117-60WH,0.01998,
+Veritiv - Dallas,P1117-70CA-V,P1117-70CA-V,0,
+Veritiv - Dallas,P1117-70WH,P1117-70WH,0.02655,
+Veritiv - Dallas,P1117-70WH-V,P1117-70WH-V,0.04694,
+Veritiv - Dallas,P1218-100WHGL-C,P1218-100WHGL-C,0.07153,
+Veritiv - Dallas,P1218-100WHGL-T,P1218-100WHGL-T,0.0399,
+Veritiv - Dallas,P1218-67CA-V-CT,P1218-67CA-V-CT,0,
+Veritiv - Dallas,P1218-67WH-V-CT,P1218-67WH-V-CT,0,
+Veritiv - Dallas,P1218-80WHGL-C,P1218-80WHGL-C,0,
+Veritiv - Dallas,P1218-80WHGL-T,P1218-80WHGL-T,0.03186,
+Veritiv - Dallas,P1319-100WHGL-C,P1319-100WHGL-C,0,
+Veritiv - Dallas,P1319-100WHGL-T,P1319-100WHGL-T,0,
+Veritiv - Dallas,P1319-80WHGL-C,P1319-80WHGL-C,0,
+Veritiv - Dallas,P1319-80WHGL-T,P1319-80WHGL-T,0,
+Veritiv - Dallas,P2335-65MGR-C,P2335-65MGR-C,0,
+Veritiv - Dallas,P2335-80WH-OS,P2335-80WH-OS,0.12567,
+Veritiv - Dallas,P2640-67BL-V,P2640-67BL-V,0,
+Veritiv - Dallas,P2640-67CA-V,P2640-67CA-V,0,
+Veritiv - Dallas,P2640-67GR-V,P2640-67GR-V,0,
+Veritiv - Dallas,P2640-67WH-V,P2640-67WH-V,0,
+Veritiv - Dallas,P2640-65OR-C,P2649-65OR-C,0,
+Veritiv - Dallas,P8511-20BL,P8511-20BL,0.01052,
+Veritiv - Dallas,P8511-20CA,P8511-20CA,0.01052,
+Veritiv - Dallas,P8511-20GR,P8511-20GR,0.01052,
+Veritiv - Dallas,P8511-20PI,P8511-20PI,0.01052,
+Veritiv - Dallas,P8511-20WH,P8511-20WH,0.00618,
+Veritiv - Dallas,P8511-60CR,P8511-60CR,0,
+Veritiv - Dallas,P8511-60WH,P8511-60WH,0.00945,
+Veritiv - Dallas,P8511-70WH,P8511-70WH,0.01105,
+Veritiv - Dallas,P8514-20WH,P8514-20WH,0.00995,
+Veritiv - Dallas,P8514-60GR,P8514-60GR,0,
+Veritiv - Dallas,P8514-60WH,P8514-60WH,0,
+Spicers - Sacramento,P2335-67PI-V,P2335-67PI-V,0.235,
+Spicers - Sacramento,P1218-100WHGL-T-SG,none,0.042,
+Spicers - Sacramento,P8511-24IV-LN,none,0.04305,
+Spicers - Sacramento,P8511-70CA,none,0.01405,
+Spicers - Sacramento,E9WH-1W,E9WH-1W,0.0249,
+Spicers - Sacramento,P1117-60WH,P1117-60WH,0.0196,
+Spicers - Sacramento,P1117-70CA-V,P1117-70CA-V,0.045,
+Spicers - Sacramento,P1117-70WH,P1117-70WH,0.022,
+Spicers - Sacramento,P1117-70WH-V,P1117-70WH-V,0.044,
+Spicers - Sacramento,P1218-100WHGL-T,P1218-100WHGL,0.041,
+Spicers - Sacramento,P1218-100WHGL-C,P1218-100WHGL-C,0.07839,
+Spicers - Sacramento,P1218-80WHGL-C,P1218-80WHGL-C,0.06233,
+Spicers - Sacramento,P1218-80WHGL-T,P1218-80WHGL-T,0.0328,
+Spicers - Sacramento,P1319-100WHGL-C,P1319-100WHGL-C,0.08972,
+Spicers - Sacramento,P1319-100WHGL-T,P1319-100WHGL-T,0.04738,
+Spicers - Sacramento,P1319-80WH-SO-C,P1319-80WH-SO-C,0,
+Spicers - Sacramento,P1319-80WHGL-C,P1319-80WHGL-C,0.07178,
+Spicers - Sacramento,P1319-80WHGL-T,P1319-80WHGL-T,0.03827,
+Spicers - Sacramento,P2335-65MGR-C,P2335-65MGR-C,0.355,
+Spicers - Sacramento,P2335-80WH-OS,P2335-80WH-OS,0.0985,
+Spicers - Sacramento,P255305-110BF-C,P255355-110BF-C,0,
+Spicers - Sacramento,P2640-67CA-V,P2640-67CA-V,0.25,
+Spicers - Sacramento,P2640-67GR-V,P2640-67GR-V,0.25,
+Spicers - Sacramento,P2640-67WH-V,P2640-67WH-V,0.25,
+Spicers - Sacramento,P2640-65OR-C,P2649-65OR-C,0.695,
+Spicers - Sacramento,P8511-20BL,P8511-20BL,0.0094,
+Spicers - Sacramento,P8511-20CA,P8511-20CA,0.0094,
+Spicers - Sacramento,P8511-20GR,P8511-20GR,0.0094,
+Spicers - Sacramento,P8511-20PI,P8511-20PI,0.0094,
+Spicers - Sacramento,P8511-20WH,P8511-20WH,0.0063,
+Spicers - Sacramento,P8511-60CR,P8511-60CR,0.0121,
+Spicers - Sacramento,P8511-60WH,P8511-60WH,0.0092,
+Spicers - Sacramento,P8511-70WH,P8511-70WH,0.01035,
+Spicers - Sacramento,P8514-20WH,P8514-20WH,0.0088,
+Spicers - Sacramento,P8514-60GR,P8514-60GR,0.0155,
+Spicers - Sacramento,P8514-60WH,P8514-60WH,0.0136,
+Spicers - Denver,EA7WH-0W,EA7WH-0W,0.0411,
+Spicers - Denver,P8511-100WH-T,P8511-100WH-T,0.01968,
+Spicers - Denver,P1218-130WHSLK-C,none,0.11806,
+Spicers - Denver,P1117-60WH,P1117-60WH,0.0213,
+Spicers - Denver,P1117-70CA-V,P1117-70CA-V,0.045,
+Spicers - Denver,P1117-70WH,P1117-70WH,0.02486,
+Spicers - Denver,P1117-70WH-V,P1117-70WH-V,0.044,
+Spicers - Denver,P1218-100WHGL-C,P1218-100WHGL-C,0.07839,
+Spicers - Denver,P1218-100WHGL-T,P1218-100WHGL-T,0.041,
+Spicers - Denver,P1218-80WHGL-C,P1218-80WHGL-C,0.06233,
+Spicers - Denver,P1218-80WHGL-T,P1218-80WHGL-T,0.0328,
+Spicers - Denver,P1319-100WHGL-C,P1319-100WHGL-C,0.08972,
+Spicers - Denver,P1319-100WHGL-T,P1319-100WHGL-T,0.04738,
+Spicers - Denver,P1319-80WHGL-C,P1319-80WHGL-C,0.07178,
+Spicers - Denver,P1319-80WHGL-T,P1319-80WHGL-T,0.03827,
+Spicers - Denver,P2335-65MGR-C,P2335-65MGR-C,0.355,
+Spicers - Denver,P2335-80WH-OS,P2335-80WH-OS,0.0985,
+Spicers - Denver,P2640-67CA-V,P2640-67CA-V,0.25,
+Spicers - Denver,P2640-67GR-V,P2640-67GR-V,0.25,
+Spicers - Denver,P2640-67WH-V,P2640-67WH-V,0.25,
+Spicers - Denver,P2640-65OR-C,P2649-65OR-C,0.695,
+Spicers - Denver,P8511-20BL,P8511-20BL,0.01,
+Spicers - Denver,P8511-20CA,P8511-20CA,0.01,
+Spicers - Denver,P8511-20GR,P8511-20GR,0.01,
+Spicers - Denver,P8511-20PI,P8511-20PI,0.01,
+Spicers - Denver,P8511-20WH,P8511-20WH,0.0063,
+Spicers - Denver,P8511-60CR,P8511-60CR,0.0121,
+Spicers - Denver,P8511-60WH,P8511-60WH,0.0097,
+Spicers - Denver,P8511-70WH,P8511-70WH,0.01175,
+Spicers - Denver,P8514-20WH,P8514-20WH,0.0088,
+Spicers - Denver,P8514-60GR,P8514-60GR,0.0155,
+Spicers - Denver,P8514-60WH,P8514-60WH,0.0136,
+Whittier Mailing Products - Sacramento,PS8511-BLKWHT-ZF,WLPSZSTKWH28FM,0.0224,
+Volume Press,P475-80GL-T-SMARTBIZ BT INST,none,0,
+Volume Press,P8514-60-SMARTBIZ SHELL,none,0,
+Cathy Welsh Envelopes,E10WH-2W-NP1935-EAG,none,0.0035,
+Test Supplier,TISPTST#10,2111,0.002,
+Test Supplier,TISM#10,2112,0.002,
+Test Supplier,TIPPR-20#TESTPAPER,2113,0.002,
+Test Supplier,TIENV#10BW,2114,0.008,
+Test Supplier,TIPINS#20,2115,0.001,
+Envelopes & Forms,E10WH-1W-SMARTBIZ TIME SEN,E10WH-1W-Smartbiz Time Sen,0,
+Envelopes & Forms,P475-80GL-T-SMARTBIZ BT INST,P475-80GL-T-Smartbiz BT Inst,0.02665,
+Envelopes & Forms,E10WH-2W-SC-SMARTBIZ-DW-CUST,E10WH-2W-SC1935 Smartbiz DW Cust,0.0185,
+Envelopes & Forms,P8514-60-SMARTBIZ SHELL,P8514-60-Smartbiz Shell,0,
+Wilmer - Denver,PS8511-BLWDO,WLPSCSTKWDOS,0.03432,
+Wilmer - Denver,PS8511-BLKWHT-CF,WLPSCSTKWHFMS1P,0.0233,
+Wilmer - Denver,PS8511-BLKWHT-HF,WLPSVSTKWH,0.0233,
+Wilmer - Denver,PS8511-BLKWHT-ZF,WLPSZSTKWH28FM,0.0233,
+Wilmer - Atlanta,PS8511-BLKWHT-CF,WLPSCSTKWHFMS1P,0.0233,
+Ennis - Denver,PS8511-BLKWHT-HF,none,0.02625,
+Ennis - Denver,PS8511-WH-HF,none,0.02625,
+Ennis - Denver,PS8514-BL-ZF,none,0.02825,
+Ennis - Denver,PS8514-WH-ZF,none,0.02825,
+Ennis - Denver,PS8511-BLKWHT-CF,C81100,0.02625,
+Ennis - Denver,PS8511-BLWDO,PS8511-BLWDO,0.0305,
+Ennis - Denver,PS8511-GRWDO,PS8511-GRWDO,0.0305,
+Ennis - Denver,PS8511-BLKWHT-ZF,Z81100,0.02625,
+Ennis - Denver,PS8511-WH-ZF,Z81100,0.02625,
+Ennis - Atlanta,PS8511-BLKWHT-CF,none,0.02625,
+Ennis - Atlanta,PS8511-BLKWHT-HF,none,0.02625,
+Ennis - Atlanta,PS8511-BLKWHT-ZF,none,0.02625,
+Ennis - Atlanta,PS8511-WH-ZF,none,0.02625,
+Ennis - Atlanta,PS8511-WH-HF,none,0.02625,
+Ennis - Atlanta,PS8514-BL-ZF,none,0.02825,
+Ennis - Atlanta,PS8514-WH-ZF,none,0.02825,
+Ennis - Atlanta,PS8511-GRWDO,none,0.02725,
+Southland Envelopes - Denver,E10BK-2W-FC-EAG,E10BK-2W-FC-Eag,0.02075,
+Southland Envelopes - Denver,E10GR-1W-FC-BOX,E10GR-1W-FC-BOX,0.02015,
+Southland Envelopes - Denver,E10GR-1W-SC-BOX,E10GR-1W-SC-BOX,0.02015,
+Southland Envelopes - Denver,E10GR-PW,E10GR-PW,0.02215,
+Southland Envelopes - Denver,E10GR-PW-FC-BOX,E10GR-PW-FC-BOX,0.02245,
+Southland Envelopes - Denver,E10GR-PW-SC-BOX,E10GR-PW-SC-BOX,0.02245,
+Southland Envelopes - Denver,E695BK-0W,E695BK-0W,0.05185,
+Southland Envelopes - Denver,E69WH-0W,E69WH-0W,0.038,
+Southland Envelopes - Denver,EA7WH-0W,EA7WH-0W,0.0224,
+Southland Envelopes - Denver,E69WH-2W,none,0.038,
+Southland Envelopes - Denver,E912BK-0W,none,0.0595,
+Southland Envelopes - Denver,E10BK-0W,E10BK-0W,0.018,
+Southland Envelopes - Denver,E10BK-2W,E10BK-2W,0.02035,
+Southland Envelopes - Denver,E10GR-1W,E10GR-1W,0.01975,
+Southland Envelopes - Denver,E10WH-0W,E10WH-0W,0.015,
+Southland Envelopes - Denver,E10WH-1W,E10WH-1W,0.01595,
+Southland Envelopes - Denver,E10WH-1W-FC-BOX,E10WH-1W-FC - BOX,0.01635,
+Southland Envelopes - Denver,E10WH-1W-FC-EAG,E10WH-1W-FC – EAG,0.01635,
+Southland Envelopes - Denver,E10WH-1W-SC-BOX,E10WH-1W-SC-BOX,0.01635,
+Southland Envelopes - Denver,E10WH-1W-SC-EAG,E10WH-1W-SC-EAG,0.01635,
+Southland Envelopes - Denver,E10WH-2W,E10WH-2W,0.01715,
+Southland Envelopes - Denver,E10WH-2W-FC-BOX,E10WH-2W-FC-BOX,0.01765,
+Southland Envelopes - Denver,E10WH-2W-FC-EAG,E10WH-2W-FC-EAG,0.01765,
+Southland Envelopes - Denver,E10WH-2W-SC-BOX,E10WH-2W-SC-BOX,0.01765,
+Southland Envelopes - Denver,E10WH-2W-SC-EAG,E10WH-2W-SC-EAG,0.01765,
+Southland Envelopes - Denver,E10WH-FULLW,E10WH-FULLW,0.0296,
+Southland Envelopes - Denver,E10WH-HW,E10WH-HW,0.01955,
+Southland Envelopes - Denver,E10WH-HW-FC-BOX,E10WH-HW-FC-BOX,0.01995,
+Southland Envelopes - Denver,E10WH-HW-FC-EAG,E10WH-HW-FC-EAG,0.01995,
+Southland Envelopes - Denver,E10WH-HW-SC-BOX,E10WH-HW-SC-BOX,0.01995,
+Southland Envelopes - Denver,E10WH-HW-SC-EAG,E10WH-HW-SC-EAG,0.01995,
+Southland Envelopes - Denver,E9WH-0W,E9WH-0W,0.01475,
+Kelly Paper - Denver,E10WH-2W-FC-EAG,3003937,0.01704,
+Kelly Paper - Denver,E10WH-1W-SC-EAG,3003983,0.01594,
+Kelly Paper - Denver,E10WH-1W-FC-EAG,3003984,0.01594,
+Kelly Paper - Denver,E10WH-1W,3003985,0.01566,
+Kelly Paper - Denver,E10WH-2W,3003986,0.01676,
+Kelly Paper - Denver,E10WH-2W-SC-EAG,3003987,0.01704,
+Kelly Paper - Denver,E10WH-1W-FC-BOX,3008671,0.01594,
+Kelly Paper - Denver,E10WH-1W-SC-BOX,3008672,0.01594,
+Kelly Paper - Denver,E10WH-2W-SC-BOX,3008673,0.01704,
+Kelly Paper - Denver,E10WH-2W-FC-BOX,3008674,0.01704,
+Kelly Paper - Denver,E69WH-0W,E69WH-0W,0.03346,
+Kelly Paper - Denver,EA7WH-0W,EA7WH-0W,0.05116,
+Kelly Paper - Denver,P8511-60WH,P8511-60WH,0.0092,
+Kelly Paper - Atlanta,E10WH-2W-FC-EAG,3003937,0.01704,
+Kelly Paper - Atlanta,E10WH-1W-SC-EAG,3003983,0.01594,
+Kelly Paper - Atlanta,E10WH-1W-FC-EAG,3003984,0.01594,
+Kelly Paper - Atlanta,E10WH-1W,3003985,0.01566,
+Kelly Paper - Atlanta,E10WH-2W,3003986,0.01676,
+Kelly Paper - Atlanta,E10WH-2W-SC-EAG,3003987,0.01704,
+Kelly Paper - Atlanta,E10WH-1W-FC-BOX,3008671,0.01594,
+Kelly Paper - Atlanta,E10WH-1W-SC-BOX,3008672,0.01594,
+Kelly Paper - Atlanta,E10WH-2W-SC-BOX,3008673,0.01704,
+Kelly Paper - Atlanta,E10WH-2W-FC-BOX,3008674,0.01704,
+Kelly Paper - Atlanta,E69WH-0W,E69WH-0W,0.03346,
+Kelly Paper - Atlanta,EA7WH-0W,EA7WH-0W,0.05116,
+Kelly Paper - Atlanta,P8511-60WH,P8511-60WH,0.0092,
+MAC Papers - Atlanta,P8514-60WH,P8514-60WH,0.01352,
+Veritiv - Baltimore,P8511-60WH,none,0.01035,
+Veritiv - Baltimore,P8511-70WH,none,0.0121,
+Ennis - Baltimore,PS8511-BLWDO,PS8511-BLWDO,0.02725,
+Ennis - Baltimore,PS8511-GRWDO,PS8511-GRWDO,0.02725,
+Uline,E10WH-2W-BLSECTNT,S-11502,0.052,
+Wilmer - Baltimore,PS8511-BLKWHT-CF,WLPSCSTKWHFMS1,0.0233,
+Wilmer - Baltimore,PS8511-BLKWHT-HF,WLPSVSTKWH,0.0233,
+Wilmer - Baltimore,PS8514-BLKWHT-ZF,WLPSZSTK14WHFMO,0.02625,
+Wilmer - Baltimore,PS8511-BLKWHT-ZF,WLPSZSTKWH28FM,0.0233,
+,E-MISCELLANEOUS,,0,
+,P8511-60PI,,0.0113,
+,E10WH-2W-MONSTERTFSB-1946STD-M,,0.0225,
+,E69BK-2WSB-FC1946M,,0.063,
+,E69WH-2W-FC1946M,,0.03925,
+,E69BK-1WBBL-FC1946M,,0,
+,E9WH-2WCSB-FC1946M,,0.02275,
+,P1218-60WH,,0,
+,E10BK-1W-COPP,,0.0195,
+,P8511-60-RUSSELLFURNITURE,,0,
+,E69BK-1WBBL-FC1946-WRITING-M,,0,
+,P8511-65NAT-C,,0,
+,P1117-80SO-C,,0,
+,E10BK-HW-FC-BOX,,0.0231,
+,E10WH-1W-SC1935-LKYTUCK,,0,
+,PS8511-FUSASHELL,,0,
+,E10WH-1W-LKY DERBY,,0,
+,E10WH-1W-SC1908-FUSA,,0,
+,E9WH-0W-BRM-AIM,,0.01829,
+,E9WH-0W-BRM-CW7,,0.01829,
+,E9WH-0W-BRM-AULTIUM,,0.01829,
+,E10WH-1W-MMC,,0,
+,P8511-WH70-YCR CTY FOLLOW,,0,
+,E10WH-2W-YCR MICHIGAN,,0.01925,
+,P8511-60WH-YCR-HEA FOLLOW,,0.0163,
+,E10WH-HW-FC1946M,,0,
+,E10WH-1W-LKY WHITE MTN SC 1935,,0,
+,E69RY-2W-SC1935,,0,
+,E10WH-1W-LMS PPISTEY,,0,
+,P8511-60-YCRCITYSQR-6BRKT,,0.0163,
+,678910,,0,
+,E69RY-2W-NO INDICIA,,0,
+,E9-ROSE MPI 619056,,0.01829,
+,E10-INITIAL BLUEBLACK FC,,0.02016,
+,PS8511-BLWDO-ENDORSE,,0.0305,
+,PS8511-WH-CF,,0.02625,
+,E10WH-2W-SC1935 SMARTBIZ DW CUST,,0.0185,
+,P8511-80WH-SILK-T,,0.01796,
+,E10WH-2W-SC-EAG-SAP,,0.0186,
+,P1218-67GR-V-CT,,0.05198,
+,PS8511-2W-INFENERGY,,0,
+,E10WH-1W-SC1908 LKYDUCHESS,,0,
+,P8511-60-YCRHEARTLAND-6BRKT,,0.0163,
+,E10WH-PW-SC-CIR,,0.01875,
+,P8514-70WH,,0,
+,E10WH-1W-PBM,,0.01916,
+,E7WH-0W,,0.02985,
+,E775WH-0W,,0.0283,
+,E10GR-PW,,0.02215,
+,E-MISCELLANEOUS,,0.00000,
+,P8511-60PI,,0.01130,
+,E10WH-2W-MONSTERTFSB-1946STD-M,,0.02250,
+,E69BK-2WSB-FC1946M,,0.06300,
+,E69WH-2W-FC1946M,,0.03925,
+Client supplied.,E69BK-1WBBL-FC1946M,,0.00000,
+,E9WH-2WCSB-FC1946M,,0.02275,
+,E10BK-HW-FC-BOX,,0.02310,
+,E-MISCELLANEOUS,,0.00000,
+,E10WH-2W-MONSTERTFSB-1946STD-M,,0.02250,
+,E69BK-2WSB-FC1946M,,0.06300,
+,E69WH-2W-FC1946M,,0.03925,
+Client supplied.,E69BK-1WBBL-FC1946M,,0.00000,
+,E9WH-2WCSB-FC1946M,,0.02275,
+,E9WH-0W-BRM-CW7,,0.01829,
+,PS8511-BLWDO-ENDORSE,,0.03050,
+,E10BK-HW-FC-BOX,,0.02310,
+,E9WH-0W-BRM-AIM,,0.01829,
+,E9WH-0W-BRM-AULTIUM,,0.01829,
+Advance.,P8514-70WH,,0.00000,
