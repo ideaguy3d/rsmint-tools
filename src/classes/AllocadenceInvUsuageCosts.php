@@ -215,7 +215,7 @@ class AllocadenceInvUsuageCosts extends Allocadence
             if(isset($ff->facCategoryCost[$_fac][$_category])) {
                 $ff->facCategoryCost[$_fac][$_category][$ff->rsCost] += $c_skuCost;
                 $ff->facCategoryCost[$_fac][$_category][$ff->rsOrder]++;
-                $ff->facCategoryCost[$_fac][$_category][$ff->rsQty] = $_category;
+                $ff->facCategoryCost[$_fac][$_category][$ff->rsQty] += $_qty;
             }
             else {
                 $ff->facCategoryCost[$_fac][$_category][$ff->rsCat] = $_category;
@@ -250,7 +250,7 @@ class AllocadenceInvUsuageCosts extends Allocadence
                 $records, $this->outFolder_invUsage, "$fac-sku-costs"
             );
         }
-    
+        
         /*
                 [
                     [] // header
@@ -262,42 +262,43 @@ class AllocadenceInvUsuageCosts extends Allocadence
                     [[]]
                 ]
             */
-    
+        
         // 70+ fields
         $ordDetailsNoCost = [];
         // 24 fields
         $invReceivedNoCost = [];
-    
+        
         $normNoCosts = function(array &$set) use (&$rec) {
             if(count($set) === 0) $set [] = array_keys($rec);
             $set [] = $rec;
         };
-    
-        // normalize from [[[]][[]]] to [[][]], O(5n), only 2-5 facilities
-        foreach($this->noSkuCost as $fac => $records) {
-            foreach($records as $sku => $rec) {
-                $this->noSkuCostSlim[$sku] ??= [$sku, '?'];
-                $rec = $rec[0]['all_data'] ?? $rec[0];
+        
+        if(isset($this->noSkuCost) && count($this->noSkuCost) > 0) {
+            // normalize from [[[]][[]]] to [[][]], O(5n), only 2-5 facilities
+            foreach($this->noSkuCost as $fac => $records) {
+                foreach($records as $sku => $rec) {
+                    $this->noSkuCostSlim[$sku] ??= [$sku, '?'];
+                    $rec = $rec[0]['all_data'] ?? $rec[0];
             
-                // inv received
-                if(count($rec) < 30) $normNoCosts($invReceivedNoCost);
-                // ord details
-                else $normNoCosts($ordDetailsNoCost);
+                    // inv received
+                    if(count($rec) < 30) $normNoCosts($invReceivedNoCost);
+                    // ord details
+                    else $normNoCosts($ordDetailsNoCost);
+                }
             }
-        }
     
-        CsvParseModel::export2csv(
-            $invReceivedNoCost, $this->outFolder_invUsage . "/no-costs", "no_cost_inventory_received"
-        );
-        CsvParseModel::export2csv(
-            $ordDetailsNoCost, $this->outFolder_invUsage . "/no-costs", "no_cost_order_details"
-        );
-        CsvParseModel::export2csv(
-            $this->noSkuCostSlim, $this->outFolder_invUsage . "/no-costs", 'simple_no_cost_list'
-        );
-        
+            CsvParseModel::export2csv(
+                $invReceivedNoCost, $this->outFolder_invUsage, "no_cost_inventory_received"
+            );
+            // export
+            CsvParseModel::export2csv(
+                $ordDetailsNoCost, $this->outFolder_invUsage, "no_cost_order_details"
+            );
+            CsvParseModel::export2csv(
+                $this->noSkuCostSlim, $this->outFolder_invUsage, 'simple_no_cost_list'
+            );
+        }
         $debug = 1;
-        
     }
     
     /**
@@ -403,8 +404,8 @@ class AllocadenceInvUsuageCosts extends Allocadence
         if(0 === count($datesSorted)) {
             $ml = __METHOD__ . ' line: ' . __LINE__;
             $err = "\n\nThere is NOOOOOO cost at all for the SKU ~$ml\n\n";
-            var_dump($skuTable);
-            echo($err);
+            //var_dump($skuTable);
+            //echo($err);
             return null;
         }
         $filter = function($v, $k) use ($datesSorted, $skuTable): bool {

@@ -14,8 +14,8 @@ use Redstone\Tools\RsmSuppress;
 use Redstone\Tools\AllocadenceQuickBooks;
 
 return function(App $app) {
-    
-    if(!empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
+    $qStrDebug = $_GET['debug'] == 'yes';
+    if(!$qStrDebug && !empty(AppGlobals::$NINJA_AUTO_DEBUG) && AppGlobals::$NINJA_AUTO_DEBUG) {
         $_SERVER['REQUEST_URI'] = '/alloc/qb?po=no&rec=no';
         $_SERVER['REQUEST_METHOD'] = 'GET';
     }
