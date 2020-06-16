@@ -3,7 +3,7 @@
  * master branch
  */
 
-ini_set('memory_limit', '512M');
+ini_set('memory_limit', '2048M');
 date_default_timezone_set('America/Los_Angeles');
 
 if(PHP_SAPI == 'cli-server') {
